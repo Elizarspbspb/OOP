@@ -96,7 +96,7 @@ int main() {
     char fraction;
     cout << "Введите первую дробь: ";
     cin >> dividend_1 >> fraction >> divisor_1;
-    cout << "Введите первую дробь: ";
+    cout << "Введите вторую дробь: ";
     cin >> dividend_2 >> fraction >> divisor_2;
     cout << "Сумма равна " << (dividend_1 * divisor_2 + divisor_1 * dividend_2) << fraction << (divisor_1 * divisor_2) << endl;
 
