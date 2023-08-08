@@ -51,8 +51,8 @@ enum etype { laborer, secretary, manager, accountant, executive, researcher };
 struct employee_new {
     int number;
     float stipend;
-    date time;
     etype emp;
+    date time;
 };
 
 int main() {
@@ -193,7 +193,52 @@ int main() {
     из упражнения 4. Организуйте программу таким образом, чтобы пользователь вводил 4 пункта данных о 
     каждом из трех сотрудников: его номер, величину зарплаты, его должность и дату принятия на работу. 
     Программа должна хранить введенные значения в трех переменных типа employee и выводить их содержимое на экран. */
-
+    employee_new worker;
+    char symbol, letter;
+    cout << "Введите номер сотрудника: ";
+    cin >> worker.number;
+    cout << "Введите величину зарплаты сотрудника: ";
+    cin >> worker.stipend;
+    cout << "Введите первую букву должности сотрудника: ";
+    cin >> letter;
+    switch(letter) {
+        case 'l':
+            worker.emp = laborer; break;
+        case 's':
+            worker.emp = secretary; break;
+        case 'm':
+            worker.emp = manager; break;
+        case 'a':
+            worker.emp = accountant; break;
+        case 'e':
+            worker.emp = executive; break;
+        case 'r':
+            worker.emp = researcher; break;
+        default:
+            cout << "ERROR SYMBOL" << endl;
+    }
+    cout << "Введите дату принятия на работу сотрудника в формате 31/12/2002: ";
+    cin >> worker.time.day >> symbol >> worker.time.mounth >> symbol >> worker.time.year;
+    cout << "----------" << endl;
+    cout << worker.number << endl;
+    cout << worker.stipend << endl;
+    cout << worker.time.day << "/" << worker.time.mounth << "/" << worker.time.year << endl;
+    switch(worker.emp) {
+        case laborer:
+            cout << "laborer" << endl; break;
+        case secretary:
+            cout << "secretary" << endl; break;
+        case manager:
+            cout << "manager" << endl; break;
+        case accountant:
+            cout << "accountant" << endl; break;
+        case executive:
+            cout << "executive" << endl; break;
+        case researcher:
+            cout << "researcher" << endl; break;
+        default:
+            cout << "ERROR worker" << endl;
+    }
 
     return 0;
 }
