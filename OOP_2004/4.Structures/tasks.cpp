@@ -1,12 +1,6 @@
 #include <iostream>
 using namespace std;
 
-struct Distance     // длина в английской системе
-{
-    int feet;
-    float inches;
-};
-
 // Task 1
 struct phone        // объявление структуры phone
 {
@@ -23,11 +17,42 @@ struct point        // coordinates
 };
 
 // Task 3
-struct Volume        // coordinates
+struct Distance     // длина в английской системе
+{
+    int feet;
+    float inches;
+};
+
+// Task 3
+struct Volume
 {
     Distance length;      
     Distance width; 
     Distance height;     
+};
+
+// Task 4
+struct employee {
+    int number;
+    float stipend;
+};
+
+// Task 5
+struct date {
+    int day;
+    int mounth;
+    int year;
+};
+
+// Task 6
+enum etype { laborer, secretary, manager, accountant, executive, researcher };
+
+// Task 7
+struct employee_new {
+    int number;
+    float stipend;
+    date time;
+    etype emp;
 };
 
 int main() {
@@ -73,13 +98,101 @@ int main() {
     объем, занимаемый помещением, и выведите результат на экран. Для подсчета объема переведите каждое из
     значений типа Distance в значение типа float, равное соответствующей длине в футах и хранимое в отдельной
     переменной. Затем для вычисления объема следует перемножить три полученные вещественные переменные. */
-    Volume amount = { {16, 3.5}, {12, 6.25}, {8, 1.75} };
+    /*Volume amount = { {16, 3.5}, {12, 6.25}, {8, 1.75} };
     // преобразование длины, ширины и высоты в вещественный формат
     float len = amount.length.feet + amount.length.inches / 12;
     float wid = amount.width.feet + amount.width.inches / 12;
     float hei = amount.height.feet + amount.height.inches / 12;
     // вычисление объема помещения
-    cout << "Объем = " << len*wid*hei << endl;
+    cout << "Объем = " << len*wid*hei << endl;*/
+
+    /*4. Создайте структуру с именем employee, содержащую два поля: номер сотрудника типа int и величину 
+    его пособия в долларах типа float. Запросите с клавиатуры данные о трех сотрудниках, сохраните их в 
+    трех структурных переменных типа employee и выведите информацию о каждом из сотрудников на экран. */
+    /*employee mas[3];
+    for(int i = 0; i < 3; i++) {
+        cout << "Введите номер сотрудника: ";
+        cin >> mas[i].number;
+        cout << "Введите размер пособия сотрудника: ";
+        cin >> mas[i].stipend;
+    }
+    for(int i = 0; i < 3; i++) {
+        cout << "Номер сотрудника: " << mas[i].number << endl;
+        cout << "Размер пособия сотрудника: " << mas[i].stipend << endl;
+        cout << "-----" << endl;
+
+    }*/
+
+    /*5. Создайте структуру типа date, содержащую три поля типа int: месяц, день и год. Попросите 
+    пользователя ввести день, месяц и год в формате 31/12/2002, сохраните введенное значение в 
+    структурной переменной, а затем извлеките данные из этой переменной и выведите их на экран в том же
+    формате, в каком они вводились.*/
+    /*date time;
+    char symbol;
+    cout << "Введите дату в формате 31/12/2002" << endl;
+    cin >> time.day >> symbol >> time.mounth >> symbol >> time.year;
+    cout << "День = " << time.day << endl;
+    cout << "Месяц = " << time.mounth << endl;
+    cout << "Год = " << time.year << endl;
+    cout << "Символ разделения = " << symbol << endl;*/
+
+    /*6. Как мы говорили, стандартные средства ввода/вывода C++ вместо значений перечисляемых типов 
+    данных выводят их внутреннее представление в виде целых чисел. Для того чтобы преодолеть это ограничение, 
+    вы можете использовать конструкцию switch, с помощью которой устанавливается соответствие между 
+    значением переменной перечисляемого типа и ее внутренним представлением. Пусть, например, в программе 
+    определен перечисляемый тип данных etype, отражающий должность сотрудника:
+        enum etype { laborer, secretary, manager, accountant, executive, researcher };
+    Напишите программу, которая сначала по первой букве должности, введенной пользователем, определяет 
+    соответствующее значение переменной, помещает это значение в переменную типа etype, а затем выводит полностью
+    название должности, первую букву которой ввел пользователь. Взаимодействие программы с пользователем может 
+    выглядеть следующим образом:    
+        Введите первую букву должности
+        (laborer, secretary, manager, accountant, executive, researcher); a 
+        полное название должности: accountant
+    Возможно, вам понадобится два ветвления switch: одно — для ввода значения, другое — для вывода. */
+    /*etype character;
+    char symbol;
+    cout << "Введите первую букву должности" << endl << 
+    "(laborer, secretary, manager, accountant, executive, researcher): ";
+    cin >> symbol;
+    switch(symbol) {
+        case 'l':
+            character = laborer; break;
+        case 's':
+            character = secretary; break;
+        case 'm':
+            character = manager; break;
+        case 'a':
+            character = accountant; break;
+        case 'e':
+            character = executive; break;
+        case 'r':
+            character = researcher; break;
+        default:
+            cout << "ERROR SYMBOL" << endl;
+    }
+    cout << "полное название должности: ";
+    switch(character) {
+        case laborer:
+            cout << "laborer" << endl; break;
+        case secretary:
+            cout << "secretary" << endl; break;
+        case manager:
+            cout << "manager" << endl; break;
+        case accountant:
+            cout << "accountant" << endl; break;
+        case executive:
+            cout << "executive" << endl; break;
+        case researcher:
+            cout << "researcher" << endl; break;
+        default:
+            cout << "ERROR SYMBOL" << endl;
+    }*/
+
+    /*7. Добавьте поля типа enum etype (упражнение 6) и struct date (упражнение 5) в структуру employee
+    из упражнения 4. Организуйте программу таким образом, чтобы пользователь вводил 4 пункта данных о 
+    каждом из трех сотрудников: его номер, величину зарплаты, его должность и дату принятия на работу. 
+    Программа должна хранить введенные значения в трех переменных типа employee и выводить их содержимое на экран. */
 
 
     return 0;
