@@ -37,7 +37,7 @@ int main() {
     const int ten = 10;
     int two = 2;
     two *= ten;
-    cout << ten << endl << two << endl << --two << endl;*
+    cout << ten << endl << two << endl << --two << endl;
 
     // Задача 4.
     /* Напишите программу, выводящую на экран ваше любимое стихотворение. 
@@ -64,7 +64,7 @@ int main() {
     cout << dollar << "$ = " << dollar / 1.487 << " фунтов стерлингов \n" 
          << dollar << "$ = " << dollar / 0.172 << " франк \n"
          << dollar << "$ = " << dollar / 0.584 << " немецких марок \n"
-         << dollar << "$ = " << dollar / 0.00955 << " йен" << endl;
+         << dollar << "$ = " << dollar / 0.00955 << " йен" << endl; 
 
     // Задача 7.
     /* Температуру, измеренную в градусах по Цельсию, можно перевести в градусы по Фаренгейту путем умножения на 9/5 и сложения 
@@ -129,7 +129,10 @@ int main() {
     cin >> d_funt;
     int pounds = static_cast<int>(d_funt);
     float decfrac = d_funt - pounds;  // десятичная дробная часть
-    cout << "Эквивалентная сумма в старой форме записи: " << static_cast<char>(156) << pounds << '.' << decfrac * 20 << endl;
-
+    decfrac *= 240;
+    int shil, pens;
+    shil = static_cast<int>(decfrac) / 12;
+    pens = static_cast<int>(decfrac) % 12;
+    cout << pounds << "." << shil << "." << pens << endl;
     return 0;
 }
