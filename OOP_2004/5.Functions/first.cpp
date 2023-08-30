@@ -8,6 +8,10 @@ void starline_2() {       // заголовок функции
     cout << endl;
 }
 void starline();            // объявление функции (прототип)
+
+// Переменное число аргументов функции
+void repchar();             // прототипы
+void repchar(char);
 void repchar(char, int);    // прототип функции
 //void repchar(char symbol, int number);    // аналогично
 
@@ -19,6 +23,8 @@ struct Distance     // длина в английской системе
     float inches;
 };
 void engldisp(Distance); // объявление
+    // Различные типы аргументов
+void engldisp(float);
 
 ////////////////////////////////
 // демонстрирует механизм возврата значения функцией
@@ -27,10 +33,22 @@ float lbstokg(float);   // прототип функции
 // retstrc.cpp
 // демонстрирует возвращение функцией структурной переменной
 Distance addengl(Distance, Distance);   // прототипы
+
 //////////////////////////////////////////////////////////
 
-// ref.cpp
-// применение ссылочного механизма передачи аргументов
+// referst.cpp
+// передача структурной переменной по ссылке
+void scale(Distance&, float);       // прототипы функций
+
+// factor2.cpp
+// подсчет факториала числа с помощью рекурсии
+unsigned long factfunc(unsigned long);  // прототип
+
+// функция lbstokgInline()
+// переводит фунты в килограммы
+inline float lbstokgInline(float pounds) {
+    return 0.453592 * pounds;
+}
 
 int main()
 {
@@ -96,6 +114,47 @@ int main()
     cout << "Целая часть равна " << intpart // вывод результатов
     << ", дробная часть равна " << fracpart << endl;
 
+    starline();
+
+    // reforder.cpp     
+    // упорядочивает по возрастанию пары чисел
+    void order(int&, int&); // прототип
+    int n1 = 99, n2 = 11;   // неупорядоченная пара
+    int n3 = 22, n4 = 88;   // упорядоченная пара
+    order(n1, n2);      // упорядочивание обеих пар
+    order(n3, n4);
+    cout << "n1 =" << n1 << endl; // вывод результатов
+    cout << "n2 =" << n2 << endl;
+    cout << "n3 =" << n3 << endl;
+    cout << "n4 =" << n4 << endl;
+
+    starline();
+
+    // referst.cpp  передача структурной переменной по ссылке
+    Distance d6 = { 12, 6.5 };      // инициализация d6 и d7
+    Distance d7 = { 10, 5.5 };
+    cout << "d6 = "; engldisp(d6);      // вывод исходных значений d6 и d7
+    cout << "\nd7 = "; engldisp(d7);
+    scale(d6, 0.5);                     // масштабирование d6 и d7
+    scale(d7, 0.25);
+    cout << "\nd6 = "; engldisp(d6);    // вывод новых значений d6 и d7
+    cout << "\nd7 = "; engldisp(d7);
+    cout << endl;
+
+    starline();
+
+    // factor2.cpp  подсчет факториала числа с помощью рекурсии
+    int n;  // число, вводимое пользователем
+    unsigned long fact;     // факториал этого числа
+    n = 5;
+    fact = factfunc(n);
+    cout << "Факториал числа " << n << "равен " << fact << endl;
+
+    starline();
+
+    float lbsIn;
+    lbsIn = 18.8;
+    cout << " " << lbstokgInline(lbsIn) << endl;
 
     return 0;
 }
@@ -106,7 +165,24 @@ void starline() {       // заголовок функции
         cout << '*';
     cout << endl;
 }
-// определение функции repchar()
+
+//---функция repchar()-----------------------------
+// выводит на экран 45 символов '*'
+void repchar() {
+    for(int j = 0; j < 45; j++) // цикл, выполняющийся 45 раз
+        cout << '*';            // вывод символа '*'
+    cout << endl;
+}
+
+//--- функция repchar(char ch)-----------------------------
+// выводит 45 заданных символов
+void repchar(char ch) {
+    for(int j = 0; j < 45; j++) // цикл, выполняющийся 45 раз
+        cout << ch;             // вывод заданного символа
+    cout << endl;
+}
+
+// определение функции repchar(char chars, int number)
 void repchar(char chars, int number) {
     for(int j = 0; j < number; j++)  // тело функции
         cout << chars;
@@ -118,6 +194,12 @@ void repchar(char chars, int number) {
 void engldisp(Distance dd) // параметр dd типа Distance (КОПИЯ)
 {
     cout << dd.feet << "\'-" << dd.inches << "\"";
+}
+// engldisp()   вывод переменной типа float в футах и дюймах
+void engldisp(float dd) {   // параметр dd типа float
+    int feet = static_cast<int>(dd / 12);
+    float inches = dd - feet * 12;
+    cout << feet << "\'-" << inches << "\"";
 }
 
 // функция lbstokg() переводит фунты в килограммы
@@ -146,4 +228,30 @@ void intfrac(float n, float& intp, float& fracp) {
     long temp = static_cast<long>(n);   // преобразование к типу long,
     intp = static_cast<float>(temp);    // и обратно во float
     fracp = n - intp;                   // вычитаем целую часть
+}
+
+//--------------------------------------------------------
+// reforder.cpp     упорядочивает по возрастанию пары чисел
+void order(int& numb1, int& numb2)  // упорядочивает два числа
+{
+    if(numb1 > numb2) { // если первое число больше второго.
+        int temp = numb1;   // то меняем их местами
+        numb1 = numb2;
+    numb2 = temp;
+    }
+}
+
+//-- функция scale()---масштабирование значения типа Distance ---------------
+void scale(Distance& dd, float factor) {
+    float inches = (dd.feet*12 + dd.inches)*factor; // перевод футов в дюймы и
+    dd.feet = static_cast<int>(inches / 12);
+    dd.inches = inches - dd.feet * 12;          // и умножение на коэффициент
+}
+
+//---------------- функция factfunc()-------- рекурсивно подсчитывает факториал числа
+unsigned long factfunc(unsigned long n) {
+    if(n > 1)
+        return n * factfunc(n - 1);     // вызов самой себя
+    else
+        return 1;
 }
