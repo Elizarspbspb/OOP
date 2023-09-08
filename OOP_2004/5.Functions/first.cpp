@@ -14,6 +14,9 @@ void repchar();             // прототипы
 void repchar(char);
 void repchar(char, int);    // прототип функции
 //void repchar(char symbol, int number);    // аналогично
+// missarg.cpp
+// применение аргументов по умолчанию
+void repchar(char = '*', int = 45); // прототип с аргументами по умолчанию
 
 ///////////////////////////
 // передача структурных переменных в функцию
