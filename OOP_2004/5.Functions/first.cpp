@@ -53,6 +53,8 @@ inline float lbstokgInline(float pounds) {
     return 0.453592 * pounds;
 }
 
+char globalCh = 'a';  // глобальная переменная ch
+
 int main()
 {
     // table.cpp
@@ -159,6 +161,7 @@ int main()
     lbsIn = 18.8;
     cout << " " << lbstokgInline(lbsIn) << endl;
 
+    cout << "globalCh = " << globalCh << endl;
     return 0;
 }
 
@@ -240,7 +243,7 @@ void order(int& numb1, int& numb2)  // упорядочивает два чис�
     if(numb1 > numb2) { // если первое число больше второго.
         int temp = numb1;   // то меняем их местами
         numb1 = numb2;
-    numb2 = temp;
+        numb2 = temp;
     }
 }
 
