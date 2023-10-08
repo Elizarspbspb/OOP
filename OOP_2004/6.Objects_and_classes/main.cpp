@@ -1,5 +1,8 @@
 // smallobj.cpp     демонстрирует простой небольшой объект
 #include <iostream>
+
+//#include "msoftcon.h"   // для функций консольной графики
+
 using namespace std;
 ////////////////////////////////////////////////////
 class smallobj {    // определение класса
@@ -33,6 +36,59 @@ class part {    // определение класса
         }
 };
 //////////////////////////////////////////////////////////
+/*class circle {              // графический Объект "круг"
+    protected:
+        int xCo, yCo;       // координаты центра
+        int radius;
+        color fillcolor;    // цвет
+        fstyle fillstyle;   // стиль заполнения
+    public:
+        void set(int x, int y, int r, color fc, fstyle fs) {    // установка атрибутов круга
+            xCo = x;
+            yCo = y;
+            radius = r;
+            //fillcolor = fc;
+            //fillstyle = fs;
+        }
+        void draw() {   // рисование круга
+            set_color(fillcolor);       // установка цвета и
+            set_fill_style(fillstyle);  // стиля заполнения
+            draw_circle(xCo, yCo, radius);// рисование круга
+        }
+};*/
+//////////////////////////////////////////////////////////
+class Distance { // длина в английской системе
+    private:
+        int feet;
+        float inches;
+    public:
+        void setdist(int ft, float in) {    // установка значений полей
+            feet = ft; inches = in; 
+        }
+        void getdist() {    // ввод полей с клавиатуры
+            cout << "\nВведите число футов: "; cin >> feet;
+            cout << "Введите число дюймов: "; cin >> inches;
+        }
+        void showdist() {   // вывод полей на экран
+            cout << feet << "\'-" << inches << '\"'; 
+        }
+};
+//////////////////////////////////////////////////////////////
+// счетчик в качестве объекта
+class Counter {
+    private:
+        unsigned int count;     // значение счетчика
+    public:
+        Counter() : count(0)    // конструктор
+        { /* пустое тело */ }
+        void inc_count() {      // инкрементирование счетчика
+            count++; 
+        }
+        int get_count() { // получение значения счетчика
+            return count; 
+        }
+};
+//////////////////////////////////////////////////////////////
 int main()  {
     smallobj s1, s2;    // определение двух объектов класса smallobj
     s1.setdata(1066);   // вызовы метода setdata()
@@ -43,5 +99,34 @@ int main()  {
     part part1;     // определение объекта класса part
     part1.setpart(6244, 373, 217.55F);
     part1.showpart();
+    ///////////////////////////////////////////////
+    /*init_graphics();    // инициализация графики
+    circle c1, c2, c3;          // создание кругов
+    c1.set(15, 7, 5, cBLUE, X_FILL);    // установка атрибутов кругов
+    c2.set(41, 12, 7, cRED, O_FILL);
+    c3.set(65, 18, 4, cGREEN, MEDIUM_FILL);
+    c1.draw();  // рисование кругов
+    c2.draw();
+    c3.draw();
+    set_cursor_pos(1, 25);  // нижний левый угол */
+    ///////////////////////////////////////////////
+    Distance dist1, dist2;      // две длины
+    dist1.setdist(11, 6.25);    // установка значений для d1
+    dist2.getdist();
+    cout << "\ndist1 - "; dist1.showdist(); // вывод длин на экран
+    cout << "\ndist2 - "; dist2.showdist();
+    cout << endl;
+    ///////////////////////////////////////////////
+    Counter c1, c2; // определение с инициализацией
+    cout << "\nc1 =" << c1.get_count(); // вывод
+    cout << "\nc2 =" << c2.get_count();
+    c1.inc_count();     // инкрементирование c1
+    c2.inc_count();     // инкрементирование c2
+    c2.inc_count();     // инкрементирование c2
+    cout << "\nc1 =" << c1.get_count(); // вывод
+    cout << "\nc2 =" << c2.get_count();
+    cout << endl;
+    ///////////////////////////////////////////////
+    
     return 0;
 }
