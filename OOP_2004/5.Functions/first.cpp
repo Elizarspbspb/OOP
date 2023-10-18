@@ -198,7 +198,6 @@ int main()
     int alpha = 7;
     int beta = 11;
     aFunc(alpha, beta); // вызов функции
-
     return 0;
 }
 
@@ -280,7 +279,7 @@ void order(int& numb1, int& numb2)  // упорядочивает два чис�
     if(numb1 > numb2) { // если первое число больше второго.
         int temp = numb1;   // то меняем их местами
         numb1 = numb2;
-    numb2 = temp;
+        numb2 = temp;
     }
 }
 
