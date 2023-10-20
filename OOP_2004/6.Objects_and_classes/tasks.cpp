@@ -86,17 +86,181 @@ public:
 };*/
 
 // Task 5
-class date {
+/*class date {
     int day;
     int mounth;
     int year;
 public:
     date() : day(0), mounth(0), year(0) {};
-    void getdate() {
-    char symbol;
-    cout << "Введите дату в формате 31/12/2002" << endl;
-    cin >> time.day >> symbol >> time.mounth >> symbol >> time.year;
+    void getdate(int days, int mounths, int years) {
+        day = days;
+        mounth = mounths;
+        year = years;
     }
+    void showdate() const {
+        cout << "День = " << day << endl;
+        cout << "Месяц = " << mounth << endl;
+        cout << "Год = " << year << endl;
+    }
+};*/
+
+// Task 6
+/*enum etype { laborer, secretary, manager, accountant, executive, researcher };
+class employee {
+    int number;
+    float stipend;
+    etype character;
+    date da;
+public:
+    employee() : number(0), stipend(0.0) {};
+    void getemploy() {
+        char symbol;
+        cout << "Введите номер сотрудника: ";
+        cin >> number;
+        cout << "Введите размер пособия сотрудника: ";
+        cin >> stipend;
+        cout << "Введите первую букву должности" << endl << 
+            "(laborer, secretary, manager, accountant, executive, researcher): ";
+        cin >> symbol;
+        switch(symbol) {
+            case 'l':
+                character = laborer; break;
+            case 's':
+                character = secretary; break;
+            case 'm':
+                character = manager; break;
+            case 'a':
+                character = accountant; break;
+            case 'e':
+                character = executive; break;
+            case 'r':
+                character = researcher; break;
+            default:
+                cout << "ERROR SYMBOL" << endl;
+        }
+        cout << "Введите дату в формате 31/12/2002" << endl;
+        int day, mounth, year;
+        cin >> day >> symbol >> mounth >> symbol >> year;
+        da.getdate(day, mounth, year);
+    }
+    void putemploy() const {
+        cout << "Номер сотрудника: " << number << endl;
+        cout << "Размер пособия сотрудника: " << stipend << endl;
+        cout << "полное название должности: ";
+        switch(character) {
+            case laborer:
+                cout << "laborer" << endl; break;
+            case secretary:
+                cout << "secretary" << endl; break;
+            case manager:
+                cout << "manager" << endl; break;
+            case accountant:
+                cout << "accountant" << endl; break;
+            case executive:
+                cout << "executive" << endl; break;
+            case researcher:
+                cout << "researcher" << endl; break;
+            default:
+                cout << "ERROR SYMBOL" << endl;
+        }
+        da.showdate();
+        cout << "-----" << endl;
+    }
+};*/
+
+// Task 7
+/*class angle {
+    int grade;
+    float minuts;
+    char route;
+public:
+    angle(int gr, float min, char rout) : grade(gr), minuts(min), route(rout) {};
+    void setAngle() {
+        bool confirm = true;
+        while (confirm) {
+            while (confirm) {
+                cout << "Введите градусы: ";
+                cin >> grade;
+                if (grade < 0) {
+                    cout << "Введены отрицательные значения градусов. Введите значения повторно" << endl;
+                    continue;
+                } else if (grade > 180) {
+                    cout << "Введены большие значения градусов. Введите значения повторно" << endl;
+                    continue;
+                }
+                confirm = false;
+            }
+            confirm = true;
+            while (confirm) {
+                cout << "Введите минуты: ";
+                cin >> minuts;
+                if (minuts < 0) {
+                    cout << "Введены отрицательные значения градусов. Введите значения повторно" << endl;
+                    continue;
+                } else if (minuts > 60) {
+                    cout << "Введены большие значения минут. Преобразование 60 мин. = 1 гр." << endl;
+                    int temp = 0;
+                    temp = static_cast<int>(minuts)/60;
+                    grade += temp;
+                    minuts -= temp*60;
+                }
+                confirm = false;
+            }
+            confirm = true;
+            while (confirm) {
+                cout << "Введите направление (N, S, Е или W): ";
+                cin >> route;
+                if ((route != 'N') && (route != 'S') && (route != 'E') && (route != 'W')) {
+                    continue;
+                } else if (((route == 'N') || (route == 'S')) && grade > 90) {
+                    cout << "Введены большие значения градусов для направлений N или S." << endl; 
+                    cout << "Требуется повторный ввод градусов и минут" << endl;
+                    break;
+                } else if (((route == 'E') || (route == 'W')) && grade > 180) {
+                    cout << "Введены большие значения градусов для направлений E или W." << endl; 
+                    cout << "Требуется повторный ввод градусов и минут" << endl;
+                    break;
+                } else 
+                    confirm = false;
+            }
+        }
+    }
+    void showAngle() const { // 179°59.9' Е
+        cout << grade << "@" << minuts << '\'' << route << endl;
+    }
+}; */
+
+// Task 8
+class countObjects {
+    static int allCount;
+    int count;
+public:
+    countObjects(int c) : count(c){
+        ++allCount;
+    };
+    void showObj() const {
+        cout << "Мой порядковый номер: " << count << " из " << allCount << endl;
+    }
+};
+int countObjects::allCount = 0;
+
+// Task 9
+/*class fraction {
+    int dividend;
+    int divisor;
+public:
+    fraction(int divid, int divis) : dividend(divid), divisor(divis) {};
+    void showFrac() const {
+        cout << dividend << "/" << divisor << endl;
+    }
+    void sumFrac(const fraction& one, const fraction& two) {
+        dividend = one.dividend * two.divisor + one.divisor * two.dividend;
+        divisor = one.divisor * two.divisor;
+    }
+};*/
+
+class ship {
+    countObjects 
 };
 
 int main(int argc, char* argv[]) {
@@ -165,10 +329,96 @@ int main(int argc, char* argv[]) {
     /*5. Взяв в качестве основы структуру из упражнения 5 главы 4, создайте класс date. Его данные должны 
     размещаться в трех полях типа int: month, day и year. Метод класса getdate() должен принимать значение 
     для объекта в формате 12/31/02, а метод showdate() — выводить данные на экран. */
-    date time_1;
+    /*date time_1;
     char symbol;
+    int day, mounth, year;
     cout << "Введите дату в формате 31/12/2002" << endl;
-    cin >> time_1.day >> symbol >> time_1.mounth >> symbol >> time_1.year;
+    //cin >> time_1.day >> symbol >> time_1.mounth >> symbol >> time_1.year;
+    cin >> day >> symbol >> mounth >> symbol >> year;
+    time_1.getdate(day, mounth, year);
+    time_1.showdate();*/
+
+    /*6. Расширьте содержание класса employee из упражнения 4, включив в него класс date и перечисление 
+    etype (см. упражнение 6 главы 4). Объект класса date будет использоваться для хранения даты приема 
+    сотрудника на работу. Перечисление будет использовано для хранения статуса сотрудника: лаборант, 
+    секретарь, менеджер и т. д. Последние два поля данных должны быть закрытыми в определении класса 
+    employee, как и номер и оклад сотрудника. Вам будет необходимо разработать методы getemploy() и 
+    putemploy(), предназначенные соответственно для ввода и отображения информации о сотруднике. Возможно, 
+    при создании методов вам понадобится ветвление switch для работы с перечисляемым типом etype. Напишите 
+    функцию main(), которая попросит пользователя ввести данные о трех сотрудниках, а затем выведет эти 
+    данные на экран.*/
+    /*employee emp1, emp2, emp3;
+    emp1.getemploy();
+    emp1.putemploy();
+    emp2.getemploy();
+    emp2.putemploy();
+    emp3.getemploy();
+    emp3.putemploy();*/
+
+    /*7. В морской навигации координаты точки измеряются в градусах и минутах широты и долготы. Например, 
+    координаты бухты Папити на о. Таити равны 149 градусов 34.8 минут восточной долготы и 17 градусов 31.5
+    минут южной широты. Это записывается как 149°34.8' W, 17°31.5' S. Один градус равен 60 минутам 
+    (устаревшая система также делила одну минуту на 60 секунд, но сейчас минуту делят на обычные десятичные 
+    доли). Долгота измеряется величиной от 0 до 180 градусов восточнее или западнее Гринвича. Широта 
+    принимает значения от 0 до 90 градусов севернее или южнее экватора. Создайте класс angle, включающий 
+    следующие три поля: типа int для числа градусов, типа float для числа минут и типа char для указания 
+    направления (N, S, Е или W). Объект этого класса может содержать значение как широты, так и долготы. 
+    Создайте метод, позволяющий ввести координату точки, направление, в котором она измеряется, и метод, 
+    выводящий на экран значение этой координаты, например 179°59.9' Е. Кроме того, напишите конструктор, 
+    принимающий три аргумента. Напишите функцию main(), которая сначала создает переменную с помощью 
+    трехаргументного конструктора и выводит ее значение на экран, а затем циклически запрашивает 
+    пользователя ввести значение координаты и отображает введенное значение на экране. Для вывода символа 
+    градусов (°) можно воспользоваться символьной константой '\xF8'.*/
+    /*angle abscissa(0, 0.0, 'W');
+    angle ordinate(0, 0.0, 'N');
+    abscissa.showAngle();
+    ordinate.showAngle();
+    abscissa.setAngle();
+    ordinate.setAngle();
+    abscissa.showAngle();
+    ordinate.showAngle();*/
+
+    /*8. Создайте класс, одно из полей которого хранит «порядковый номер» объекта, то есть для первого 
+    созданного объекта значение этого поля равно 1, для второго созданного объекта значение равно 2 и т.д.
+    Для того чтобы создать такое поле, вам необходимо иметь еще одно поле, в которое будет записываться 
+    количество созданных объектов класса (это означает, что последнее поле должно относиться не к отдельным 
+    объектам класса, а ко всему классу в целом. Вспомните, какое ключевое слово необходимо при описании 
+    такого поля.). Каждый раз при создании нового объекта конструктор может получить значение этого поля и в
+    соответствии с ним назначить объекту индивидуальный порядковый номер. В класс следует включить метод,
+    который будет выводить на экран порядковый номер объекта. Создайте функцию main(), в которой будут созданы
+    три объекта, и каждый объект выведет на экран свой порядковый номер, например: Мой порядковый номер: 2 и т.п.*/
+    /*countObjects objects1(1);
+    countObjects objects2(2);
+    countObjects objects3(3);
+    objects1.showObj();
+    objects2.showObj();
+    objects3.showObj(); */
+
+    /*9. На основе структуры fraction из упражнения 8 главы 4 создайте класс fraction. Данные класса должны
+    быть представлены двумя полями: числителем и знаменателем. Методы класса должны получать от пользователя
+    значения числителя и знаменателя дроби в форме 3/5 и выводить значение дроби в этом же формате. Кроме 
+    того, должен быть разработан метод, складывающий значения двух дробей. Напишите функцию main(), которая
+    циклически запрашивает у пользователя ввод пары дробей, затем складывает их и выводит результат на экран.
+    После каждой такой операции программа должна спрашивать пользователя, следует ли продолжать цикл.*/
+    /*int dividend, divisor;
+    char frac;
+    cout << "Введите первую дробь: ";
+    cin >> dividend >> frac >> divisor;
+    fraction first(dividend, divisor);
+    cout << "Введите вторую дробь: ";
+    cin >> dividend >> frac >> divisor;
+    fraction second(dividend, divisor);
+    fraction third(0, 0);
+    third.sumFrac(first, second); 
+    third.showFrac();*/
+
+    /*10. Создайте класс с именем ship, который будет содержать данные об учетном номере корабля и 
+    координатах его расположения. Для задания номера корабля следует использовать механизм, аналогичный
+    описанному в упражнении 8. Для хранения координат используйте два поля типа angle. Разработайте метод,
+    который будет сохранять в объекте данные о корабле, вводимые пользователем, и метод, выводящий данные
+    о корабле на экран. Напишите функцию  main(), создающую три объекта класса ship, затем запрашивающую 
+    ввод пользователем информации о каждом из кораблей и выводящую на экран всю полученную информацию. */
+
 
     return 0;
 }
