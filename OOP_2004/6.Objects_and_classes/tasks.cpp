@@ -1,4 +1,5 @@
 #include <iostream>
+#include <cmath>
 
 using namespace std;
 
@@ -231,7 +232,7 @@ public:
 }; */
 
 // Task 8
-class countObjects {
+/*class countObjects {
     static int allCount;
     int count;
 public:
@@ -242,7 +243,7 @@ public:
         cout << "Мой порядковый номер: " << count << " из " << allCount << endl;
     }
 };
-int countObjects::allCount = 0;
+int countObjects::allCount = 0; */
 
 // Task 9
 /*class fraction {
@@ -259,9 +260,83 @@ public:
     }
 };*/
 
-class ship {
-    countObjects 
+// Task 10
+/*class classShip {
+    static int allShips;
+    int countShip;
+    angle coord;
+public:
+    classShip(int c) : countShip(c), coord(0, 0.0, 'W') {
+        ++allShips;
+        coord.setAngle();
+    };
+    void showShips() const {
+        cout << "Мой порядковый номер: " << countShip << " из " << allShips << endl;
+        coord.showAngle();
+    }
 };
+int classShip::allShips = 0; */
+
+// Task 11 and 12
+class fraction {
+    int dividend;
+    int divisor;
+    char symb;
+public:
+    fraction() = default;
+    void enterFr() {
+        cin >> dividend >> symb >> divisor;
+    }
+    void showFr() const {
+        //cout << dividend << "/" << divisor << endl;
+        cout << dividend << "/" << divisor;
+    }
+    void fadd(const fraction&, const fraction&);
+    void fsub(const fraction&, const fraction&);
+    void fmul(const fraction&, const fraction&);
+    void fdiv(const fraction&, const fraction&);
+    void lowterms();
+    // Task 12
+    void setFr(int denominator, int numerator) {
+        dividend = denominator;
+        divisor = numerator;
+    }
+    // 
+};
+void fraction::fadd(const fraction& first, const fraction& second) {
+    dividend = first.dividend * second.divisor + first.divisor * second.dividend;
+    divisor = first.divisor * second.divisor;            
+}
+void fraction::fsub(const fraction& first, const fraction& second) {           
+    dividend = first.dividend * second.divisor - first.divisor * second.dividend;
+    divisor = first.divisor * second.divisor;            
+}
+void fraction::fmul(const fraction& first, const fraction& second) {
+    dividend = first.dividend * second.dividend;
+    divisor = first.divisor * second.divisor;            
+}
+void fraction::fdiv(const fraction& first, const fraction& second) {
+    dividend = first.dividend * second.divisor;
+    divisor = first.divisor * second.dividend;           
+}
+void fraction::lowterms() {     // сокращение дроби
+    long tnum, tden, temp, gcd;
+    tnum = labs(dividend);       // используем неотрицательные значения (нужен cmath)
+    tden = labs(divisor);
+    if(tden == 0)           // проверка знаменателя на 0
+        { cout << "Недопустимый знаменатель!"; exit(1); }
+    else if(tnum == 0)      // проверка числителя на 0
+        { dividend = 0; divisor = 1; return; }
+    while(tnum != 0) {      // нахождение наибольшего общего делителя
+        if(tnum < tden)     // если числитель больше знаменателя,
+            { temp = tnum; tnum = tden; tden = temp; }      // меняем их местами
+        tnum = tnum - tden;     // вычитание
+    }
+    gcd = tden;
+    dividend = dividend / gcd; // делим числитель и знаменатель на полученный наибольший общий делитель
+    divisor = divisor / gcd;
+}
+
 
 int main(int argc, char* argv[]) {
     /*1. Создайте класс Int, имитирующий стандартный тип int. Единственное поле этого класса должно иметь 
@@ -418,7 +493,106 @@ int main(int argc, char* argv[]) {
     который будет сохранять в объекте данные о корабле, вводимые пользователем, и метод, выводящий данные
     о корабле на экран. Напишите функцию  main(), создающую три объекта класса ship, затем запрашивающую 
     ввод пользователем информации о каждом из кораблей и выводящую на экран всю полученную информацию. */
+    /*classShip oneShip(1);
+    classShip twoShip(2);
+    classShip thirdShip(3);
+    oneShip.showShips();
+    twoShip.showShips();
+    thirdShip.showShips();*/
 
+    /* 11. Модифицируйте калькулятор, созданный в упражнении 12 главы 5 так, чтобы вместо структуры fraction
+    использовался одноименный класс. Класс должен содержать методы для ввода и вывода данных объектов, а 
+    также для выполнения арифметических операций. Кроме того, необходимо включить в состав класса функцию, 
+    приводящую дробь к несократимому виду. Функция должна находить наибольший общий делитель числителя и 
+    знаменателя и делить числитель и знаменатель на это значение. Код функции, названной lowterms(), 
+    приведен ниже:
+        void fraction::lowterms() {     // сокращение дроби
+            long tnum, tden, temp, gcd;
+            tnum = labs(num);       // используем неотрицательные значения (нужен cmath)
+            tden = labs(den);
+            if(tden == 0)           // проверка знаменателя на 0
+                { cout << "Недопустимый знаменатель!"; exit(1); }
+            else if(tnum == 0)      // проверка числителя на 0
+                { num = 0; den = 1; return; }
+            while(tnum != 0) {      // нахождение наибольшего общего делителя
+                if(tnum < tden)     // если числитель больше знаменателя,
+                    { temp = tnum; tnum = tden; tden = temp; }      // меняем их местами
+                tnum = tnum - tden;     // вычитание
+            }
+            gcd = tden;
+            num = num / gcd; // делим числитель и знаменатель на полученный наибольший общий делитель
+            den = den / gcd;
+        }
+    Можно вызывать данную функцию в конце каждого метода, выполняющего арифметическую операцию, либо 
+    непосредственно перед выводом на экран результата. Кроме перечисленных методов, вы можете включить в 
+    класс конструктор с двумя аргументами, что также будет полезно. */
+    /*fraction firstOp, secondOp, result; 
+    char operation, contin = 'y';
+    do {
+        //cout << "Введите первую дробь, операцию и вторую дробь: ";
+        //cin >> firstOp.dividend >> fraction >> firstOp.divisor >> operation >> secondOp.dividend >> fraction >> secondOp.divisor;
+        cout << "Введите первую дробь: ";
+        firstOp.enterFr();
+        cout << "Введите операцию: ";
+        cin >> operation;
+        cout << "Введите вторую дробь: ";
+        secondOp.enterFr();
+        switch(operation) {
+            case '+':
+                result.fadd(firstOp, secondOp);
+                result.lowterms();
+                result.showFr();
+                break;
+            case '-':
+                result.fsub(firstOp, secondOp);
+                result.lowterms();
+                result.showFr();
+                break;
+            case '/':
+                result.fdiv(firstOp, secondOp);
+                result.lowterms();
+                result.showFr();
+                break;
+            case '*':
+                result.fmul(firstOp, secondOp);
+                result.lowterms();
+                result.showFr();
+                break;
+            default:
+                cout << operation << " - некорректная операция" << endl;
+        }
+        cout << "Выполнить еще одну операцию (y/n)? ";
+        cin >> contin;
+    } while(contin != 'n'); */
+
+    /*12. Используйте преимущество ООП, заключающееся в том, что однажды созданный класс можно помещать в 
+    другие программы. Создайте новую программу, которая будет включать класс fraction, созданный в 
+    упражнении 11. Программа должна выводить аналог целочисленной таблицы умножения для дробей. Пользователь
+    вводит знаменатель, а программа должна подобрать всевозможные целые значения числителя так, чтобы 
+    значения получаемых дробей находились между 0 и 1. Дроби из получившегося таким образом набора 
+    перемножаются друг с другом во всевозможных комбинациях, в результате чего получается таблица 
+    следующего вида (для знаменателя, равного 6):
+        1/6     1/3     1/2     2/3     5/6
+-----------------------------------------
+1/6     1/36    1/18    1/12    1/9     5/36
+1/3     1/18    1/9     1/6     2/9     5/18
+1/2     1/12    1/6     1/4     1/3     5/12
+2/3     1/9     2/9     1/3     4/9     5/9
+5/6     5/36    5/18    5/12    5/9     25/36   */
+    fraction result;
+    int numerator = 0;      // числитель
+    int denominator = 0;    // знаменатель
+    cin >> denominator;
+    for (int i = 0; i < denominator; i++) {
+        for (int j = 1; j <= denominator; j++) {
+            //result.setFr(denominator, i);
+            result.setFr(i*(j-1), j*denominator);
+            result.lowterms();
+            result.showFr();
+            cout << " ";
+        }
+        cout << endl;
+    }
 
     return 0;
 }
