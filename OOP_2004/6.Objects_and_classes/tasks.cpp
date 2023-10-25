@@ -4,7 +4,7 @@
 using namespace std;
 
 // Task 1
-/*class Int {
+class Int {
     int value;
 public:
     Int() : value(0) {};                // конструктор значение = нулю
@@ -18,10 +18,10 @@ Int Int::sum(const Int& two) const {
     Int temp;
     temp.value = value + two.value;
     return temp;
-}*/
+}
 
 // Task 2
-/*const char ESC = 27;
+const char ESC = 27;
 const double TOLL = 0.50;
 class tollBooth {
 private:
@@ -41,10 +41,10 @@ public:
         cout << "Прибыль = " << profit << endl;  
     }
     ~tollBooth() = default;
-};*/
+};
 
 //Task 3
-/*class Time {
+class Time {
     int hours;
     int minutes;
     int seconds;
@@ -65,10 +65,10 @@ void Time::sum(const Time& one, const Time& two) {
     hours = allSecsOne/3600;
     minutes = (allSecsOne - (hours * 3600))/60;
     seconds = allSecsOne - (hours * 3600) - (minutes * 60);
-}*/
+}
 
 // Task 4
-/*class employee {
+class employee {
     int number;
     float stipend;
 public:
@@ -84,10 +84,10 @@ public:
         cout << "Размер пособия сотрудника: " << stipend << endl;
         cout << "-----" << endl;
     }
-};*/
+};
 
 // Task 5
-/*class date {
+class date {
     int day;
     int mounth;
     int year;
@@ -103,17 +103,17 @@ public:
         cout << "Месяц = " << mounth << endl;
         cout << "Год = " << year << endl;
     }
-};*/
+};
 
 // Task 6
-/*enum etype { laborer, secretary, manager, accountant, executive, researcher };
-class employee {
+enum etype { laborer, secretary, manager, accountant, executive, researcher };
+class employeeOne {
     int number;
     float stipend;
     etype character;
     date da;
 public:
-    employee() : number(0), stipend(0.0) {};
+    employeeOne() : number(0), stipend(0.0) {};
     void getemploy() {
         char symbol;
         cout << "Введите номер сотрудника: ";
@@ -167,10 +167,10 @@ public:
         da.showdate();
         cout << "-----" << endl;
     }
-};*/
+};
 
 // Task 7
-/*class angle {
+class angle {
     int grade;
     float minuts;
     char route;
@@ -229,10 +229,10 @@ public:
     void showAngle() const { // 179°59.9' Е
         cout << grade << "@" << minuts << '\'' << route << endl;
     }
-}; */
+};
 
 // Task 8
-/*class countObjects {
+class countObjects {
     static int allCount;
     int count;
 public:
@@ -243,25 +243,25 @@ public:
         cout << "Мой порядковый номер: " << count << " из " << allCount << endl;
     }
 };
-int countObjects::allCount = 0; */
+int countObjects::allCount = 0;
 
 // Task 9
-/*class fraction {
+class fractionNine {
     int dividend;
     int divisor;
 public:
-    fraction(int divid, int divis) : dividend(divid), divisor(divis) {};
+    fractionNine(int divid, int divis) : dividend(divid), divisor(divis) {};
     void showFrac() const {
         cout << dividend << "/" << divisor << endl;
     }
-    void sumFrac(const fraction& one, const fraction& two) {
+    void sumFrac(const fractionNine& one, const fractionNine& two) {
         dividend = one.dividend * two.divisor + one.divisor * two.dividend;
         divisor = one.divisor * two.divisor;
     }
-};*/
+};
 
 // Task 10
-/*class classShip {
+class classShip {
     static int allShips;
     int countShip;
     angle coord;
@@ -275,7 +275,7 @@ public:
         coord.showAngle();
     }
 };
-int classShip::allShips = 0; */
+int classShip::allShips = 0;
 
 // Task 11 and 12
 class fraction {
@@ -344,9 +344,9 @@ int main(int argc, char* argv[]) {
     целым значением, выводить значение поля на экран и складывать два значения типа Int. Напишите программу,
     в которой будут созданы три объекта класса Int, два из которых будут инициализированы. Сложите два 
     инициализированных объекта, присвойте результат третьему, а затем отобразите результат на экране. */
-    /*Int one(5), two(10), three;
+    Int one(5), two(10), three;
     three = one.sum(two);
-    three.showvalue();*/
+    three.showvalue();
 
     /*2. Представьте пункт для взимания платежей за проезд по автостраде. Каждая проезжающая машина должна 
     заплатить за проезд 50 центов, однако часть машин платит за проезд, а часть проезжает бесплатно. 
@@ -361,7 +361,7 @@ int main(int argc, char* argv[]) {
     того, что-бы сымитировать заплатившего автолюбителя, и другую клавишу, чтобы сымитировать недобросовестного
     водителя. Нажатие клавиши Esc должно привести к выдаче текущих значений количества машин и выручки и 
     завершению программы. */
-    /*tollBooth ride;
+    tollBooth ride;
     char symbol;
     cout << "\nВведите 1 для заплатившего автолюбителя, "
         << "\n 0 для недобросовестного водителя, "
@@ -374,7 +374,7 @@ int main(int argc, char* argv[]) {
             ride.nopayCar();
         }
     } while(symbol != ESC);
-    ride.display();*/
+    ride.display();
 
     /*3. Создайте класс с именем time, содержащий три поля типа int, предназначенные для хранения часов, 
     минут и секунд. Один из конструкторов класса должен инициализировать поля нулевыми значениями, а другой
@@ -384,51 +384,50 @@ int main(int argc, char* argv[]) {
     ли они быть константными) и один неинициализированный объект. Затем сложите два инициализированных 
     значения, а результат присвойте третьему объекту и выведите его значение на экран. 
     Где возможно, сделайте методы константными. */
-    /*const Time one(12, 30, 45), two(6, 25, 20); 
-    Time three;
-    three.sum(one, two);
-    three.showTime(); */
+    const Time first(12, 30, 45), second(6, 25, 20); 
+    Time theart;
+    theart.sum(first, second);
+    theart.showTime();
 
     /*4. Создайте класс employee, используя упражнение 4 главы 4. Класс должен включать поле типа int для 
     хранения номера сотрудника и поле типа float для хранения величины его оклада. Методы класса должны 
     позволять пользователю вводить и отображать данные класса. Напишите функцию main(), которая запросит 
     пользователя ввести данные для трех сотрудников и выведет полученную информацию на экран. */
-    /*employee one, two, three;
-    one.inputEmploy();
-    two.inputEmploy();
-    three.inputEmploy();
-    one.showEmploy();
-    two.showEmploy();
-    three.showEmploy();*/
+    employee one4, two4, three4;
+    one4.inputEmploy();
+    two4.inputEmploy();
+    three4.inputEmploy();
+    one4.showEmploy();
+    two4.showEmploy();
+    three4.showEmploy();
 
     /*5. Взяв в качестве основы структуру из упражнения 5 главы 4, создайте класс date. Его данные должны 
     размещаться в трех полях типа int: month, day и year. Метод класса getdate() должен принимать значение 
     для объекта в формате 12/31/02, а метод showdate() — выводить данные на экран. */
-    /*date time_1;
-    char symbol;
+    date time_1;
+    char slash;
     int day, mounth, year;
     cout << "Введите дату в формате 31/12/2002" << endl;
-    //cin >> time_1.day >> symbol >> time_1.mounth >> symbol >> time_1.year;
-    cin >> day >> symbol >> mounth >> symbol >> year;
+    cin >> day >> slash >> mounth >> slash >> year;
     time_1.getdate(day, mounth, year);
-    time_1.showdate();*/
+    time_1.showdate();
 
-    /*6. Расширьте содержание класса employee из упражнения 4, включив в него класс date и перечисление 
+    /*6. Расширьте содержание класса employeeOne из упражнения 4, включив в него класс date и перечисление 
     etype (см. упражнение 6 главы 4). Объект класса date будет использоваться для хранения даты приема 
     сотрудника на работу. Перечисление будет использовано для хранения статуса сотрудника: лаборант, 
     секретарь, менеджер и т. д. Последние два поля данных должны быть закрытыми в определении класса 
-    employee, как и номер и оклад сотрудника. Вам будет необходимо разработать методы getemploy() и 
+    employeeOne, как и номер и оклад сотрудника. Вам будет необходимо разработать методы getemploy() и 
     putemploy(), предназначенные соответственно для ввода и отображения информации о сотруднике. Возможно, 
     при создании методов вам понадобится ветвление switch для работы с перечисляемым типом etype. Напишите 
     функцию main(), которая попросит пользователя ввести данные о трех сотрудниках, а затем выведет эти 
     данные на экран.*/
-    /*employee emp1, emp2, emp3;
+    employeeOne emp1, emp2, emp3;
     emp1.getemploy();
     emp1.putemploy();
     emp2.getemploy();
     emp2.putemploy();
     emp3.getemploy();
-    emp3.putemploy();*/
+    emp3.putemploy();
 
     /*7. В морской навигации координаты точки измеряются в градусах и минутах широты и долготы. Например, 
     координаты бухты Папити на о. Таити равны 149 градусов 34.8 минут восточной долготы и 17 градусов 31.5
@@ -444,14 +443,14 @@ int main(int argc, char* argv[]) {
     трехаргументного конструктора и выводит ее значение на экран, а затем циклически запрашивает 
     пользователя ввести значение координаты и отображает введенное значение на экране. Для вывода символа 
     градусов (°) можно воспользоваться символьной константой '\xF8'.*/
-    /*angle abscissa(0, 0.0, 'W');
+    angle abscissa(0, 0.0, 'W');
     angle ordinate(0, 0.0, 'N');
     abscissa.showAngle();
     ordinate.showAngle();
     abscissa.setAngle();
     ordinate.setAngle();
     abscissa.showAngle();
-    ordinate.showAngle();*/
+    ordinate.showAngle();
 
     /*8. Создайте класс, одно из полей которого хранит «порядковый номер» объекта, то есть для первого 
     созданного объекта значение этого поля равно 1, для второго созданного объекта значение равно 2 и т.д.
@@ -462,12 +461,12 @@ int main(int argc, char* argv[]) {
     соответствии с ним назначить объекту индивидуальный порядковый номер. В класс следует включить метод,
     который будет выводить на экран порядковый номер объекта. Создайте функцию main(), в которой будут созданы
     три объекта, и каждый объект выведет на экран свой порядковый номер, например: Мой порядковый номер: 2 и т.п.*/
-    /*countObjects objects1(1);
+    countObjects objects1(1);
     countObjects objects2(2);
     countObjects objects3(3);
     objects1.showObj();
     objects2.showObj();
-    objects3.showObj(); */
+    objects3.showObj();
 
     /*9. На основе структуры fraction из упражнения 8 главы 4 создайте класс fraction. Данные класса должны
     быть представлены двумя полями: числителем и знаменателем. Методы класса должны получать от пользователя
@@ -475,17 +474,17 @@ int main(int argc, char* argv[]) {
     того, должен быть разработан метод, складывающий значения двух дробей. Напишите функцию main(), которая
     циклически запрашивает у пользователя ввод пары дробей, затем складывает их и выводит результат на экран.
     После каждой такой операции программа должна спрашивать пользователя, следует ли продолжать цикл.*/
-    /*int dividend, divisor;
+    int dividend, divisor;
     char frac;
     cout << "Введите первую дробь: ";
     cin >> dividend >> frac >> divisor;
-    fraction first(dividend, divisor);
+    fractionNine first9(dividend, divisor);
     cout << "Введите вторую дробь: ";
     cin >> dividend >> frac >> divisor;
-    fraction second(dividend, divisor);
-    fraction third(0, 0);
-    third.sumFrac(first, second); 
-    third.showFrac();*/
+    fractionNine second9(dividend, divisor);
+    fractionNine third(0, 0);
+    third.sumFrac(first9, second9); 
+    third.showFrac();
 
     /*10. Создайте класс с именем ship, который будет содержать данные об учетном номере корабля и 
     координатах его расположения. Для задания номера корабля следует использовать механизм, аналогичный
@@ -493,12 +492,12 @@ int main(int argc, char* argv[]) {
     который будет сохранять в объекте данные о корабле, вводимые пользователем, и метод, выводящий данные
     о корабле на экран. Напишите функцию  main(), создающую три объекта класса ship, затем запрашивающую 
     ввод пользователем информации о каждом из кораблей и выводящую на экран всю полученную информацию. */
-    /*classShip oneShip(1);
+    classShip oneShip(1);
     classShip twoShip(2);
     classShip thirdShip(3);
     oneShip.showShips();
     twoShip.showShips();
-    thirdShip.showShips();*/
+    thirdShip.showShips();
 
     /* 11. Модифицируйте калькулятор, созданный в упражнении 12 главы 5 так, чтобы вместо структуры fraction
     использовался одноименный класс. Класс должен содержать методы для ввода и вывода данных объектов, а 
@@ -526,7 +525,7 @@ int main(int argc, char* argv[]) {
     Можно вызывать данную функцию в конце каждого метода, выполняющего арифметическую операцию, либо 
     непосредственно перед выводом на экран результата. Кроме перечисленных методов, вы можете включить в 
     класс конструктор с двумя аргументами, что также будет полезно. */
-    /*fraction firstOp, secondOp, result; 
+    fraction firstOp, secondOp, result; 
     char operation, contin = 'y';
     do {
         //cout << "Введите первую дробь, операцию и вторую дробь: ";
@@ -563,7 +562,7 @@ int main(int argc, char* argv[]) {
         }
         cout << "Выполнить еще одну операцию (y/n)? ";
         cin >> contin;
-    } while(contin != 'n'); */
+    } while(contin != 'n');
 
     /*12. Используйте преимущество ООП, заключающееся в том, что однажды созданный класс можно помещать в 
     другие программы. Создайте новую программу, которая будет включать класс fraction, созданный в 
@@ -579,16 +578,16 @@ int main(int argc, char* argv[]) {
 1/2     1/12    1/6     1/4     1/3     5/12
 2/3     1/9     2/9     1/3     4/9     5/9
 5/6     5/36    5/18    5/12    5/9     25/36   */
-    fraction result;
+    fraction result12;
     int numerator = 0;      // числитель
     int denominator = 0;    // знаменатель
     cin >> denominator;
     for (int i = 0; i < denominator; i++) {
         for (int j = 1; j <= denominator; j++) {
-            //result.setFr(denominator, i);
-            result.setFr(i*(j-1), j*denominator);
-            result.lowterms();
-            result.showFr();
+            //result12.setFr(denominator, i);
+            result12.setFr(i*(j-1), j*denominator);
+            result12.lowterms();
+            result12.showFr();
             cout << " ";
         }
         cout << endl;
