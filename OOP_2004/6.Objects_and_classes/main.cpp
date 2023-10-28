@@ -43,13 +43,17 @@ class part {    // определение класса
         color fillcolor;    // цвет
         fstyle fillstyle;   // стиль заполнения
     public:
-        void set(int x, int y, int r, color fc, fstyle fs) {    // установка атрибутов круга
-            xCo = x;
-            yCo = y;
-            radius = r;
-            //fillcolor = fc;
-            //fillstyle = fs;
-        }
+        //void set(int x, int y, int r, color fc, fstyle fs) {    // установка атрибутов круга
+        //    xCo = x;
+        //    yCo = y;
+        //    radius = r;
+        //    //fillcolor = fc;
+        //    //fillstyle = fs;
+        //}
+        // ИЛИ
+        // конструктор
+        circle(int x, int y, int r, color fc, fstyle fs):xCo(x), yCo(y), radius(r), fillcolor(fc), fillstyle(fs)
+        { }
         void draw() {   // рисование круга
             set_color(fillcolor);       // установка цвета и
             set_fill_style(fillstyle);  // стиля заполнения
@@ -69,7 +73,7 @@ class Distance { // длина в английской системе
             cout << "\nВведите число футов: "; cin >> feet;
             cout << "Введите число дюймов: "; cin >> inches;
         }
-        void showdist() {   // вывод полей на экран
+        void showdist() const {   // вывод полей на экран
             cout << feet << "\'-" << inches << '\"'; 
         }
 };
@@ -78,9 +82,9 @@ class Distance { // длина в английской системе
 class Counter {
     private:
         unsigned int count;     // значение счетчика
-    public:
+    public:   
         Counter() : count(0)    // конструктор
-        { /* пустое тело */ }
+        { cout << "Конструктор\n"; }
         void inc_count() {      // инкрементирование счетчика
             count++; 
         }
@@ -88,13 +92,37 @@ class Counter {
             return count; 
         }
 };
+////////////////////////////////////////////////////
+class foo {
+private:
+    static int count;   // общее поле для всех объектов (в смысле "объявления")
+public:
+    foo()               // инкрементирование при создании объекта
+    { count++; }
+    int getcount()      // возвращает значение count
+    { return count; }
+};
+int foo::count = 0;     // *определение* count
+////////////////////////////////////////////////////
+// constfu.cpp
+// применение константных методов
+class aClass {
+private:
+    int alpha;
+public:
+    void nonFunc()          // неконстантный метод корректно
+    { alpha = 99; } 
+    //void conFunc()const     // константный метод
+    //{ alpha = 99; }         // ошибка: нельзя изменить значение поля
+};
+
 //////////////////////////////////////////////////////////////
-int main()  {
+int main(int argc, char* argv[]) {
     smallobj s1, s2;    // определение двух объектов класса smallobj
     s1.setdata(1066);   // вызовы метода setdata()
     s2.setdata(1776);
     s1.showdata();      // вызовы метода showdata()
-    s2. showdata();
+    s2.showdata();
     ///////////////////////////////////////////////
     part part1;     // определение объекта класса part
     part1.setpart(6244, 373, 217.55F);
@@ -102,9 +130,14 @@ int main()  {
     ///////////////////////////////////////////////
     /*init_graphics();    // инициализация графики
     circle c1, c2, c3;          // создание кругов
-    c1.set(15, 7, 5, cBLUE, X_FILL);    // установка атрибутов кругов
-    c2.set(41, 12, 7, cRED, O_FILL);
-    c3.set(65, 18, 4, cGREEN, MEDIUM_FILL);
+    //c1.set(15, 7, 5, cBLUE, X_FILL);    // установка атрибутов кругов
+    //c2.set(41, 12, 7, cRED, O_FILL);
+    //c3.set(65, 18, 4, cGREEN, MEDIUM_FILL);
+
+    circle c1(15, 7, 5, cBLUE, X_FILL);
+    circle c2(41, 12, 7, cRED, O_FILL);
+    circle c3(65, 18, 4, cGREEN, MEDIUM_FILL);
+
     c1.draw();  // рисование кругов
     c2.draw();
     c3.draw();
@@ -127,6 +160,11 @@ int main()  {
     cout << "\nc2 =" << c2.get_count();
     cout << endl;
     ///////////////////////////////////////////////
-    
+    foo f1, f2, f3; // создание трех объектов
+    // каждый объект видит одно и то же значение
+    cout << "Число объектов: " << f1.getcount() << endl;
+    cout << "Число объектов: " << f2.getcount() << endl;
+    cout << "Число объектов: " << f3.getcount() << endl;
+    ///////////////////////////////////////////////
     return 0;
 }
