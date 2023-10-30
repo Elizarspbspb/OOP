@@ -1,6 +1,7 @@
 #include <iostream>
 #include <iomanip>      // setw
 #include <cstring>
+#include <string>
 
 using namespace std;
 
@@ -128,6 +129,101 @@ int main(int argc, char* argv[]) {
     cout << endl;
 
     //////////////////////////////////////////////////////////////
+
+    string bs1("Рыба");
+    string bs2 = "Мясо";
+    string bs3;
+    bs3 = bs1;
+    cout << "bs3 >> " << bs3 << endl;
+    bs3 = "Ни " + bs1 + " ни ";
+    bs3 += bs2;
+    cout << "bs3 >> " << bs3 << endl;
+    bs1.swap(bs2);
+    cout << bs1 << " не " << bs2 << endl;
+
+    //////////////////////////////////////////////////////////////
+    // ввод/вывод для класса string
+    string full_name, nickname, address;
+    string greeting("Здравствуйте, ");
+    cout << "Введите Ваше ФИО: ";
+    cin.ignore();       // очистить поток
+    getline(cin.ignore(), full_name);
+    cout << "Ваше ФИО: " << full_name << endl;
+    cout << "Введите Ваш псевдоним: ";
+    cin >> nickname;
+    greeting += nickname;
+    cout << greeting << endl;
+    cout << "Введите Ваш адрес в несколько строк\n";
+    cout << "Окончание ввода символ '$'\n";
+    cin.ignore(); 
+    getline(cin.ignore(), address, '$');
+    cout << "Ваш адрес: " << address << endl;
+
+    //////////////////////////////////////////////////////////////
+
+    string spruce = "В лесу родилась елочка, в лесу она росла.";
+    int number;
+    number = spruce.find("елочка");
+    cout << "Елочка найдена: " << number << endl;
+    number = spruce.find_first_of("умка");
+    cout << "Первый из умка: " << number << endl;
+    number = spruce.find_first_not_of("абвгдАБВГД");
+    cout << "Первый не из: " << number << endl;
+
+    //////////////////////////////////////////////////////////////
+    
+    string str1("Все хорошо, прекрасная маркиза.");
+    string str2("принцесса");
+    string str3("Приветствую ");
+    str1.erase(0, 12);                  // убираем "Все хорошо, "
+    str1.replace(11, 7, str2);          // заменяем "маркиза" на "принцесса"
+    str1.insert(0, str3);               // вставляем "Приветствую, "
+    str1.erase(str1.size() - 1, 1);     // убираем '.'
+    str1.append(3, '!');                // добавляем '!!!'
+    int countSpace = str1.find(' ');       // ищем пробелы
+    while(countSpace < str1.size()) {      // цикл по всем пробелам
+        str1.replace(countSpace, 1, "/");  // заменяем пробел на '/'
+        countSpace = str1.find(' ');       // ищем следующий пробел
+    }
+    cout << "str1: " << str1 << endl;
+
+    //////////////////////////////////////////////////////////////
+
+    string aName = "Иван";
+    string userName;
+    cout << "Введите Ваше имя: ";
+    cin >> userName;
+    if(userName == aName)
+        cout << "Привет, Иван\n";
+    else if(userName < aName)
+        cout << "Ваше имя идет до имени Иван\n";
+    else
+        cout << "Ваше имя идет после имени Иван\n";
+    int n = userName.compare(0, 2, aName, 0, 2);    
+    // .compare - сравнивает первые две буквы слова «Иван» с первыми двумя userName
+    cout << "Первые две буквы Вашего имени ";
+    if(n == 0)
+        cout << "совпадают ";
+    else if(n < 0)
+        cout << "идут до ";
+    else
+        cout << "идут после ";
+    cout << aName.substr(0, 2) << endl;
+
+    //////////////////////////////////////////////////////////////
+
+    char charray[80];
+    string word;
+    cout << "Введите слово: ";
+    cin >> word;
+    int wlen = word.length();       // длина строки
+    cout << "По одному символу: ";
+    for(int j = 0; j < wlen; j++)
+        cout << word.at(j);         // тут будет проверка на выход за пределы строки
+        // cout << word[j];         // а тут проверки не будет
+    word.copy(charray, wlen, 0);    // копируем строку в массив charray
+    charray[wlen] = 0;
+    cout << "\nМассив содержит: " << charray << endl;
 
     return 0;
 }
