@@ -225,5 +225,7 @@ int main(int argc, char* argv[]) {
     charray[wlen] = 0;
     cout << "\nМассив содержит: " << charray << endl;
 
+    //////////////////////////////////////////////////////////////
+    
     return 0;
 }
