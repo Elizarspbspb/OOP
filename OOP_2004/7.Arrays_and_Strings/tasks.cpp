@@ -12,11 +12,11 @@ const int MAXSTR = 100;  // максимальная длина строки
 // Task 1
 char reversit(const char re[]) {
     char input[MAXSTR];
-    for (int j = 0, i = strlen(re)-1; i >= -1; --i, ++j) {
+    for (int j = 0, i = strlen(re); i >= -1; --i, ++j) {
         input[j] = re[i];
         cout << input[j] << " ";
     }
-    return input;
+    return *input;
 }
 /*void reversit(char s[]) {
     int len = strlen(s);
