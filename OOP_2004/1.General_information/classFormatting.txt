@@ -1,0 +1,64 @@
+class Foo final
+{
+public:
+    Foo() = default;                        // Optinal default
+    explicit Foo(int a);                    // Without Foo()
+    ~Foo() = default;                       // Optinal default
+    Foo(const Foo&) = delete;               // Optinal delete
+    Foo& operator=(const Foo&) = delete;    // Optinal delete
+    // new line
+    void member();
+    // new line
+private:
+    int a; // fields
+    // new line
+    void privateMember();
+};
+
+---- -------- ------- ------- ------- ----
+
+class Foo final
+{
+public:
+    Foo() = default;
+    ~Foo() = default
+    Foo(const Foo&) = delete;
+    Foo& operator=(const Foo&) = delete;
+
+    void member();
+private:
+    int a{};
+
+    void privateMember();
+};
+
+---- -------- ------- ------- ------- ----
+
+// foo.h
+class Foo final
+{
+public:
+    Foo(int a);
+    ~Foo() = default
+    Foo(const Foo&) = delete;
+    Foo& operator=(const Foo&) = delete;
+
+    void member();
+private:
+    int a;
+
+    void privateMember();
+};
+
+---- -------- ------- ------- ------- ----
+
+// foo.cpp
+#include "foo.h"
+
+#include "project_headers"
+
+#include <system_headers>
+
+
+Foo::Foo(int a) : a(a) {}
+
