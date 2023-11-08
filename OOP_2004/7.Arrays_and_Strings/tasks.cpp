@@ -2,6 +2,8 @@
 #include <iomanip>      // setw
 #include <cstring>
 #include <string>
+#include <math.h>
+#include <stdlib.h>
 
 using namespace std;
 
@@ -140,6 +142,41 @@ void card::display() {
 }
 
 //Task 7
+class Money{
+public:
+    long double mstold(string);
+};
+long double Money::mstold(string strFrom) {
+    string strTo;
+    long double mon = 0.0;
+    for (int size = 0, sizeTwo = 0; size < strFrom.length(); size++) {
+        if (strFrom[size] >= 48 && strFrom[size] <= 57) {
+            strTo[sizeTwo++] = strFrom[size];
+        } else if (strFrom[size] == '.') {
+            strTo[sizeTwo++] = strFrom[size];
+        }
+    }
+    mon = stold(strTo); // mon = _atold(strTo);
+    return mon;
+}
+
+//Task 7
+const int LIMIT = 100;      // максимальная длина строки
+class safearay {
+    int masSeven[LIMIT];
+public:
+    int putel(int index, int value) {
+        if (index > LIMIT-1 || index < 0)
+            return -1;
+        masSeven[index] = value;
+        return 0;
+    }
+    int getel(int index) const {
+        if (index > LIMIT-1 || index < 0)
+            return -1;
+        return masSeven[index];
+    }
+};
 
 int main(int argc, char* argv[]) {
     /*1. Напишите функцию reversit(), которая переворачивает строку (массив типа char). Используйте цикл 
@@ -305,6 +342,33 @@ int main(int argc, char* argv[]) {
     для преобразования новой строки к числу типа long double. Предполагаем, что денежное значение не может
     быть отрицательным. Напишите функцию main() для проверки метода mstold(), которая несколько раз получает
     денежную строку от пользователя и выводит соответствующее число типа long double. */
+    /*string money;
+    Money text;
+    cout << "Введите денежную сумму ($1 234 567 890 123.99): ";
+    getline(cin, money);
+    cout << "Число = " << text.mstold(money) << endl; */
+
+    /*8. Другим недостатком C++ является отсутствие автоматической проверки индексов массива на 
+    соответствие их границам массива (это делает действия с массивами быстрыми, но менее надежными). 
+    Мы можем использовать класс для создания надежного массива, который проверяет индексы при любой 
+    попытке доступа к массиву. Напишите класс safearay, который использует массив типа int фиксированного
+    размера (назовем его LIMIT) в качестве своей единственной переменной. В классе будет два метода. 
+    Первый, putel(), принимает индекс и значение типа int как аргументы и вставляет это значение в массив
+    по заданному индексу. Второй, getel(), принимает индекс как аргумент и возвращает значение типа int, 
+    содержащееся в элементе с этим индексом.
+        safearay sa1;           // описываем массив
+        int temp = 12345;       // описываем целое
+        sa1.putel(7, temp);     // помещаем значение temp в массив
+        temp = sa1.getel(7);    // получаем значение из массива
+    Оба метода должны проверять индекс аргумента, чтобы быть уверенными, что он не меньше 0 и не больше, 
+    чем LIMIT-1. Вы можете использовать этот массив без опаски, что запись будет произведена в другие 
+    части памяти. Использование методов для доступа к элементам массива не выглядит так наглядно, как 
+    использование операции []. В главе 8 мы увидим, как перегрузить эту операцию, чтобы сделать работу 
+    нашего класса safearay похожей на работу встроенных массивов. */
+    safearay sa1;           // описываем массив
+    int temp = 12345;       // описываем целое
+    sa1.putel(7, temp);     // помещаем значение temp в массив
+    temp = sa1.getel(7);    // получаем значение из массива
 
     return 0;
 }
