@@ -4,6 +4,7 @@
 #include <string>
 #include <math.h>
 #include <stdlib.h>
+#include <strstream>  // Task 11
 
 using namespace std;
 
@@ -144,8 +145,13 @@ void card::display() {
 
 //Task 7
 class Money{
+    char streams[MAXSTR] = "$";
 public:
     long double mstold(string);
+    char ldtoms(long double);
+    void show() const {
+        cout << streams << endl;
+    }
 };
 long double Money::mstold(string strFrom) {
     string strTo;
@@ -160,8 +166,20 @@ long double Money::mstold(string strFrom) {
     mon = stold(strTo); // mon = _atold(strTo);
     return mon;
 }
+// Task 11
+char Money::ldtoms(long double doubleFrom) {
+    if (doubleFrom > 9999999999999990.00)
+        return *"Very big number !";
+    ostrstream ustring;
+    ustring << doubleFrom;
+    string len = ustring.str();
+    for (int i = 0; i < len.length(); i++) {
+        streams[i+1] = ustring.str()[i];
+    }
+    return *streams;    
+}
 
-//Task 7
+//Task 8
 const int LIMIT = 100;      // максимальная длина строки
 class safearay {
     int masSeven[LIMIT];
@@ -415,10 +433,10 @@ int main(int argc, char* argv[]) {
     части памяти. Использование методов для доступа к элементам массива не выглядит так наглядно, как 
     использование операции []. В главе 8 мы увидим, как перегрузить эту операцию, чтобы сделать работу 
     нашего класса safearay похожей на работу встроенных массивов. */
-    safearay sa1;           // описываем массив
+    /*safearay sa1;           // описываем массив
     int temp = 12345;       // описываем целое
     sa1.putel(7, temp);     // помещаем значение temp в массив
-    temp = sa1.getel(7);    // получаем значение из массива
+    temp = sa1.getel(7);    // получаем значение из массива */
 
     /*9. Очередь — это устройство для хранения данных, похожее на стек. Отличие в том, что в стеке 
     последний сохраненный элемент будет первым извлеченным, тогда как в очереди первый сохраненный элемент
@@ -469,6 +487,24 @@ int main(int argc, char* argv[]) {
     maxMas.putel(7, 4, temp);  
     cout << "Temp2 = " << maxMas.getel(7, 4) << endl;   */
 
+    /* 11. Вернемся к обсуждению денежных строк из упражнения 7. Напишите метод ldtoms() для 
+    преобразования числа типа long double в денежную строку, представляющую это число. Для начала вам 
+    нужно проверить, что значение long double не очень большое. Мы предполагаем, что вы не будете 
+    пытаться преобразовать число, больше чем 9 999 999 999 999 990.00. Затем преобразуем long double в 
+    строку (без знака доллара и запятых), хранящуюся в памяти, используя объект ostrstream, как 
+    рассматривалось ранее в этой главе. Получившаяся отформатированная строка может быть помещена в 
+    буфер, называющийся ustring. Затем вам нужно будет создать другую строку, начинающуюся со знака 
+    доллара, далее копируем цифру за цифрой из строки ustring, начиная слева и вставляя запятые через 
+    каждые три цифры. Также вам нужно подавлять нули в начале строки. Например, вы должны вывести 
+    $3 124.95, а не $0 000 000 000 003 124.95. Не забудьте закончить строку нулевым символом '\0'.
+    Напишите функцию main() для тестирования этой функции путем многократного ввода пользователем чисел 
+    типа long double и вывода результата в виде денежной строки. */
+    /*Money text;
+    long double money = 0;
+    cout << "Введите денежную сумму ($1 234 567 890 123.99): ";
+    cin >> money;
+    text.ldtoms(money);
+    text.show(); */
 
     return 0;
 }
