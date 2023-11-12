@@ -148,6 +148,7 @@ class Money{
     char streams[MAXSTR] = "$";
 public:
     long double mstold(string);
+    // Task 11
     char ldtoms(long double);
     void show() const {
         cout << streams << endl;
@@ -246,6 +247,59 @@ public:
     }
 };
 
+
+// Task 12
+class bMoney {
+    long double money;
+    char streams[MAXSTR] = "$";
+    string strFrom;
+public:
+    bMoney();
+    bMoney(char s[]);
+    void putmoney();
+    void getmoney();
+    long double mstold(string);
+    char ldtoms(long double);
+    void madd(bMoney, bMoney);
+};
+bMoney::bMoney() : money(0) {}
+bMoney::bMoney(char s[]) : money(0) {}
+void bMoney::putmoney()
+{
+    cout << "Введите строку с числом " << endl;
+    cin >> strFrom;
+    mstold(strFrom);
+}
+long double bMoney::mstold(string strTo) {
+    long double mon = 0.0;
+    for (int size = 0, sizeTwo = 0; size < strFrom.length(); size++) {
+        if (strFrom[size] >= 48 && strFrom[size] <= 57) {
+            strTo[sizeTwo++] = strFrom[size];
+        } else if (strFrom[size] == '.') {
+            strTo[sizeTwo++] = strFrom[size];
+        }
+    }
+    mon = stold(strTo); // mon = _atold(strTo);
+    return mon;
+}
+
+void bMoney::getmoney() {
+    cout << ldtoms(money) << streams << endl;
+}
+char bMoney::ldtoms(long double doubleFrom) {
+    if (doubleFrom > 9999999999999990.00)
+        return *"Very big number !";
+    ostrstream ustring;
+    ustring << doubleFrom;
+    string len = ustring.str();
+    for (int i = 0; i < len.length(); i++)
+        streams[i+1] = ustring.str()[i];
+    return *streams;    
+}
+void bMoney::madd(bMoney one, bMoney two) {
+    money = one.money + two.money;
+}
+
 int main(int argc, char* argv[]) {
     /*1. Напишите функцию reversit(), которая переворачивает строку (массив типа char). Используйте цикл 
     for, который меняет местами первый и последний символы, затем следующие и т. д. до предпоследнего. 
@@ -253,21 +307,21 @@ int main(int argc, char* argv[]) {
     reversit(). Программа должна принимать строку от пользователя, вызывать функцию reversit(), а затем 
     выводить полученный результат. Используйте метод ввода, который позволяет использовать внутренние 
     пробелы. Протестируйте программу на примере фразы «Аргентина манит негра». */
-    /*char input[MAXSTR];
+    char input[MAXSTR];
     cout << "Введите строку текста" << endl;
     //cin >> input;             // работает до пробела
     cin.ignore();
     cin.get(input, MAXSTR);     // работает до новой строки
     cout << reversit(input) << endl;
     //reversit(input);            // перевернуть строку
-    cout << "Перевернутая строка:" << input << endl; */
+    cout << "Перевернутая строка:" << input << endl;
 
     /*2. Создайте класс employee, который содержит имя (объект класса string) и номер (типа long) служащего.
     Включите в него метод getdata(), предназначенный для получения данных от пользователя и помещения их в
     объект, и метод putdata(), для вывода данных. Предполагаем, что имя не может иметь внутренних пробелов.
     Напишите функцию main(), использующую этот класс. Вам нужно будет создать массив типа employee, а затем
     предложить пользователю ввести данные до 100 служащих. Наконец, вам нужно будет вывести данные всех служащих.*/
-    /*employeSeven sotr[MAXSTR];
+    employeSeven sotr[MAXSTR];
     char contin = 'y';
     int countEmploys = 0;
     do {
@@ -277,7 +331,7 @@ int main(int argc, char* argv[]) {
     } while(contin != 'n');
     while(countEmploys >= 0) {
         sotr[countEmploys--].putdata();
-    } */
+    }
 
     /*3. Напишите программу, вычисляющую среднее значение до 100 интервалов, введенных пользователем. 
     Создайте массив объектов класса Distance, как это было сделано в примере ENGLARAY этой главы. Для 
@@ -290,7 +344,7 @@ int main(int argc, char* argv[]) {
             feet = int(fltfeet);
             inches = (temp - feet) * 12.0;
         }*/
-    /*Distance num[MAXSTR];
+    Distance num[MAXSTR];
     Distance result;
     char continuE;
     int count = 0;
@@ -308,14 +362,14 @@ int main(int argc, char* argv[]) {
     cout << endl;
     while (count >= 0) {
         num[count--].showdist();
-    } */
+    }
 
     /*4. Начните с программы, которая позволяет пользователю вводить целые числа, а затем сохранять их в
     массиве типа int. Напишите функцию maxint(), которая, обрабатывая элементы массива один за другим, 
     находит наибольший. Функция должна принимать в качестве аргумента адрес массива и количество элементов 
     в нем, а возвращать индекс наибольшего элемента. Программа должна вызвать эту функцию, а затем вывести
     наибольший элемент и его индекс. (Смотрите программу SALES этой главы.) */
-    /*string num;
+    string num;
     int numbers[MAXSTR];
     int count = 0, index = 0;
     while (count < 5) {
@@ -331,12 +385,12 @@ int main(int argc, char* argv[]) {
         count++;
     }
     index = maxint(numbers, count);
-    cout << "Индекс = " << index << "; Элемент: " << numbers[index] << endl; */
+    cout << "Индекс = " << index << "; Элемент: " << numbers[index] << endl;
 
     /*5. Начните с класса fraction из упражнений 11 и 12 главы 6. Напишите функцию main(), которая получает
     случайные дробные числа от пользователя, сохраняет их в массиве типа fraction, вычисляет среднее 
     значение и выводит результат. */
-    /*fraction masFrac[MAXSTR];
+    fraction masFrac[MAXSTR];
     fraction result(0, 1);
     char continuEFrac;
     int countFrac = 0;
@@ -358,12 +412,12 @@ int main(int argc, char* argv[]) {
     while(countFrac >= 0) {
         masFrac[--countFrac].showFr();
         cout << "; ";
-    } */
+    }
 
     /*6. В игре бридж каждому из игроков раздают 13 карт, таким образом колода расходуется полностью. 
     Модифицируйте программу CARDARAY этой главы так, чтобы после перемешивания колоды она делилась на 
     четыре части по 13 карт каждая. Каждая из четырех групп карт затем должна быть выведена. */
-    /*card deck[52];
+    card deck[52];
     int j;
     cout << endl;
     for (j = 0; j < 52; j++) {      // создаем упорядоченную колоду карт
@@ -391,7 +445,7 @@ int main(int argc, char* argv[]) {
         cout << " ";
         if (!((j + 1) % 13)) // начинаем новую строку после каждой 13-й карты
             cout << endl;
-    } */
+    }
 
     /* 7. Одним из недостатков C++ является отсутствие для бизнес-программ встроенного типа для денежных
     значений, такого, как $173 698 001.32. Такой денежный тип должен иметь возможность для хранения числа с
@@ -410,11 +464,11 @@ int main(int argc, char* argv[]) {
     для преобразования новой строки к числу типа long double. Предполагаем, что денежное значение не может
     быть отрицательным. Напишите функцию main() для проверки метода mstold(), которая несколько раз получает
     денежную строку от пользователя и выводит соответствующее число типа long double. */
-    /*string money;
+    string money;
     Money text;
     cout << "Введите денежную сумму ($1 234 567 890 123.99): ";
     getline(cin, money);
-    cout << "Число = " << text.mstold(money) << endl; */
+    cout << "Число = " << text.mstold(money) << endl;
 
     /*8. Другим недостатком C++ является отсутствие автоматической проверки индексов массива на 
     соответствие их границам массива (это делает действия с массивами быстрыми, но менее надежными). 
@@ -433,10 +487,10 @@ int main(int argc, char* argv[]) {
     части памяти. Использование методов для доступа к элементам массива не выглядит так наглядно, как 
     использование операции []. В главе 8 мы увидим, как перегрузить эту операцию, чтобы сделать работу 
     нашего класса safearay похожей на работу встроенных массивов. */
-    /*safearay sa1;           // описываем массив
+    safearay sa1;           // описываем массив
     int temp = 12345;       // описываем целое
     sa1.putel(7, temp);     // помещаем значение temp в массив
-    temp = sa1.getel(7);    // получаем значение из массива */
+    temp = sa1.getel(7);    // получаем значение из массива
 
     /*9. Очередь — это устройство для хранения данных, похожее на стек. Отличие в том, что в стеке 
     последний сохраненный элемент будет первым извлеченным, тогда как в очереди первый сохраненный элемент
@@ -458,7 +512,7 @@ int main(int argc, char* argv[]) {
         для возврата переменной tail и похожее выражение для возврата переменной head. Массив, используемый
     в очереди, иногда называют круговым буфером, так как начало и конец очереди циркулируют по нему вместе 
     с ее данными. */
-    /*Queue qu1;
+    Queue qu1;
     qu1.put(11);
     qu1.put(22);
     cout << "1: " << qu1.get() << endl;
@@ -470,7 +524,7 @@ int main(int argc, char* argv[]) {
     cout << "3: " << qu1.get() << endl;
     cout << "4: " << qu1.get() << endl;
     cout << "5: " << qu1.get() << endl;
-    cout << "6: " << qu1.get() << endl; */
+    cout << "6: " << qu1.get() << endl;
 
     /*10. Матрица — это двумерный массив. Создайте класс matrix, который предоставляет те же меры 
     безопасности, как и класс из упражнения 7, то есть осуществляет проверку индексов массива на вхождение
@@ -478,14 +532,14 @@ int main(int argc, char* argv[]) {
     программисту определить реальный размер массива (допустим, сделать его меньше, чем 10 на 10). Методам,
     предназначенным для доступа к членам матрицы, теперь нужны два индекса: по одному для каждой размерности
     массива. Вот фрагмент функции main(), которая работает с таким классом: */
-    /*Matrix aveMas(3, 4);              // описываем матрицу
+    Matrix aveMas(3, 4);              // описываем матрицу
     int temp = 12345;                   // описываем целое
     aveMas.putel(2, 1, temp);           // помещаем значение temp в матрицу
     cout << "Temp1 = " << aveMas.getel(2, 1) << endl;  // получаем значение из матрицы
     Matrix maxMas;       
     temp = 100;               
     maxMas.putel(7, 4, temp);  
-    cout << "Temp2 = " << maxMas.getel(7, 4) << endl;   */
+    cout << "Temp2 = " << maxMas.getel(7, 4) << endl;
 
     /* 11. Вернемся к обсуждению денежных строк из упражнения 7. Напишите метод ldtoms() для 
     преобразования числа типа long double в денежную строку, представляющую это число. Для начала вам 
@@ -499,12 +553,39 @@ int main(int argc, char* argv[]) {
     $3 124.95, а не $0 000 000 000 003 124.95. Не забудьте закончить строку нулевым символом '\0'.
     Напишите функцию main() для тестирования этой функции путем многократного ввода пользователем чисел 
     типа long double и вывода результата в виде денежной строки. */
-    /*Money text;
+    Money text;
     long double money = 0;
     cout << "Введите денежную сумму ($1 234 567 890 123.99): ";
     cin >> money;
     text.ldtoms(money);
-    text.show(); */
+    text.show();
+
+    /*12. Создайте класс bMoney. Он должен хранить денежные значения как long double. Используйте метод
+    mstold() для преобразования денежной строки, введенной пользователем, в long double, и метод ldtoms()
+    для преобразования числа типа long double в денежную строку для вывода (см. упражнения 7 и 10). Вы 
+    можете вызывать для ввода и вывода методы getmoney() и putmoney(). Напишите другой метод класса для 
+    сложения двух объектов типа bMoney и назовите его madd(). Сложение этих объектов легко произвести: 
+    просто сложите переменную типа long double одного объекта с такой же переменной другого объекта. 
+    Напишите функцию main(), которая просит пользователя несколько раз ввести денежную строку, а затем 
+    выводит сумму значений этих строк. Вот как может выглядеть определение класса:
+    class bMoney {
+    private:
+        long double money;
+    public:
+        bMoney();
+        bMoney(char s[]);
+        void madd(bMoney m1, bMoney m2);
+        void getmoney();
+        void putmoney();
+    }; */
+    bMoney one, two, three;
+    one.putmoney();
+    two.putmoney();
+    one.getmoney();
+    two.getmoney();
+    three.madd(one, two);
+    three.getmoney();
+
 
     return 0;
 }
