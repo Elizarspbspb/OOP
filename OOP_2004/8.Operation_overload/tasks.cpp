@@ -81,6 +81,94 @@ String String::operator+=(String ss) {      // s3 = s1 += s2;
     strcat(str, ss.str);   // добавляем содержимое второй строки
 }*/
 
+//Task 3
+class Time {
+    int hours;
+    int minutes;
+    int seconds;
+public:
+    Time() : hours(0), minutes(0), seconds(0) {};
+    Time(int hour, int minut, int sec) : hours(hour), minutes(minut), seconds(sec) {};
+    void showTime() const {
+        cout << hours << ":" << minutes << ":" << seconds << endl;
+    }
+    //void sum(const Time&, const Time&);
+    Time operator+(Time) const;
+    ~Time() = default;
+    // Task 5
+    Time operator++();
+    Time operator++(int);
+    Time operator--();
+    Time operator--(int);
+};
+Time Time::operator+(Time one) const {
+    unsigned long allSecsOne = one.hours * 3600 + one.minutes * 60 + one.seconds;
+    unsigned long allSecsTwo = hours * 3600 + minutes * 60 + seconds;
+    allSecsOne += allSecsTwo;
+    int hours = allSecsOne/3600;
+    int minutes = (allSecsOne - (hours * 3600))/60;
+    int seconds = allSecsOne - (hours * 3600) - (minutes * 60);
+    return Time(hours, minutes, seconds);
+}
+// Task 5
+Time Time::operator++() {
+    ++hours;
+    ++minutes;
+    ++seconds;
+    return Time(hours, minutes, seconds);
+}
+Time Time::operator++(int) {
+    return Time(hours++, minutes++, seconds++);
+}
+Time Time::operator--() {
+    --hours;
+    --minutes;
+    --seconds;
+    return Time(hours, minutes, seconds);
+}
+Time Time::operator--(int) {
+    return Time(hours--, minutes--, seconds--);
+}
+
+// Task 4
+class Int {
+    int value;
+public:
+    Int() : value(0) {};                // конструктор значение = нулю
+    Int(int number) : value(number) {}; // метод установки целого значения
+    void showValue() const {            // метод вывода значения
+        cout << "Значение поля = " << value << endl; 
+    }
+    Int operator+(Int);
+    Int operator-(Int);
+    Int operator*(Int);
+    Int operator/(Int);
+    Int checkit(long double);
+};
+Int Int::operator+(Int two) {
+    long double valueNew = value + two.value;
+    return checkit(valueNew);
+} 
+Int Int::operator-(Int two) {
+    long double valueNew = value - two.value;
+    return checkit(valueNew);
+} 
+Int Int::operator*(Int two) {
+    long double valueNew = value * two.value;
+    return checkit(valueNew);
+} 
+Int Int::operator/(Int two) {
+    long double valueNew = value / two.value;
+    return checkit(valueNew);
+} 
+Int Int::checkit(long double answer) {      // проверка результатов
+    if (answer > 2147483648.0L || answer <-2147483648.0L) { 
+        cout << "\nОшибка переполнения\n ";
+        exit(1); 
+    }
+    return Int(int(answer));
+}
+
 int main(int argc, char* argv[]) 
 {
     /*1. Добавьте в класс Distance из программы ENGLPLUS этой главы перегруженную операцию -, которая 
@@ -99,7 +187,7 @@ int main(int argc, char* argv[])
     программе STRPLUS этой главы. Эта операция должна позволять записывать выражения типа: s1 += s2;
     где s2 прибавляется (объединяется) к строке s1, результат при этом остается в s1. Операция должна 
     также позволять использовать результат для других вычислений, например в выражениях типа s3 = s1 += s2; */
-    String s1 = "\nС Рождеством! ";
+    /*String s1 = "\nС Рождеством! ";
     String s2 = "С Новым годом!";
     String s3;
     s1.display();
@@ -108,7 +196,52 @@ int main(int argc, char* argv[])
     s3 = s1 += s2;
     //s1 += s2;     
     s1.display();
-    s3.display();
+    s3.display(); */
+
+    /*3. Модифицируйте класс time из упражнения 3 главы 6 так, чтобы вместо метода add_time() можно было
+    использовать операцию + для складывания двух значений времени. Напишите программу для проверки класса.*/
+    /*Time one(10, 30, 45);
+    Time two(6, 20, 5);
+    Time three;
+    three = one + two;
+    one.showTime();
+    two.showTime();
+    three.showTime(); */
+
+    /*4. Создайте класс Int, основанный на упражнении 1 из главы 6. Перегрузите четыре целочисленных 
+    арифметических операции (+, -, * и /) так, чтобы их можно было использовать для операций с объектами
+    класса Int. Если результат какой-либо из операций выходит за границы типа int (в 32-битной системе),
+    имеющие значение от 2 147 483 648 до -2 147 483 648, то операция должна послать сообщение об ошибке
+    и завершить программу. Такие типы данных полезны там, где ошибки могут быть вызваны арифметическим 
+    переполнением, которое недопустимо. Подсказка: для облегчения проверки переполнения выполняйте 
+    вычисления с использованием типа long double. Напишите программу для проверки этого класса. */
+    /*Int one(1200);
+    Int two(60);
+    Int three;
+    three = one + two;
+    one.showValue();
+    two.showValue();
+    three.showValue();
+    three = one - two;
+    three.showValue();
+    three = one * two;
+    three.showValue();
+    three = one / two;
+    three.showValue(); */
+
+    /*5. Пополните класс time, рассмотренный в упражнении 3, перегруженными операциями увеличения (++) 
+    и уменьшения (--), которые работают в обеих, префиксной и постфиксной, формах записи и возвращают 
+    значение. Дополните функцию main(), чтобы протестировать эти операции. */
+    Time inc(10, 10, 10);
+    inc.showTime();     // 10 10 10
+    inc++;
+    inc.showTime();     // 11 11 11
+    --inc;
+    inc.showTime();     // 10 10 10
+    ++inc;
+    inc.showTime();     // 11 11 11
+    inc--;
+    inc.showTime();     // 10 10 10
 
 
     return 0;
