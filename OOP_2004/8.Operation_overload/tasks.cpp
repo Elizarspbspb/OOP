@@ -100,6 +100,9 @@ public:
     Time operator++(int);
     Time operator--();
     Time operator--(int);
+    // Task 6
+    Time operator-(Time) const;
+    Time operator*(Time) const;
 };
 Time Time::operator+(Time one) const {
     unsigned long allSecsOne = one.hours * 3600 + one.minutes * 60 + one.seconds;
@@ -128,6 +131,25 @@ Time Time::operator--() {
 }
 Time Time::operator--(int) {
     return Time(hours--, minutes--, seconds--);
+}
+// Task 6
+Time Time::operator-(Time one) const {
+    unsigned long allSecsOne = one.hours * 3600 + one.minutes * 60 + one.seconds;
+    unsigned long allSecsTwo = hours * 3600 + minutes * 60 + seconds;
+    allSecsOne = allSecsTwo - allSecsOne;
+    int hours = allSecsOne/3600;
+    int minutes = (allSecsOne - (hours * 3600))/60;
+    int seconds = allSecsOne - (hours * 3600) - (minutes * 60);
+    return Time(hours, minutes, seconds);
+}
+Time Time::operator*(Time one) const {
+    float allSecsOne = one.hours * 3600 + one.minutes * 60 + one.seconds;
+    float allSecsTwo = hours * 3600 + minutes * 60 + seconds;
+    allSecsOne *= allSecsTwo;
+    int hours = allSecsOne/3600;
+    int minutes = (allSecsOne - (hours * 3600))/60;
+    int seconds = allSecsOne - (hours * 3600) - (minutes * 60);
+    return Time(hours, minutes, seconds);
 }
 
 // Task 4
@@ -232,7 +254,7 @@ int main(int argc, char* argv[])
     /*5. Пополните класс time, рассмотренный в упражнении 3, перегруженными операциями увеличения (++) 
     и уменьшения (--), которые работают в обеих, префиксной и постфиксной, формах записи и возвращают 
     значение. Дополните функцию main(), чтобы протестировать эти операции. */
-    Time inc(10, 10, 10);
+    /*Time inc(10, 10, 10);
     inc.showTime();     // 10 10 10
     inc++;
     inc.showTime();     // 11 11 11
@@ -241,7 +263,22 @@ int main(int argc, char* argv[])
     ++inc;
     inc.showTime();     // 11 11 11
     inc--;
-    inc.showTime();     // 10 10 10
+    inc.showTime();     // 10 10 10     */
+
+    /*6. Добавьте в класс time из упражнения 5 возможность вычитать значения времени, используя 
+    перегруженную операцию -, и умножать эти значения, используя тип float и перегруженную операцию *. */
+    Time SixOne(10, 10, 10);
+    Time SixTwo(2, 5, 4);
+    Time SixThree;
+    SixThree = SixOne - SixTwo;
+    SixOne.showTime(); 
+    cout << endl;
+    SixTwo.showTime(); 
+    cout << endl;
+    SixThree.showTime(); 
+    SixThree = SixOne * SixTwo;
+    SixThree.showTime(); 
+    cout << endl;
 
 
     return 0;
