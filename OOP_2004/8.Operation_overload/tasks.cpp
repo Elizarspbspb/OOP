@@ -143,13 +143,18 @@ Time Time::operator-(Time one) const {
     return Time(hours, minutes, seconds);
 }
 Time Time::operator*(Time one) const {
-    float allSecsOne = one.hours * 3600 + one.minutes * 60 + one.seconds;
-    float allSecsTwo = hours * 3600 + minutes * 60 + seconds;
-    allSecsOne *= allSecsTwo;
-    int hours = allSecsOne/3600;
-    int minutes = (allSecsOne - (hours * 3600))/60;
-    int seconds = allSecsOne - (hours * 3600) - (minutes * 60);
-    return Time(hours, minutes, seconds);
+    int sec = seconds * one.seconds;
+    int min = minutes * one.minutes;
+    int hou = hours * one.hours;
+    while (sec > 59) {
+        sec -= 60;
+        min++; 
+    }
+    while (min > 59) { 
+        min -= 60; 
+        hou++; 
+    }
+    return Time(hou, min, sec); // вернуть временное значение
 }
 
 // Task 4
@@ -189,6 +194,64 @@ Int Int::checkit(long double answer) {      // проверка результа
         exit(1); 
     }
     return Int(int(answer));
+}
+
+// Task 7
+class fraction {
+    int dividend;
+    int divisor;
+    char symb;
+public:
+    fraction() { dividend = 0; divisor = 0; symb = '/'; }
+    fraction(int divid, int divis) : dividend(divid), divisor(divis) {};
+    void enterFr() {
+        cin >> dividend >> symb >> divisor;
+    }
+    void showFr() const {
+        cout << dividend << "/" << divisor << endl;
+    }
+    fraction operator+(fraction);
+    fraction operator-(fraction);
+    fraction operator*(fraction);
+    fraction operator/(fraction);
+    void lowterms();
+};
+fraction fraction::operator+(fraction second) {
+    int dividend2 = dividend * second.divisor + divisor * second.dividend;
+    int divisor2 = divisor * second.divisor;
+    return fraction(dividend2, divisor2);         
+}
+fraction fraction::operator-(fraction second) {        
+    int dividend2 = dividend * second.divisor - divisor * second.dividend;
+    int divisor2 = divisor * second.divisor; 
+    return fraction(dividend2, divisor2);               
+}
+fraction fraction::operator*(fraction second) {
+    int dividend2 = dividend * second.dividend;
+    int divisor2 = divisor * second.divisor; 
+    return fraction(dividend2, divisor2);               
+}
+fraction fraction::operator/(fraction second) {
+    int dividend2 = dividend * second.divisor;
+    int divisor2 = divisor * second.dividend;
+    return fraction(dividend2, divisor2);               
+}
+void fraction::lowterms() {         // сокращение дроби
+    long tnum, tden, temp, gcd;
+    tnum = labs(dividend);          // используем неотрицательные значения (нужен cmath)
+    tden = labs(divisor);
+    if(tden == 0)               // проверка знаменателя на 0
+        { cout << "Недопустимый знаменатель!"; exit(1); }
+    else if(tnum == 0)      // проверка числителя на 0
+        { dividend = 0; divisor = 1; return; }
+    while(tnum != 0) {      // нахождение наибольшего общего делителя
+        if(tnum < tden)     // если числитель больше знаменателя,
+            { temp = tnum; tnum = tden; tden = temp; }      // меняем их местами
+        tnum = tnum - tden;     // вычитание
+    }
+    gcd = tden;
+    dividend = dividend / gcd; // делим числитель и знаменатель на полученный наибольший общий делитель
+    divisor = divisor / gcd;
 }
 
 int main(int argc, char* argv[]) 
@@ -267,7 +330,7 @@ int main(int argc, char* argv[])
 
     /*6. Добавьте в класс time из упражнения 5 возможность вычитать значения времени, используя 
     перегруженную операцию -, и умножать эти значения, используя тип float и перегруженную операцию *. */
-    Time SixOne(10, 10, 10);
+    /*Time SixOne(10, 10, 10);
     Time SixTwo(2, 5, 4);
     Time SixThree;
     SixThree = SixOne - SixTwo;
@@ -278,8 +341,58 @@ int main(int argc, char* argv[])
     SixThree.showTime(); 
     SixThree = SixOne * SixTwo;
     SixThree.showTime(); 
-    cout << endl;
+    cout << endl; */
 
+    /*7. Модифицируйте класс fraction в четырехфункциональном дробном калькуляторе из упражнения 11 главы 6
+    так, чтобы он использовал перегруженные операции сложения, вычитания, умножения и деления. (Вспомните 
+    правила арифметики с дробями в упражнении 12 главы 3 «Циклы и ветвления».) Также перегрузите операции 
+    сравнения == и != и используйте их для выхода из цикла, когда пользователь вводит 0/1, 0 и 1 значения
+    двух частей дроби. Вы можете модифицировать и функцию lowterms() так, чтобы она возвращала значение ее 
+    аргумента, уменьшенное до несократимой дроби. Это будет полезным в арифметических функциях, которые 
+    могут быть выполнены сразу после получения ответа. */
+    /*fraction first7(2, 6);
+    fraction second7(1, 3);
+    fraction third(0, 0);
+    third = first7 + second7; 
+    third.lowterms();
+    first7.showFr();
+    second7.showFr();
+    third.showFr(); */
+
+    /*8. Модифицируйте класс bMoney из упражнения 12 главы 7 «Массивы и строки», включив арифметические 
+    операции, выполненные с помощью перегруженных операций:
+        bMoney = bMoney + bMoney
+        bMoney = bMoney - bMoney
+        bМоnеу = bMoney * long double (цена за единицу времени, затраченного на изделие)
+        long double = bMoney / bMoney (общая цена, деленная на цену за изделие)
+        bMoney = bMoney / long double (общая цена, деленная на количество изделий).
+    Заметим, что операция / перегружена дважды. Компилятор может различить оба варианта, так как их аргументы разные. Помним, что легче вы-
+полнять арифметические операции с объектами класса bMoney, выполняя
+те же операции с его long double данными.
+Убедитесь, что программа main() запросит ввод пользователем двух де-
+нежных строк и числа с плавающей точкой. Затем она выполнит все пять
+операций и выведет результаты. Это должно происходить в цикле, так,
+чтобы пользователь мог ввести еще числа, если это понадобится.
+Некоторые операции с деньгами не имеют смысла: bMoney*bMoney не пред-
+ставляет ничего реального, так как нет такой вещи, как денежный квад-
+рат; вы не можете прибавить bMoney к long double (что же будет, если рубли
+сложить с изделиями?). Чтобы сделать это невозможным, скомпилируйте
+такие неправильные операции, не включая операции преобразования для
+bMoney в long double или long double в bMoney. Если вы это сделаете и запи-
+шете затем выражение типа:
+bmon2 = bmon1 + widgets; // это не имеет смысла
+то компилятор будет автоматически преобразовывать widgets в bMoney и
+выполнять сложение. Без них компилятор будет отмечать такие преобра-
+зования как ошибки, что позволит легче найти концептуальные ошибки.
+Также сделайте конструкторы преобразований явными.
+Вот некоторые другие вероятные операции с деньгами, которые мы еще
+не умеем выполнять с помощью перегруженных операций, так как они
+требуют объекта справа от знака операции, а не слева:
+long double * bMoney // Пока не можем это сделать: bMoney возможен только справа
+long double / bMoney // Пока не можем это сделать: bMoney возможен только справа
+Мы рассмотрим выход из этой ситуации при изучении дружественных
+функций в главе 11.
+*/
 
     return 0;
 }
