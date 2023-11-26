@@ -3,6 +3,7 @@
 #include <ctime>
 #include <string.h>     // для функций strcpy, strcat
 #include <stdlib.h>     // для функции exit
+#include <strstream>    // Task 8
 
 using namespace std;
 
@@ -210,12 +211,30 @@ public:
     void showFr() const {
         cout << dividend << "/" << divisor << endl;
     }
+    void lowterms();
+    // Task 7
     fraction operator+(fraction);
     fraction operator-(fraction);
     fraction operator*(fraction);
     fraction operator/(fraction);
-    void lowterms();
 };
+void fraction::lowterms() {         // сокращение дроби
+    long tnum, tden, temp, gcd;
+    tnum = labs(dividend);          // используем неотрицательные значения (нужен cmath)
+    tden = labs(divisor);
+    if(tden == 0)               // проверка знаменателя на 0
+        { cout << "Недопустимый знаменатель!"; exit(1); }
+    else if(tnum == 0)      // проверка числителя на 0
+        { dividend = 0; divisor = 1; return; }
+    while(tnum != 0) {      // нахождение наибольшего общего делителя
+        if(tnum < tden)     // если числитель больше знаменателя,
+            { temp = tnum; tnum = tden; tden = temp; }      // меняем их местами
+        tnum = tnum - tden;     // вычитание
+    }
+    gcd = tden;
+    dividend = dividend / gcd; // делим числитель и знаменатель на полученный наибольший общий делитель
+    divisor = divisor / gcd;
+}
 fraction fraction::operator+(fraction second) {
     int dividend2 = dividend * second.divisor + divisor * second.dividend;
     int divisor2 = divisor * second.divisor;
@@ -236,23 +255,110 @@ fraction fraction::operator/(fraction second) {
     int divisor2 = divisor * second.dividend;
     return fraction(dividend2, divisor2);               
 }
-void fraction::lowterms() {         // сокращение дроби
-    long tnum, tden, temp, gcd;
-    tnum = labs(dividend);          // используем неотрицательные значения (нужен cmath)
-    tden = labs(divisor);
-    if(tden == 0)               // проверка знаменателя на 0
-        { cout << "Недопустимый знаменатель!"; exit(1); }
-    else if(tnum == 0)      // проверка числителя на 0
-        { dividend = 0; divisor = 1; return; }
-    while(tnum != 0) {      // нахождение наибольшего общего делителя
-        if(tnum < tden)     // если числитель больше знаменателя,
-            { temp = tnum; tnum = tden; tden = temp; }      // меняем их местами
-        tnum = tnum - tden;     // вычитание
-    }
-    gcd = tden;
-    dividend = dividend / gcd; // делим числитель и знаменатель на полученный наибольший общий делитель
-    divisor = divisor / gcd;
+
+// Task 8
+const int MAXSTR = 100;     // максимальная длина строки
+class bMoney {
+    long double money;
+    char streams[MAXSTR] = "$";
+    string strFrom;
+public:
+    bMoney();
+    bMoney(char s[]);
+    //bMoney(long double); // конструктор преобразования long double в bMoney 
+    void putmoney();
+    void getmoney();
+    long double mstold(string);
+    char ldtoms(long double);
+    bMoney operator+(bMoney);       // bMoney = bMoney + bMoney
+    bMoney operator-(bMoney);       // bMoney = bMoney - bMoney
+    bMoney operator*(long double);  // bМоnеу = bMoney * long double
+    long double operator/(bMoney);  // long double = bMoney / bMoney
+    bMoney operator/(long double);  // bMoney = bMoney / long double
+};
+bMoney::bMoney() : money(0) {}
+bMoney::bMoney(char s[]) : money(0) {}
+//bMoney::bMoney(long double mon) : money(mon) {} // неявный конструктор преобразования long double в bMoney
+/*bMoney::bMoney(long double mon) {   // явный конструктор преобразования long double в bMoney
+    money = static_cast<int>(mon);
+}*/
+void bMoney::putmoney() {
+    cout << "Введите строку с числом " << endl;
+    cin >> strFrom;
+    mstold(strFrom);
 }
+long double bMoney::mstold(string strTo) {
+    long double mon = 0.0;
+    for (int size = 0, sizeTwo = 0; size < strFrom.length(); size++) {
+        if (strFrom[size] >= 48 && strFrom[size] <= 57) {
+            strTo[sizeTwo++] = strFrom[size];
+        } else if (strFrom[size] == '.') {
+            strTo[sizeTwo++] = strFrom[size];
+        }
+    }
+    mon = stold(strTo); // mon = _atold(strTo);
+    return mon;
+}
+void bMoney::getmoney() {
+    cout << ldtoms(money) << streams << endl;
+}
+char bMoney::ldtoms(long double doubleFrom) {
+    if (doubleFrom > 9999999999999990.00)
+        return *"Very big number !";
+    ostrstream ustring;
+    ustring << doubleFrom;
+    string len = ustring.str();
+    for (int i = 0; i < len.length(); i++)
+        streams[i+1] = ustring.str()[i];
+    return *streams;    
+}
+bMoney bMoney::operator+(bMoney two) {
+    bMoney three;
+    three.money = money + two.money;
+    return three;
+}
+bMoney bMoney::operator-(bMoney two) {
+    bMoney three;
+    three.money = money - two.money;
+    return three;
+}
+bMoney bMoney::operator*(long double time) {
+    bMoney three;
+    three.money = money * time;
+    return three;
+}
+long double bMoney::operator/(bMoney two) {
+    long double count;
+    count = money / two.money;
+    return count;
+}
+bMoney bMoney::operator/(long double two) {
+    bMoney three;
+    three.money = money / two;
+    return three;
+}
+
+
+// Task 9
+const int LIMIT = 100;  // размер массива
+class safearray {
+private:
+    int up;
+    int lower;
+    int dif;
+    int arr[LIMIT];
+public:
+    safearray() = default;
+    safearray(int u, int l) : up(u), lower(l) { }
+    int& operator[](int n) {
+        n = n - dif;
+        if (n < 0 || n >= LIMIT) { 
+            cout << "\nОшибочный индекс!"; 
+            exit(1); 
+        }
+        return arr[n];
+    }
+};
 
 int main(int argc, char* argv[]) 
 {
@@ -366,33 +472,73 @@ int main(int argc, char* argv[])
         bМоnеу = bMoney * long double (цена за единицу времени, затраченного на изделие)
         long double = bMoney / bMoney (общая цена, деленная на цену за изделие)
         bMoney = bMoney / long double (общая цена, деленная на количество изделий).
-    Заметим, что операция / перегружена дважды. Компилятор может различить оба варианта, так как их аргументы разные. Помним, что легче вы-
-полнять арифметические операции с объектами класса bMoney, выполняя
-те же операции с его long double данными.
-Убедитесь, что программа main() запросит ввод пользователем двух де-
-нежных строк и числа с плавающей точкой. Затем она выполнит все пять
-операций и выведет результаты. Это должно происходить в цикле, так,
-чтобы пользователь мог ввести еще числа, если это понадобится.
-Некоторые операции с деньгами не имеют смысла: bMoney*bMoney не пред-
-ставляет ничего реального, так как нет такой вещи, как денежный квад-
-рат; вы не можете прибавить bMoney к long double (что же будет, если рубли
-сложить с изделиями?). Чтобы сделать это невозможным, скомпилируйте
-такие неправильные операции, не включая операции преобразования для
-bMoney в long double или long double в bMoney. Если вы это сделаете и запи-
-шете затем выражение типа:
-bmon2 = bmon1 + widgets; // это не имеет смысла
-то компилятор будет автоматически преобразовывать widgets в bMoney и
-выполнять сложение. Без них компилятор будет отмечать такие преобра-
-зования как ошибки, что позволит легче найти концептуальные ошибки.
-Также сделайте конструкторы преобразований явными.
-Вот некоторые другие вероятные операции с деньгами, которые мы еще
-не умеем выполнять с помощью перегруженных операций, так как они
-требуют объекта справа от знака операции, а не слева:
-long double * bMoney // Пока не можем это сделать: bMoney возможен только справа
-long double / bMoney // Пока не можем это сделать: bMoney возможен только справа
-Мы рассмотрим выход из этой ситуации при изучении дружественных
-функций в главе 11.
-*/
+    Заметим, что операция / перегружена дважды. Компилятор может различить оба варианта, так как их 
+    аргументы разные. Помним, что легче выполнять арифметические операции с объектами класса bMoney, 
+    выполняя те же операции с его long double данными. Убедитесь, что программа main() запросит ввод 
+    пользователем двух денежных строк и числа с плавающей точкой. Затем она выполнит все пять операций 
+    и выведет результаты. Это должно происходить в цикле, так, чтобы пользователь мог ввести еще числа, 
+    если это понадобится. Некоторые операции с деньгами не имеют смысла: bMoney*bMoney не представляет 
+    ничего реального, так как нет такой вещи, как денежный квадрат; вы не можете прибавить bMoney к long 
+    double (что же будет, если рубли сложить с изделиями?). Чтобы сделать это невозможным, скомпилируйте
+    такие неправильные операции, не включая операции преобразования для bMoney в long double или long 
+    double в bMoney. Если вы это сделаете и запишете затем выражение типа:
+        bmon2 = bmon1 + widgets; // это не имеет смысла
+    то компилятор будет автоматически преобразовывать widgets в bMoney и выполнять сложение. Без них 
+    компилятор будет отмечать такие преобразования как ошибки, что позволит легче найти концептуальные 
+    ошибки. Также сделайте конструкторы преобразований явными. Вот некоторые другие вероятные операции с 
+    деньгами, которые мы еще не умеем выполнять с помощью перегруженных операций, так как они требуют 
+    объекта справа от знака операции, а не слева: 
+    long double * bMoney // Пока не можем это сделать: bMoney возможен только справа
+    long double / bMoney // Пока не можем это сделать: bMoney возможен только справа
+    Мы рассмотрим выход из этой ситуации при изучении дружественных функций в главе 11. */
+    /*bMoney one, two, three;
+    char contin = 'y';
+    do {
+        one.putmoney();
+        two.putmoney();
+        one.getmoney();
+        two.getmoney();
+            three = one + two;
+        cout << "Сумма = ";
+        three.getmoney();
+            three = one - two;
+        cout << "Разница = ";
+        three.getmoney();
+            three = one * 13.5;
+        cout << "Цена за единицу времени, затраченного на изделие = ";
+        three.getmoney();
+            cout << "Общая цена, деленная на цену за изделие = " << one / two << endl;
+            three = one / 13.5;
+        cout << "Общая цена, деленная на количество изделий = ";
+        three.getmoney();
+        //three = one + 10; // Error если нет конструктора с параметром long double
+        three.getmoney();
+        cout << "Добавить еще сотрудника (y or n) ? : ";
+        cin >> contin;
+    } while(contin != 'n'); */
+
+    /*9. Дополните класс safearay из программы ARROVER3 этой главы так, чтобы пользователь мог определять
+    и верхнюю, и нижнюю границы массива (например, индексы, начинающиеся с 100 и заканчивающиеся 200). 
+    Имеем перегруженную операцию доступа к членам массива, проверяющую индексы каждый раз, когда к массиву
+    нужен доступ, для проверки того, что мы не вышли за пределы массива. Вам понадобится конструктор с 
+    двумя аргументами, который определяет верхнюю и нижнюю границы. Так как мы еще не изучили, как выделять
+    память динамически, то данные класса все еще будут размещаться в массиве, состоящем из 100 элементов, 
+    но вообще вы можете преобразовывать индексы массива safearay в индексы реального массива целых чисел 
+    произвольным образом. Например, если пользователь определил диапазон от 100 до 175, то вы можете 
+    преобразовать его в диапазон от arr[0] до arr[75]. */
+    int up, lower;
+    cout << "Введите нижнюю границу массива: ";
+    cin >> lower;
+    cout << "Введите верхнюю границу массива: "; 
+    cin >> up;
+    safearray sa1(up, lower);
+    for(int j = 0; j < LIMIT; j++)
+        sa1[j] = j * 10;
+    for(int j = 0; j < LIMIT; j++) {
+        int temp = sa1[j];
+        cout << "Элемент " << j << " равен " << temp << endl;
+    }
+
 
     return 0;
 }
