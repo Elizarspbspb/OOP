@@ -4,6 +4,7 @@
 #include <string.h>     // для функций strcpy, strcat
 #include <stdlib.h>     // для функции exit
 #include <strstream>    // Task 8
+#include <math.h>        // Task 10
 
 using namespace std;
 
@@ -360,6 +361,33 @@ public:
     }
 };
 
+// Task 10
+class Polar {
+private:
+    int radius;
+    int angle;
+public:
+    Polar() = default;
+    Polar(int ra, int an) : radius(ra), angle(an) {};
+    Polar operator+(Polar);
+    void show() const {
+        cout << radius << " - " << angle << endl;
+    }
+};
+Polar Polar::operator+(Polar two) {
+    float x1 = radius * cos(angle); 
+    float y1 = radius * sin(angle);
+    float x2 = two.radius * cos(two.angle); 
+    float y2 = two.radius * sin(two.angle);
+    float x3 = x1 + x2; 
+    float y3 = y1 + y2;
+
+    Polar newPolar;
+    newPolar.radius = sqrt(x3*x3 + y3*y3);
+    newPolar.angle = atan(y3 / x3);
+    return newPolar;
+}
+
 int main(int argc, char* argv[]) 
 {
     /*1. Добавьте в класс Distance из программы ENGLPLUS этой главы перегруженную операцию -, которая 
@@ -526,7 +554,7 @@ int main(int argc, char* argv[])
     но вообще вы можете преобразовывать индексы массива safearay в индексы реального массива целых чисел 
     произвольным образом. Например, если пользователь определил диапазон от 100 до 175, то вы можете 
     преобразовать его в диапазон от arr[0] до arr[75]. */
-    int up, lower;
+    /*int up, lower;
     cout << "Введите нижнюю границу массива: ";
     cin >> lower;
     cout << "Введите верхнюю границу массива: "; 
@@ -537,7 +565,19 @@ int main(int argc, char* argv[])
     for(int j = 0; j < LIMIT; j++) {
         int temp = sa1[j];
         cout << "Элемент " << j << " равен " << temp << endl;
-    }
+    } */
+
+    /*10. Только для любителей математики: создайте класс Polar, который предназначен для хранения 
+    полярных координат (радиуса и угла). Перегрузите операцию + для выполнения сложения для объектов 
+    класса Polar. Сложение двух объектов выполняется путем сложения координат X объектов, а затем 
+    координат Y. Результат будет координатами новой точки. Таким образом, вам нужно будет преобразовать 
+    полярные координаты к прямоугольным, сложить их, а затем обратно преобразовать прямоугольные 
+    координаты результата к полярным. */
+    Polar al(5, 30);
+    Polar al2(10, 15);
+    Polar al3;
+    al3 = al + al2;
+    al3.show();
 
 
     return 0;
