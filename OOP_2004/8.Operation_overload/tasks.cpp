@@ -388,6 +388,64 @@ Polar Polar::operator+(Polar two) {
     return newPolar;
 }
 
+// Task 11
+class sterling {
+    long pounds;
+    int shillings, pence;
+    double newMoney;
+public:
+    sterling() = default;
+    sterling(double newMon) : newMoney(newMon) {}
+    sterling(long po, int sh, int pe) : pounds(po), shillings(sh), pence(pe) {}
+    long getNewMoney(long, int, int);
+    sterling getAldMoney(double);
+    void getSterling();
+    void putSterling() const;
+    sterling operator+(sterling);
+};
+long sterling::getNewMoney(long pounds, int shillings, int pence) {
+    return pounds + (static_cast<double>(12 * shillings + pence) / 240); // 240 - 12 * 20.  
+}
+sterling sterling::getAldMoney(double newMoney) {
+    long pounds = static_cast<int>(newMoney);
+    double decfrac = newMoney - pounds;  // десятичная дробная часть
+    decfrac *= 240;
+    int shil, pens;
+    shil = static_cast<int>(decfrac) / 12;
+    pens = static_cast<int>(decfrac) % 12;
+    return sterling(pounds, shil, pens);
+}
+sterling sterling::operator+(sterling one) {
+    sterling sumMoney;
+    sumMoney.pence = pence + one.pence;
+    if (sumMoney.pence > 11) {
+        while (sumMoney.pence >= 12) {
+            sumMoney.pence -= 12;
+            one.shillings++;
+        }
+    }
+    sumMoney.shillings = shillings + one.shillings;
+    if (sumMoney.shillings > 19) {
+        while (sumMoney.shillings >= 20) {
+            sumMoney.shillings -= 20;
+            one.pounds++;
+        }
+    }
+    sumMoney.pounds = pounds + one.pounds;
+    return sumMoney;
+}
+void sterling::getSterling() {
+    cout << "Введите количество фунтов: ";
+    cin >> pounds;
+    cout << "Введите количество шиллингов: ";
+    cin >> shillings;
+    cout << "Введите количество пенсов: ";
+    cin >> pence;
+}
+void sterling::putSterling() const {
+    cout << "Всего £" << pounds << " " << shillings << " " << pence << endl;
+}
+
 int main(int argc, char* argv[]) 
 {
     /*1. Добавьте в класс Distance из программы ENGLPLUS этой главы перегруженную операцию -, которая 
@@ -573,11 +631,40 @@ int main(int argc, char* argv[])
     координат Y. Результат будет координатами новой точки. Таким образом, вам нужно будет преобразовать 
     полярные координаты к прямоугольным, сложить их, а затем обратно преобразовать прямоугольные 
     координаты результата к полярным. */
-    Polar al(5, 30);
+    /*Polar al(5, 30);
     Polar al2(10, 15);
     Polar al3;
     al3 = al + al2;
-    al3.show();
+    al3.show(); */
+
+    /*11. Помните структуру sterling? Мы встречались с ней в упражнении 10 главы 2 «Основы программирования
+    на C++», в упражнении 11 главы 5 и в других местах. Преобразуйте ее в класс, имеющий переменные для 
+    фунтов (типа long), шиллингов (типа int) и пенсов (типа int). Создайте в классе следующие функции:
+        ♦ конструктор без аргументов;
+        ♦ конструктор с одним аргументом типа double (для преобразования от десятичных фунтов);    
+        ♦ конструктор с тремя аргументами: фунтами, шиллингами и пенсами;
+        ♦ метод getSterling() для получения от пользователя значений количества фунтов, шиллингов и 
+        пенсов в формате £9.19.11;
+        ♦ метод putSterling() для вывода значений количества фунтов, шиллингов и пенсов в формате £9.19.11;
+        ♦ метод для сложения (sterling + sterling), используя перегруженную операцию +;
+        ♦ метод вычитания (sterling - sterling), используя перегруженную операцию -;
+        ♦ метод умножения (sterling * double), используя перегруженную операцию *;
+        ♦ метод деления (sterling / sterling), используя перегруженную операцию /;
+        ♦ метод деления (sterling / double), используя перегруженную операцию /;
+        ♦ операцию double (для преобразования к типу double)
+    Выполнять вычисления вы можете, например, складывая отдельно данные объекта: сложить сначала пенсы, 
+    затем шиллинги и т. д. Однако легче использовать операцию преобразования для преобразования объекта 
+    класса sterling к типу double, выполнить вычисления с типами double, а затем преобразовать обратно к 
+    типу sterling. Таким образом, операция + выглядит похожей на эту:
+        sterling sterling::operator+(sterling s2) {
+            return sterling(double(sterling(pounds, shillings, pense)) + double(s2));
+        }
+    Так мы создадим две временных переменных типа double, одна происходит от объекта, который вызывает 
+    функцию, а другая от аргумента s2. Эти переменные затем складываются, результат преобразовывается к 
+    типу sterling и возвращается. Заметим, что мы использовали другой подход для класса sterling, нежели
+    для класса bMoney. В классе sterling мы используем операции преобразования, таким образом отказавшись
+    от возможности поиска неправильных операций, но получив простоту при записи перегружаемых 
+    математических операций. */
 
 
     return 0;
