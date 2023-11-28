@@ -402,6 +402,7 @@ public:
     void getSterling();
     void putSterling() const;
     sterling operator+(sterling);
+    sterling operator-(sterling);
 };
 long sterling::getNewMoney(long pounds, int shillings, int pence) {
     return pounds + (static_cast<double>(12 * shillings + pence) / 240); // 240 - 12 * 20.  
@@ -424,6 +425,33 @@ sterling sterling::operator+(sterling one) {
             one.shillings++;
         }
     }
+    sumMoney.shillings = shillings + one.shillings;
+    if (sumMoney.shillings > 19) {
+        while (sumMoney.shillings >= 20) {
+            sumMoney.shillings -= 20;
+            one.pounds++;
+        }
+    }
+    sumMoney.pounds = pounds + one.pounds;
+    return sumMoney;
+}
+sterling sterling::operator-(sterling one) {
+    sterling difMoney;
+    difMoney.pence = pence;
+    if (one.pence > difMoney.pence) {
+        while (difMoney.pence <= one.pence) {
+            difMoney.pence += 12;
+            --difMoney.shillings;
+        }
+    }
+    difMoney.pence -= one.pence;
+    /*difMoney.pence = pence - one.pence;
+    if (difMoney.pence > pence) {
+        while (sumMoney.pence >= 12) {
+            sumMoney.pence += 12;
+            one.shillings--;
+        }
+    } */
     sumMoney.shillings = shillings + one.shillings;
     if (sumMoney.shillings > 19) {
         while (sumMoney.shillings >= 20) {
