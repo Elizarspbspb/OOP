@@ -267,20 +267,28 @@ public:
     bMoney();
     bMoney(char s[]);
     //bMoney(long double); // конструктор преобразования long double в bMoney 
+    explicit bMoney(long double); // explicit - запрет скрытого преобразования типов данных long double в bMoney 
     void putmoney();
     void getmoney();
     long double mstold(string);
     char ldtoms(long double);
-    bMoney operator+(bMoney);       // bMoney = bMoney + bMoney
-    bMoney operator-(bMoney);       // bMoney = bMoney - bMoney
-    bMoney operator*(long double);  // bМоnеу = bMoney * long double
-    long double operator/(bMoney);  // long double = bMoney / bMoney
-    bMoney operator/(long double);  // bMoney = bMoney / long double
+    bMoney operator+(bMoney);           // bMoney = bMoney + bMoney
+    bMoney operator-(bMoney);           // bMoney = bMoney - bMoney
+    bMoney operator*(long double);      // bМоnеу = bMoney * long double
+    long double operator/(bMoney);      // long double = bMoney / bMoney
+    bMoney operator/(long double);      // bMoney = bMoney / long double
+    // Task 12
+    operator double() {
+        return money /= 50.0;
+    }
+    /*    operator double() const {  
+        return pounds + (static_cast<double>(12 * shillings + pence) / 240);    // 240 - 12 * 20.  
+    } */
 };
 bMoney::bMoney() : money(0) {}
 bMoney::bMoney(char s[]) : money(0) {}
-//bMoney::bMoney(long double mon) : money(mon) {} // неявный конструктор преобразования long double в bMoney
-/*bMoney::bMoney(long double mon) {   // явный конструктор преобразования long double в bMoney
+bMoney::bMoney(long double mon) : money(mon) {} // неявный конструктор преобразования long double в bMoney
+/*bMoney::bMoney(long double mon) {             // явный конструктор преобразования long double в bMoney
     money = static_cast<int>(mon);
 }*/
 void bMoney::putmoney() {
@@ -403,10 +411,21 @@ public:
     void putSterling() const;
     sterling operator+(sterling);
     sterling operator-(sterling);
+    sterling operator*(double);
+    sterling operator/(sterling);
+    sterling operator/(double);
+    operator double() const {  
+        return pounds + (static_cast<double>(12 * shillings + pence) / 240);    // 240 - 12 * 20.  
+    }
+    // Task 12
+    operator bMoney();
 };
 long sterling::getNewMoney(long pounds, int shillings, int pence) {
-    return pounds + (static_cast<double>(12 * shillings + pence) / 240); // 240 - 12 * 20.  
+    return pounds + (static_cast<double>(12 * shillings + pence) / 240);    // 240 - 12 * 20.  
 }
+/*sterling sterling::operator+(sterling s2) {
+            return sterling(double(sterling(pounds, shillings, pense)) + double(s2));
+}*/
 sterling sterling::getAldMoney(double newMoney) {
     long pounds = static_cast<int>(newMoney);
     double decfrac = newMoney - pounds;  // десятичная дробная часть
@@ -438,6 +457,8 @@ sterling sterling::operator+(sterling one) {
 sterling sterling::operator-(sterling one) {
     sterling difMoney;
     difMoney.pence = pence;
+    difMoney.shillings = shillings;
+    difMoney.pounds = pounds;
     if (one.pence > difMoney.pence) {
         while (difMoney.pence <= one.pence) {
             difMoney.pence += 12;
@@ -445,22 +466,31 @@ sterling sterling::operator-(sterling one) {
         }
     }
     difMoney.pence -= one.pence;
-    /*difMoney.pence = pence - one.pence;
-    if (difMoney.pence > pence) {
-        while (sumMoney.pence >= 12) {
-            sumMoney.pence += 12;
-            one.shillings--;
-        }
-    } */
-    sumMoney.shillings = shillings + one.shillings;
-    if (sumMoney.shillings > 19) {
-        while (sumMoney.shillings >= 20) {
-            sumMoney.shillings -= 20;
-            one.pounds++;
+    if (one.shillings > difMoney.shillings) {
+        while (difMoney.shillings <= one.shillings) {
+            difMoney.shillings += 20;
+            --difMoney.pounds;
         }
     }
-    sumMoney.pounds = pounds + one.pounds;
-    return sumMoney;
+    difMoney.shillings -= one.shillings;
+    difMoney.pounds -= one.pounds;
+    return difMoney;
+}
+sterling sterling::operator*(double one) {
+    double um = getNewMoney(pounds, shillings, pence);
+    um *= one;
+    return getAldMoney(um);
+}
+sterling sterling::operator/(sterling one) {
+    double del1 = getNewMoney(pounds, shillings, pence);
+    double del2 = getNewMoney(one.pounds, one.shillings, one.pence);
+    del1 /= del2;
+    return getAldMoney(del1);
+}
+sterling sterling::operator/(double one) {
+    double um = getNewMoney(pounds, shillings, pence);
+    um /= one;
+    return getAldMoney(um);
 }
 void sterling::getSterling() {
     cout << "Введите количество фунтов: ";
@@ -471,7 +501,13 @@ void sterling::getSterling() {
     cin >> pence;
 }
 void sterling::putSterling() const {
-    cout << "Всего £" << pounds << " " << shillings << " " << pence << endl;
+    cout << " £" << pounds << " " << shillings << " " << pence << endl;
+}
+// Task 12
+sterling::operator bMoney() {               // оператор преобразования
+    double newModel = getNewMoney(pounds, shillings, pence);
+    newModel *= 50.0;
+    return bMoney(newModel);
 }
 
 int main(int argc, char* argv[]) 
@@ -693,7 +729,58 @@ int main(int argc, char* argv[])
     для класса bMoney. В классе sterling мы используем операции преобразования, таким образом отказавшись
     от возможности поиска неправильных операций, но получив простоту при записи перегружаемых 
     математических операций. */
+    /*double money = 10;
+    sterling one(15, 18, 10);
+    sterling two(6, 2, 8);
+    sterling three;
+    one.putSterling();
+    two.putSterling();
+        three = one + two;
+    three.putSterling();
+        three = one - two;
+    three.putSterling();
+        three = one * money;
+    three.putSterling();
+        three = one / two;
+    three.putSterling();
+        three = one / money;
+    three.putSterling();
+    money = three;
+    cout << "money = " << money << endl; */
 
+    /*12. Напишите программу, объединяющую в себе классы bMoney из упражнения 8 и sterling из упражнения 11. 
+    Напишите операцию преобразования для преобразования между классами bMoney и sterling, предполагая, что 
+    один фунт (£1.0.0) равен пятидесяти долларам ($50.00). Это приблизительный курс обмена для XIX века, 
+    когда Британская империя еще использовала меру фунты-шиллинги-пенсы. Напишите программу main(), которая 
+    позволит пользователю вводить суммы в каждой из валют и преобразовывать их в другую валюту с выводом 
+    результата. Минимизируйте количество изменений в существующих классах bMoney и sterling. */
+    char continueEnter = '0';
+    uint change = 0;
+    while (continueEnter != 'n') {
+        cout << "Для перевода фунтов в доллары введите 1 " << endl;
+        cout << "Для перевода долларов в фунты введите 2 " ;
+        cin >> change;
+        if (change == 1) {
+            sterling from;
+            from.getSterling();
+            from.putSterling(); 
+            cout << " -> " << endl;
+            bMoney to = from;
+            to.getmoney();
+            cout << ";" << endl;
+        } else if (change == 2) {
+            bMoney from;
+            from.putmoney();
+            from.getmoney();
+            cout << " -> " << endl;
+            sterling to = from;
+            to.putSterling(); 
+            cout << ";" << endl;
+        } else
+            continue;
+        cout << "Продолжить ввод денежных единиц (y or n) : ";
+        cin >> continueEnter; 
+    }
 
     return 0;
 }
