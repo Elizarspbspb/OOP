@@ -325,6 +325,18 @@ operator float() const {
 	fracfeet += static_cast<float>(feet); 	// добавляем целые футы
 	return fracfeet / MTF;			// переводим в метры
 }
+-----------------------
+class bMoney {
+    long double money;
+    char streams[MAXSTR] = "$";
+public:
+    bMoney();
+    bMoney(char s[]);
+    bMoney(long double); 	// неявный конструктор преобразования long double в bMoney 
+    bMoney(long double) { 	// неявный конструктор преобразования long double в bMoney 
+    	
+    }
+}
 ***От основного к определенному пользователем***
 Для перехода от основного типа — в нашем случае float — к определенному пользователем типу, такому, как Distance, мы используем конструктор с одним аргументом.
 Distance(float meters) {
