@@ -278,12 +278,9 @@ public:
     long double operator/(bMoney);      // long double = bMoney / bMoney
     bMoney operator/(long double);      // bMoney = bMoney / long double
     // Task 12
-    operator double() {
-        return money /= 50.0;
+    long double getParam() const {
+        return money;
     }
-    /*    operator double() const {  
-        return pounds + (static_cast<double>(12 * shillings + pence) / 240);    // 240 - 12 * 20.  
-    } */
 };
 bMoney::bMoney() : money(0) {}
 bMoney::bMoney(char s[]) : money(0) {}
@@ -306,6 +303,8 @@ long double bMoney::mstold(string strTo) {
         }
     }
     mon = stold(strTo); // mon = _atold(strTo);
+    // Task 12
+    money = mon;
     return mon;
 }
 void bMoney::getmoney() {
@@ -418,7 +417,8 @@ public:
         return pounds + (static_cast<double>(12 * shillings + pence) / 240);    // 240 - 12 * 20.  
     }
     // Task 12
-    operator bMoney();
+    operator bMoney();      // 1
+    sterling(bMoney);       // 2
 };
 long sterling::getNewMoney(long pounds, int shillings, int pence) {
     return pounds + (static_cast<double>(12 * shillings + pence) / 240);    // 240 - 12 * 20.  
@@ -427,12 +427,16 @@ long sterling::getNewMoney(long pounds, int shillings, int pence) {
             return sterling(double(sterling(pounds, shillings, pense)) + double(s2));
 }*/
 sterling sterling::getAldMoney(double newMoney) {
-    long pounds = static_cast<int>(newMoney);
-    double decfrac = newMoney - pounds;  // десятичная дробная часть
+    long poundsNew = static_cast<int>(newMoney);
+    double decfrac = newMoney - poundsNew;  // десятичная дробная часть
     decfrac *= 240;
     int shil, pens;
     shil = static_cast<int>(decfrac) / 12;
     pens = static_cast<int>(decfrac) % 12;
+    // Task 12
+    pounds = poundsNew;
+    shillings = shil;
+    pence = pens;
     return sterling(pounds, shil, pens);
 }
 sterling sterling::operator+(sterling one) {
@@ -504,10 +508,16 @@ void sterling::putSterling() const {
     cout << " £" << pounds << " " << shillings << " " << pence << endl;
 }
 // Task 12
-sterling::operator bMoney() {               // оператор преобразования
+sterling::operator bMoney() {               // оператор преобразования 1
     double newModel = getNewMoney(pounds, shillings, pence);
     newModel *= 50.0;
     return bMoney(newModel);
+}
+sterling::sterling(bMoney one) {               // конструктор преобразования 2
+    newMoney = one.getParam();
+    newMoney /= 50.0;
+    cout << newMoney << endl;
+    getAldMoney(newMoney);
 }
 
 int main(int argc, char* argv[]) 
@@ -516,19 +526,19 @@ int main(int argc, char* argv[])
     вычисляет разность двух интервалов. Она должна позволять выполнение выражений типа 
     dist3 = dist1-dist2;. Предполагаем, что эта операция никогда не будет использоваться для вычитания
     большего интервала из меньшего (так как отрицательного интервала быть не может). */
-    /*Distance dist3;
+    Distance dist3;
     Distance dist1(15, 6.25);
     Distance dist2(11, 7.25);
     dist3 = dist1 - dist2;          
     cout << "\ndist1 ="; dist1.showdist();
     cout << "\ndist2 ="; dist2.showdist();
-    cout << "\ndist3 ="; dist3.showdist(); */
+    cout << "\ndist3 ="; dist3.showdist();
 
     /*2. Напишите программу, которая заменяет перегруженную операцию + на перегруженную операцию += в 
     программе STRPLUS этой главы. Эта операция должна позволять записывать выражения типа: s1 += s2;
     где s2 прибавляется (объединяется) к строке s1, результат при этом остается в s1. Операция должна 
     также позволять использовать результат для других вычислений, например в выражениях типа s3 = s1 += s2; */
-    /*String s1 = "\nС Рождеством! ";
+    String s1 = "\nС Рождеством! ";
     String s2 = "С Новым годом!";
     String s3;
     s1.display();
@@ -537,17 +547,17 @@ int main(int argc, char* argv[])
     s3 = s1 += s2;
     //s1 += s2;     
     s1.display();
-    s3.display(); */
+    s3.display();
 
     /*3. Модифицируйте класс time из упражнения 3 главы 6 так, чтобы вместо метода add_time() можно было
     использовать операцию + для складывания двух значений времени. Напишите программу для проверки класса.*/
-    /*Time one(10, 30, 45);
+    Time one(10, 30, 45);
     Time two(6, 20, 5);
     Time three;
     three = one + two;
     one.showTime();
     two.showTime();
-    three.showTime(); */
+    three.showTime();
 
     /*4. Создайте класс Int, основанный на упражнении 1 из главы 6. Перегрузите четыре целочисленных 
     арифметических операции (+, -, * и /) так, чтобы их можно было использовать для операций с объектами
@@ -556,24 +566,24 @@ int main(int argc, char* argv[])
     и завершить программу. Такие типы данных полезны там, где ошибки могут быть вызваны арифметическим 
     переполнением, которое недопустимо. Подсказка: для облегчения проверки переполнения выполняйте 
     вычисления с использованием типа long double. Напишите программу для проверки этого класса. */
-    /*Int one(1200);
-    Int two(60);
-    Int three;
-    three = one + two;
-    one.showValue();
-    two.showValue();
-    three.showValue();
-    three = one - two;
-    three.showValue();
-    three = one * two;
-    three.showValue();
-    three = one / two;
-    three.showValue(); */
+    Int one4(1200);
+    Int two4(60);
+    Int three4;
+    three4 = one4 + two4;
+    one4.showValue();
+    two4.showValue();
+    three4.showValue();
+    three4 = one4 - two4;
+    three4.showValue();
+    three4 = one4 * two4;
+    three4.showValue();
+    three4 = one4 / two4;
+    three4.showValue();
 
     /*5. Пополните класс time, рассмотренный в упражнении 3, перегруженными операциями увеличения (++) 
     и уменьшения (--), которые работают в обеих, префиксной и постфиксной, формах записи и возвращают 
     значение. Дополните функцию main(), чтобы протестировать эти операции. */
-    /*Time inc(10, 10, 10);
+    Time inc(10, 10, 10);
     inc.showTime();     // 10 10 10
     inc++;
     inc.showTime();     // 11 11 11
@@ -582,11 +592,11 @@ int main(int argc, char* argv[])
     ++inc;
     inc.showTime();     // 11 11 11
     inc--;
-    inc.showTime();     // 10 10 10     */
+    inc.showTime();     // 10 10 10     
 
     /*6. Добавьте в класс time из упражнения 5 возможность вычитать значения времени, используя 
     перегруженную операцию -, и умножать эти значения, используя тип float и перегруженную операцию *. */
-    /*Time SixOne(10, 10, 10);
+    Time SixOne(10, 10, 10);
     Time SixTwo(2, 5, 4);
     Time SixThree;
     SixThree = SixOne - SixTwo;
@@ -597,7 +607,7 @@ int main(int argc, char* argv[])
     SixThree.showTime(); 
     SixThree = SixOne * SixTwo;
     SixThree.showTime(); 
-    cout << endl; */
+    cout << endl;
 
     /*7. Модифицируйте класс fraction в четырехфункциональном дробном калькуляторе из упражнения 11 главы 6
     так, чтобы он использовал перегруженные операции сложения, вычитания, умножения и деления. (Вспомните 
@@ -606,14 +616,14 @@ int main(int argc, char* argv[])
     двух частей дроби. Вы можете модифицировать и функцию lowterms() так, чтобы она возвращала значение ее 
     аргумента, уменьшенное до несократимой дроби. Это будет полезным в арифметических функциях, которые 
     могут быть выполнены сразу после получения ответа. */
-    /*fraction first7(2, 6);
+    fraction first7(2, 6);
     fraction second7(1, 3);
     fraction third(0, 0);
     third = first7 + second7; 
     third.lowterms();
     first7.showFr();
     second7.showFr();
-    third.showFr(); */
+    third.showFr();
 
     /*8. Модифицируйте класс bMoney из упражнения 12 главы 7 «Массивы и строки», включив арифметические 
     операции, выполненные с помощью перегруженных операций:
@@ -641,31 +651,31 @@ int main(int argc, char* argv[])
     long double * bMoney // Пока не можем это сделать: bMoney возможен только справа
     long double / bMoney // Пока не можем это сделать: bMoney возможен только справа
     Мы рассмотрим выход из этой ситуации при изучении дружественных функций в главе 11. */
-    /*bMoney one, two, three;
+    bMoney one8, two8, three8;
     char contin = 'y';
     do {
-        one.putmoney();
-        two.putmoney();
-        one.getmoney();
-        two.getmoney();
-            three = one + two;
+        one8.putmoney();
+        two8.putmoney();
+        one8.getmoney();
+        two8.getmoney();
+            three8 = one8 + two8;
         cout << "Сумма = ";
-        three.getmoney();
-            three = one - two;
+        three8.getmoney();
+            three8 = one8 - two8;
         cout << "Разница = ";
-        three.getmoney();
-            three = one * 13.5;
+        three8.getmoney();
+            three8 = one8 * 13.5;
         cout << "Цена за единицу времени, затраченного на изделие = ";
-        three.getmoney();
-            cout << "Общая цена, деленная на цену за изделие = " << one / two << endl;
-            three = one / 13.5;
+        three8.getmoney();
+            cout << "Общая цена, деленная на цену за изделие = " << one8 / two8 << endl;
+            three8 = one8 / 13.5;
         cout << "Общая цена, деленная на количество изделий = ";
-        three.getmoney();
+        three8.getmoney();
         //three = one + 10; // Error если нет конструктора с параметром long double
-        three.getmoney();
+        three8.getmoney();
         cout << "Добавить еще сотрудника (y or n) ? : ";
         cin >> contin;
-    } while(contin != 'n'); */
+    } while(contin != 'n');
 
     /*9. Дополните класс safearay из программы ARROVER3 этой главы так, чтобы пользователь мог определять
     и верхнюю, и нижнюю границы массива (например, индексы, начинающиеся с 100 и заканчивающиеся 200). 
@@ -676,7 +686,7 @@ int main(int argc, char* argv[])
     но вообще вы можете преобразовывать индексы массива safearay в индексы реального массива целых чисел 
     произвольным образом. Например, если пользователь определил диапазон от 100 до 175, то вы можете 
     преобразовать его в диапазон от arr[0] до arr[75]. */
-    /*int up, lower;
+    int up, lower;
     cout << "Введите нижнюю границу массива: ";
     cin >> lower;
     cout << "Введите верхнюю границу массива: "; 
@@ -687,7 +697,7 @@ int main(int argc, char* argv[])
     for(int j = 0; j < LIMIT; j++) {
         int temp = sa1[j];
         cout << "Элемент " << j << " равен " << temp << endl;
-    } */
+    }
 
     /*10. Только для любителей математики: создайте класс Polar, который предназначен для хранения 
     полярных координат (радиуса и угла). Перегрузите операцию + для выполнения сложения для объектов 
@@ -695,11 +705,11 @@ int main(int argc, char* argv[])
     координат Y. Результат будет координатами новой точки. Таким образом, вам нужно будет преобразовать 
     полярные координаты к прямоугольным, сложить их, а затем обратно преобразовать прямоугольные 
     координаты результата к полярным. */
-    /*Polar al(5, 30);
+    Polar al(5, 30);
     Polar al2(10, 15);
     Polar al3;
     al3 = al + al2;
-    al3.show(); */
+    al3.show();
 
     /*11. Помните структуру sterling? Мы встречались с ней в упражнении 10 главы 2 «Основы программирования
     на C++», в упражнении 11 главы 5 и в других местах. Преобразуйте ее в класс, имеющий переменные для 
@@ -729,24 +739,24 @@ int main(int argc, char* argv[])
     для класса bMoney. В классе sterling мы используем операции преобразования, таким образом отказавшись
     от возможности поиска неправильных операций, но получив простоту при записи перегружаемых 
     математических операций. */
-    /*double money = 10;
-    sterling one(15, 18, 10);
-    sterling two(6, 2, 8);
-    sterling three;
-    one.putSterling();
-    two.putSterling();
-        three = one + two;
-    three.putSterling();
-        three = one - two;
-    three.putSterling();
-        three = one * money;
-    three.putSterling();
-        three = one / two;
-    three.putSterling();
-        three = one / money;
-    three.putSterling();
-    money = three;
-    cout << "money = " << money << endl; */
+    double money = 10;
+    sterling one11(15, 18, 10);
+    sterling two11(6, 2, 8);
+    sterling three11;
+    one11.putSterling();
+    two11.putSterling();
+        three11 = one11 + two11;
+    three11.putSterling();
+        three11 = one11 - two11;
+    three11.putSterling();
+        three11 = one11 * money;
+    three11.putSterling();
+        three11 = one11 / two11;
+    three11.putSterling();
+        three11 = one11 / money;
+    three11.putSterling();
+    money = three11;
+    cout << "money = " << money << endl;
 
     /*12. Напишите программу, объединяющую в себе классы bMoney из упражнения 8 и sterling из упражнения 11. 
     Напишите операцию преобразования для преобразования между классами bMoney и sterling, предполагая, что 
@@ -767,7 +777,6 @@ int main(int argc, char* argv[])
             cout << " -> " << endl;
             bMoney to = from;
             to.getmoney();
-            cout << ";" << endl;
         } else if (change == 2) {
             bMoney from;
             from.putmoney();
@@ -775,7 +784,6 @@ int main(int argc, char* argv[])
             cout << " -> " << endl;
             sterling to = from;
             to.putSterling(); 
-            cout << ";" << endl;
         } else
             continue;
         cout << "Продолжить ввод денежных единиц (y or n) : ";
