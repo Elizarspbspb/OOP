@@ -261,7 +261,7 @@ public:
 
 int main(int argc, char* argv[]) 
 {
-    /*CountDn c2(10);         // ERROR без CountDn(int c) : Counter(c) {}
+    CountDn c2(10);         // ERROR без CountDn(int c) : Counter(c) {}
     CountDn c1;             // объект c1
     cout << "\n c1 =" << c1.get_count();    // вывод на печать
     ++c1; ++c1; ++c1;       // увеличиваем c1 три раза
@@ -296,7 +296,7 @@ int main(int argc, char* argv[])
     //////////////////////////////////////////////////////////////
 
     manager m1, m2; // конструктор, установленный по умолчанию для класса manager
-    scientist s1;
+    scientist sc1;
     laborer l1;
     cout << endl;
     // введем информацию о нескольких сотрудниках
@@ -305,7 +305,7 @@ int main(int argc, char* argv[])
     cout << "\nВвод информации о втором менеджере";
     m2.getdata();
     cout << "\nВвод информации о первом ученом";
-    s1.getdata();
+    sc1.getdata();
     cout << "\nВвод информации о первом рабочем";
     l1.getdata();
     // выведем полученную информацию на экран
@@ -314,14 +314,14 @@ int main(int argc, char* argv[])
     cout << "\nИнформация о втором менеджере";
     m2.putdata();
     cout << "\nИнформация о первом ученом";
-    s1.putdata();
+    sc1.putdata();
     cout << "\nИнформация о первом рабочем";
     l1.putdata();
     cout << endl;
 
     //////////////////////////////////////////////////////////////
 
-    init_graphics();    // инициализируем систему отображения графики
+    /*init_graphics();    // инициализируем систему отображения графики
     circle cir(40, 12, 5, cBLUE, X_FILL);       // создаем круг
     rect rec(12, 7, 10, 15, cRED, SOLID_FILL);  // создаем прямоугольник
     tria tri(60, 7, 11, cGREEN, MEDIUM_FILL);   // создаем пирамиду
@@ -348,17 +348,17 @@ int main(int argc, char* argv[])
 
     //////////////////////////////////////////////////////////////
 
-    laborer l1;
+    laborer la1;
     foreman f1;
     cout << endl;
     cout << "\nВвод информации о первом рабочем";
-    l1.getdata();
+    la1.getdata();
     cout << "\nВвод информации о первом бригадире";
     f1.getdata();
     // выведем полученную информацию на экран
     cout << endl;
     cout << "\nИнформация о первом рабочем";
-    l1.putdata();
+    la1.putdata();
     cout << "\nИнформация о первом бригадире";
     f1.putdata();
     cout << endl;
