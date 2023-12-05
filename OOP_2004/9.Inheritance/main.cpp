@@ -1,3 +1,4 @@
+// Глава 9. Наследование
 #include <iostream>
 #include <iomanip>
 #include <ctime>
@@ -95,6 +96,8 @@ public:
     }
 };
 
+///////////////////////////////////////////////////////////
+
 // наследование применяется для других целей, как часть первоначальной разработки программы.
 const int LEN = 80;                 // максимальная длина имени
 class employee  {                   // некий сотрудник
@@ -142,6 +145,117 @@ public:
 };
 class laborer : public employee { // рабочий
 };
+class foreman : public laborer  { // бригадир
+private:
+    float quotas;   // норма выработки
+public:
+    void getdata() {
+        laborer::getdata();
+        cout << " Введите норму выработки: "; cin >> quotas;
+    }
+    void putdata() const {
+        laborer::putdata();
+        cout << "\n Норматив: " << quotas;
+    }
+};
+
+///////////////////////////////////////////////////////////
+
+// геометрические фигуры
+/*#include <msoftcon.h>
+class shape {           // базовый класс
+protected:
+    int xCo, yCo;       // координаты фигуры
+    color fillcolor;    // цвет
+    fstyle fillstyle;   // стиль изображения
+public:
+    shape() : xCo(0), yCo(0), fillcolor(cWHITE), fillstyle(SOLID_FILL) { }
+    shape(int x, int y, color fc, fstyle fs) : xCo(x), yCo(y), fillcolor(fc), fillstyle(fs) { }
+    void draw() const { // функция установки цвета и стиля
+        set_color(fillcolor);
+        set_fill_style(fillstyle);
+    }
+};
+// -----------------------------------------------
+class circle : public shape {
+private:
+    int radius;             // радиус, а xCo и yCo будут координатами центра
+public:
+    circle() : shape() { }
+    circle(int x, int y, int r, color fc, fstyle fs) : shape(x, y, fc, fs), radius(r) { }
+    void draw() const {     // функция рисования окружности
+        shape::draw();
+        draw_circle(xCo, yCo, radius);
+    }
+};
+// -----------------------------------------------
+class rect : public shape {
+private:
+    int width, height;      // ширина и высота, а xCo и yCo будут координатами верхнего правого угла
+public:
+    rect() : shape(), height(0), width(0) { }
+    rect(int x, int y, int h, int w, color fc, fstyle fs) : shape(x, y, fc, fs), height(h), width(w) { }
+    void draw() const {     // функция рисования прямоугольника
+        shape::draw();
+        draw_rectangle(xCo, yCo, xCo + width, yCo + height);    // нарисуем диагональ
+        set_color(xWHITE);
+        draw_line(xCo, yCo, xCo + width, yCo + height);
+    }
+};
+// -----------------------------------------------
+class tria : public shape {
+private:
+    int height; // высота пирамиды, а xCo и yCo будут координатами вершины
+public:
+    tria() : shape(), height(0) { }
+    tria(int x, int y, int h, color fc, fstyle fs) : shape(x, y, fc, fs), height(h) { }
+    void draw() const {
+        shape::draw();
+        draw_pyramid(xCo, yCo, height);
+    }
+}; */
+
+///////////////////////////////////////////////////////////
+
+// испытание классов наследованных как public и private
+class A { // базовый класс
+private:
+    int privdataA;
+protected:
+    int protdataA;
+public:
+    int pubdataA;
+};
+// -----------------------------------------------
+class B : public A {    // public наследование
+public:
+    void funct() {
+        int a;
+        //a = privdataA;  // ошибка, нет доступа
+        a = protdataA;  // так можно
+        a = pubdataA;   // так можно
+    }
+};
+// -----------------------------------------------
+class C : private A {   // private наследование
+public:
+    void funct() {
+        int a;
+        //a = privdataA;  // ошибка, нет доступа
+        a = protdataA;  // так можно
+        a = pubdataA;   // так можно
+    }
+};
+// -----------------------------------------------
+class D : protected A {   // private наследование
+public:
+    void funct() {
+        int a;
+        //a = privdataA;  // ошибка, нет доступа
+        a = protdataA;  // так можно
+        a = pubdataA;   // так можно
+    }
+};
 
 ///////////////////////////////////////////////////////////
 
@@ -177,7 +291,7 @@ int main(int argc, char* argv[])
     cout << "\nA = "; alpha.showdist();
     cout << "\nB = "; beta.showdist();
     cout << "\nC = "; gamma.showdist();
-    cout << endl; */
+    cout << endl;
 
     //////////////////////////////////////////////////////////////
 
@@ -205,7 +319,50 @@ int main(int argc, char* argv[])
     l1.putdata();
     cout << endl;
 
-// 380 стр
+    //////////////////////////////////////////////////////////////
+
+    init_graphics();    // инициализируем систему отображения графики
+    circle cir(40, 12, 5, cBLUE, X_FILL);       // создаем круг
+    rect rec(12, 7, 10, 15, cRED, SOLID_FILL);  // создаем прямоугольник
+    tria tri(60, 7, 11, cGREEN, MEDIUM_FILL);   // создаем пирамиду
+    cir.draw();         // рисуем все наши фигуры
+    rec.draw();
+    tri.draw(); 
+    set_cursor_pos(1, 25); // переводим курсор в самый низ экрана */
+
+    //////////////////////////////////////////////////////////////
+
+    int a;
+    B objB;
+    // a = objB.privdataA;     // ошибка, нет доступа
+    // a = objB.protdataA;     // ошибка, нет доступа
+    a = objB.pubdataA;          // так можно
+    C objC;
+    // a = objC.privdataA;     // ошибка, нет доступа
+    // a = objC.protdataA;     // ошибка, нет доступа
+    // a = objC.pubdataA;      // ошибка, нет доступа
+    D objD;
+    // a = objD.privdataA;     // ошибка, нет доступа
+    // a = objD.protdataA;     // ошибка, нет доступа
+    // a = objD.pubdataA;      // ошибка, нет доступа
+
+    //////////////////////////////////////////////////////////////
+
+    laborer l1;
+    foreman f1;
+    cout << endl;
+    cout << "\nВвод информации о первом рабочем";
+    l1.getdata();
+    cout << "\nВвод информации о первом бригадире";
+    f1.getdata();
+    // выведем полученную информацию на экран
+    cout << endl;
+    cout << "\nИнформация о первом рабочем";
+    l1.putdata();
+    cout << "\nИнформация о первом бригадире";
+    f1.putdata();
+    cout << endl;
+
     //////////////////////////////////////////////////////////////
 
     return 0;
