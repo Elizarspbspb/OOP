@@ -18,7 +18,7 @@ public:
     }
     void putdata() const {
         cout << "\n Книга: " << nameBook;
-        cout << "\n Цена: " << costBook;
+        cout << "\n Цена: " << costBook << endl;
     }
 };
 // Task 3 start
@@ -318,6 +318,88 @@ void Pstring2::right(char s[], int count) {
     }
 }
 
+
+// Task 9
+class date {
+    int day;
+    int mounth;
+    int year;
+public:
+    date() : day(0), mounth(0), year(0) {};
+    void getdate(int days, int mounths, int years) {
+        day = days;
+        mounth = mounths;
+        year = years;
+    }
+    void showdate() const {
+        cout << "День = " << day << endl;
+        cout << "Месяц = " << mounth << endl;
+        cout << "Год = " << year << endl;
+    }
+};
+class publication2 : public publication, public date {
+protected:
+    date da;
+public:
+    void getdata() {
+        publication::getdata();
+        int day, mounth, year;
+        char slash = '/';
+        cout << "Введите дату в формате 31/12/2002" << endl;
+        cin >> day >> slash >> mounth >> slash >> year;
+        da.getdate(day, mounth, year);
+    }
+    void putdata() const {
+        publication::putdata();
+        da.showdate();
+    }
+};
+class book2 : public publication2, public sales {
+    int pages;
+public:
+    void getdata() {
+        publication2::getdata();
+        cout << "\nВведите количество страниц: "; cin >> pages;
+        sales::getdata();
+    }
+    void putdata() const {
+        publication2::putdata();
+        cout << "\n Страниц: " << pages;
+        sales::putdata();
+    }
+};
+class type2 : private publication2, public sales {
+    float minutTime;
+public:
+    void getdata() {
+        publication2::getdata();
+        cout << "\nВведите время записи в минутах: "; cin >> minutTime;
+        sales::getdata();
+    }
+    void putdata() const {
+        publication2::putdata();
+        cout << "\n Время: " << minutTime << " минут";
+        sales::putdata();
+    }
+};
+
+// Task 10
+class executive : public manager {
+    int bonusYear;
+    int shareNumbers;
+public:
+    void getdata() {
+        manager::getdata();
+        cout << "\nВведите размер годового бонуса: "; cin >> bonusYear;
+        cout << "\nВведите количество акций: "; cin >> shareNumbers;
+    }
+    void putdata() const {
+        manager::putdata();
+        cout << "\nРазмер годового бонуса: " << bonusYear;
+        cout << "\nКоличество акций: " << shareNumbers;
+    }
+};
+
 ///////////////////////////////////////////////////////////
 
 int main(int argc, char* argv[]) 
@@ -451,6 +533,33 @@ int main(int argc, char* argv[])
     изменения функций классов так, чтобы пользователь мог вводить и выводить дату выхода книги. Для даты 
     можно использовать класс data из упражнения 5 главы 6, который хранит дату в виде трех целых: 
     для месяца, для дня и для года. */
+    /* book2 readBook2;
+    type2 listenBook2;
+    readBook2.getdata();
+    listenBook2.getdata();
+    readBook2.putdata();
+    listenBook2.putdata(); */
+
+    /*10. В программе EMPMULT этой главы существует только один тип должности менеджера. В любой серьезной 
+    компании кроме менеджеров существуют еще и управляющие. Создадим производный от класса manager класс 
+    executive. (Мы предполагаем, что управляющий — это главный менеджер.) Добавочными данными этого класса 
+    будут размер годовой премии и количество его акций в компании. Добавьте подходящие методы для этих 
+    данных, позволяющие их вводить и выводить. */
+    /*executive mainMan;
+    mainMan.getdata();
+    mainMan.putdata(); */
+
+    /*11. В различных ситуациях иногда требуется работать с двумя числами, объединенными в блок. Например, 
+    каждая из координат экрана имеет горизонтальную составляющую (x) и вертикальную (y). Представьте такой 
+    блок чисел в качестве структуры pair, которая содержит две переменные типа int. Теперь предположим, что
+    мы хотим иметь возможность хранить переменные типа pair в стеке. То есть мы хотим иметь возможность 
+    положить переменную типа pair в стек путем вызова метода push() с переменной типа pair в качестве 
+    аргумента и вынуть ее из стека путем вызова метода pop(), возвращающего переменную типа pair. Начнем с 
+    класса Stack2 программы STAKEN из этой главы. Создадим производный от него класс pairStack. В нем будут
+    содержаться два метода: перегружаемый метод push() и перегружаемый метод pop(). Метод pairStack::push()
+    должен будет сделать два вызова метода Stack2::push(), чтобы сохранить оба числа из пары, а метод 
+    pairStack::pop() должен будет сделать два вызова метода Stack2::pop(). */
+    
 
 
     return 0;
