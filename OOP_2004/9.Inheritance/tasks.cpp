@@ -400,6 +400,57 @@ public:
     }
 };
 
+// Task 11
+class Stack {
+protected:
+    enum { MAX = 10 };   // размер стека
+    int st[MAX];        // данные, хранящиеся в стеке
+    int top;            // индекс последнего элемента в стеке
+public:
+    Stack() { top = -1; }
+    void push(int var) { st[++top] = var; }
+    int pop() { return st[top--]; }
+};
+class Stack2 : public Stack {
+public:
+    void push(int var) {
+        if(top >= MAX - 1) {    // если стек полон, то ошибка
+            cout << "\nОшибка: стек полон"; 
+            exit(1); 
+        }
+        Stack::push(var);       // вызов функции push класса Stack
+    }
+    int pop() {         // извлечение числа из стека
+        if(top < 0) {   // если стек пуст, то ошибка
+            cout << "\nОшибка: стек пуст\n"; 
+            exit(1); 
+        }
+        return Stack::pop();    // вызов функции pop класса Stack(можно без return)
+    }
+};
+class pairStack : public Stack2 {
+public:
+    int x, y;
+public:
+    pairStack() : x(0), y(0) {}
+    pairStack(int x1, int y1) {
+        x = x1; 
+        y = y1;
+        push(x, y);
+    }
+    void push(int xin, int yin) {
+        x = xin;
+        y = yin;
+        Stack2::push(x);
+        Stack2::push(y);
+    }
+    pairStack pop() {
+        y = Stack2::pop();
+        x = Stack2::pop();
+        return pairStack(x, y);
+    }
+};
+
 ///////////////////////////////////////////////////////////
 
 int main(int argc, char* argv[]) 
@@ -559,7 +610,20 @@ int main(int argc, char* argv[])
     содержаться два метода: перегружаемый метод push() и перегружаемый метод pop(). Метод pairStack::push()
     должен будет сделать два вызова метода Stack2::push(), чтобы сохранить оба числа из пары, а метод 
     pairStack::pop() должен будет сделать два вызова метода Stack2::pop(). */
-    
+    /*pairStack one9;
+    one9.push(1, 2);
+    one9.push(2, 2);
+    one9.push(3, 4);
+    one9.push(3, 4);
+    one9.pop();
+    cout << endl << one9.x << " - " << one9.y;
+    pairStack two9;
+    two9 = one9.pop();
+    cout << endl << one9.x << " - " << one9.y;
+    one9.pop();
+    cout << endl << one9.x << " - " << one9.y;
+    two9.pop();
+    cout << endl << two9.x << " - " << two9.y; */
 
 
     return 0;
