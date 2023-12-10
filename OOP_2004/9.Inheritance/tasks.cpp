@@ -451,6 +451,67 @@ public:
     }
 };
 
+
+// Task 12
+#include "task12.h"
+class sterfrac : public sterling, public fraction {
+private:
+    int eighths;
+    sterling str;
+    fraction fra;
+public:
+    sterfrac() : sterling(), fraction() {}
+    sterfrac(sterling one2, fraction two2) {
+        str = one2;
+        fra = two2;
+        fra.lowterms();
+    }
+    sterfrac(long pounds2, int shillings2, int pence2, int dividend2, int divisor2) {
+        str = sterling(pounds2, shillings2, pence2);
+        fra = fraction(dividend2, divisor2);
+        fra.lowterms();
+    }
+    void setSterling() {
+        cout << "Введите денежки в формате - 1.1.1-1/4 или 9.19.11-7/8" << endl;
+        str.getSterling();
+        cout << "Введите дробные части пенни в одну строку" << endl;
+        fra.enterFr();
+    }
+    void getSterling() const {
+        str.putSterling();
+        cout << "-";
+        fra.showFr();
+    }
+    sterfrac operator+(sterfrac);
+    sterfrac operator-(sterfrac);
+    sterfrac operator*(sterfrac);
+    sterfrac operator/(sterfrac);
+};
+sterfrac sterfrac::operator+(sterfrac two) {
+    sterling newStr = str.operator+(two.str);
+    fraction newFra = fra.operator+(two.fra);
+    sterfrac three(newStr, newFra);
+    return three;
+}
+sterfrac sterfrac::operator-(sterfrac two) {
+    sterling newStr = str.operator-(two.str);
+    fraction newFra = fra.operator-(two.fra);
+    sterfrac three(newStr, newFra);
+    return three;
+}
+sterfrac sterfrac::operator*(sterfrac two) {
+    sterling newStr = str.operator*(two.str);
+    fraction newFra = fra.operator*(two.fra);
+    sterfrac three(newStr, newFra);
+    return three;
+}
+sterfrac sterfrac::operator/(sterfrac two) {
+    sterling newStr = str.operator/(two.str);
+    fraction newFra = fra.operator/(two.fra);
+    sterfrac three(newStr, newFra);
+    return three;
+}
+
 ///////////////////////////////////////////////////////////
 
 int main(int argc, char* argv[]) 
@@ -463,12 +524,12 @@ int main(int argc, char* argv[])
     и putdata(), предназначенный для вывода этих данных. 
     Напишите функцию main() программы для проверки классов book и type. Создайте их объекты в программе и 
     запросите пользователя ввести и вывести данные с использованием методов getdata() и putdata(). */
-    /*book readBook;
+    book readBook;
     type listenBook;
     readBook.getdata();
     listenBook.getdata();
     readBook.putdata();
-    listenBook.putdata(); */
+    listenBook.putdata();
 
     /*2. Вспомните пример STRCONV из главы 8. Класс String в этом примере имеет дефект: у него нет защиты 
     на тот случай, если его объекты будут инициализированы слишком длинной строкой (константа SZ имеет 
@@ -480,11 +541,11 @@ int main(int argc, char* argv[])
     копировать в str только SZ-1 символов, если строка окажется слишком длинной, и будет копировать строку 
     полностью, если она будет иметь длину меньшую, чем SZ. Напишите функцию main() программы для проверки 
     ее работы со строками разной длины. */
-    /*Pstring s1 = "Эта строка имеет очень большую длину и мы можем быть уверены, что она не уместится в отведенный буфер, что приведет к непредсказуемым последствиям.";
+    Pstring s1 = "Эта строка имеет очень большую длину и мы можем быть уверены, что она не уместится в отведенный буфер, что приведет к непредсказуемым последствиям.";
     s1.display();
     cout << " - - - " << endl;
     Pstring s2 = "Короткая строка.";
-    s2.display(); */
+    s2.display();
 
     /*3. Начните с классов book, type и publication из упражнения 1. Добавьте базовый класс sales, в 
     котором содержится массив, состоящий из трех значений типа float, куда можно записать общую стоимость 
@@ -493,21 +554,21 @@ int main(int argc, char* argv[])
     стали производными обоих классов: publications и sales. Объекты классов book и type должны вводить и 
     выводить данные о продажах вместе с другими своими данными. Напишите функцию main() для создания 
     объектов классов book и type, чтобы протестировать возможности ввода/вывода данных. */
-    /*book readBook;
-    type listenBook;
-    readBook.getdata();
-    listenBook.getdata();
-    readBook.putdata();
-    listenBook.putdata(); */
+    book readBook3;
+    type listenBook3;
+    readBook3.getdata();
+    listenBook3.getdata();
+    readBook3.putdata();
+    listenBook3.putdata();
 
     /*4. Предположим, что издатель из упражнений 1 и 3 решил добавить к своей продукции версии книг на комп.
     дисках для тех, кто любит читать книги на своих компьютерах. Добавьте класс disk, который, как book и 
     type, является производным класса publication. Класс disk должен включать в себя те же функции, что и в 
     других классах. Полем только этого класса будет тип диска: CD или DVD. Для хранения этих данных вы 
     можете ввести тип enum. Пользователь должен выбрать подходящий тип, набрав на клавиаtype с или d. */
-    /*disk oneD;
+    disk oneD;
     oneD.getdata();
-    oneD.putdata(); */
+    oneD.putdata();
 
     /*5. Создайте производный класс employee2 от базового класса employee из программы EMPLOY этой главы. 
     Добавьте в новый класс поле compensation типа double и поле period типа enum для обозначения периода 
@@ -517,7 +578,7 @@ int main(int argc, char* argv[])
     scientist2 и laborer2 более соответствовало бы духу ООП. Затем можно применить множественное 
     наследование и сделать так, чтобы эти три новых класса стали производными класса compensation и 
     первоначальных классов manager, scientist и laborer. Таким путем можно избежать модификации исходных классов.*/
-    /*manager2 man;
+    manager2 man;
     man.getdata();
     man.putdata();
     scientist2 sci;
@@ -525,13 +586,13 @@ int main(int argc, char* argv[])
     sci.putdata();
     laborer2 lab;
     lab.getdata();
-    lab.putdata();*/
+    lab.putdata();
 
     /*6. Вспомним программу ARROVER3 из главы 8. Сохраним класс safearray таким же и, используя наследование, 
     добавим к нему возможность для пользователя определять верхнюю и нижнюю границы массива в конструкторе.
     Это похоже на упражнение 9 из главы 8, за исключением того, что применено наследование для создания 
     нового класса (можно назвать его safehilo) взамен модификации исходного класса. */
-    /*int up, lower;
+    int up, lower;
     cout << "Введите нижнюю границу массива: ";
     cin >> lower;
     cout << "Введите верхнюю границу массива: "; 
@@ -543,12 +604,12 @@ int main(int argc, char* argv[])
     for(j = lower; j < up; j++) {
         int temp = sa1[j];      // используем функцию справа от знака =
         cout << "Элемент " << j << " равен " << temp << endl;
-    } */
+    }
 
     /*7. Вспомним программу COUNTEN2 из этой главы. В ней можно увеличивать и уменьшать счетчик, используя 
     префиксные операции. Используя наследование, добавьте возможность использования постфиксных операций 
     для случаев увеличения и уменьшения. (Описание постфиксных операций вы сможете найти в главе 8.) */
-    /*CountPrefPost c1;     // переменные класса CountPrefPost
+    CountPrefPost c1;     // переменные класса CountPrefPost
     CountPrefPost c2(100);
     cout << "\nc1 = " << c1.get_count();        // выводим значения на экран
     cout << "\nc2 = " << c2.get_count();
@@ -557,7 +618,7 @@ int main(int argc, char* argv[])
     --c2; c2--;
     cout << "\nc2 = " << c2.get_count();
     CountPrefPost c3 = c2--;      // создаем переменную c3 на основе c2
-    cout << "\nc3 = " << c3.get_count();        // показываем значение */
+    cout << "\nc3 = " << c3.get_count();        // показываем значение
 
     /*8. В некоторых компьютерных языках, таких, как Visual Basic, есть операции, с помощью которых можно 
     выделить часть строки и присвоить ее другой строке. (В стандартном классе string предложены различные 
@@ -570,12 +631,12 @@ int main(int argc, char* argv[])
     временный объект класса Pstring2, который затем их возвратит. Для получения лучшего результата 
     используйте в этих функциях возврат по ссылке, чтобы они могли быть использованы с левой стороны знака 
     «равно» для изменения части существующей строки. */
-    /*Pstring2 s1 = "Эта строка имеет очень большую длину и мы можем быть уверены, что она не уместится в отведенный буфер, что приведет к непредсказуемым последствиям.";
-    s1.display();
+    Pstring2 s18 = "Эта строка имеет очень большую длину и мы можем быть уверены, что она не уместится в отведенный буфер, что приведет к непредсказуемым последствиям.";
+    s18.display();
     cout << " - - - " << endl;
-    Pstring2 s2 = "Короткая строка.Эта строка имеет очень большую длину и мы можем быть уверены, что она ///////////////////////////////////";
-    s2.left(s1, 5);
-    s2.display(); */
+    Pstring2 s28 = "Короткая строка.Эта строка имеет очень большую длину и мы можем быть уверены, что она ///////////////////////////////////";
+    s28.left(s18, 5);
+    s28.display();
 
     /*9. Вспомним классы publication, book и type из упражнения 1. Предположим, что мы хотим добавить в 
     классы book и type дату выхода книги. Создайте новый производный класс publication2, который является 
@@ -584,21 +645,21 @@ int main(int argc, char* argv[])
     изменения функций классов так, чтобы пользователь мог вводить и выводить дату выхода книги. Для даты 
     можно использовать класс data из упражнения 5 главы 6, который хранит дату в виде трех целых: 
     для месяца, для дня и для года. */
-    /* book2 readBook2;
+    book2 readBook2;
     type2 listenBook2;
     readBook2.getdata();
     listenBook2.getdata();
     readBook2.putdata();
-    listenBook2.putdata(); */
+    listenBook2.putdata();
 
     /*10. В программе EMPMULT этой главы существует только один тип должности менеджера. В любой серьезной 
     компании кроме менеджеров существуют еще и управляющие. Создадим производный от класса manager класс 
     executive. (Мы предполагаем, что управляющий — это главный менеджер.) Добавочными данными этого класса 
     будут размер годовой премии и количество его акций в компании. Добавьте подходящие методы для этих 
     данных, позволяющие их вводить и выводить. */
-    /*executive mainMan;
+    executive mainMan;
     mainMan.getdata();
-    mainMan.putdata(); */
+    mainMan.putdata();
 
     /*11. В различных ситуациях иногда требуется работать с двумя числами, объединенными в блок. Например, 
     каждая из координат экрана имеет горизонтальную составляющую (x) и вертикальную (y). Представьте такой 
@@ -610,7 +671,7 @@ int main(int argc, char* argv[])
     содержаться два метода: перегружаемый метод push() и перегружаемый метод pop(). Метод pairStack::push()
     должен будет сделать два вызова метода Stack2::push(), чтобы сохранить оба числа из пары, а метод 
     pairStack::pop() должен будет сделать два вызова метода Stack2::pop(). */
-    /*pairStack one9;
+    pairStack one9;
     one9.push(1, 2);
     one9.push(2, 2);
     one9.push(3, 4);
@@ -623,8 +684,39 @@ int main(int argc, char* argv[])
     one9.pop();
     cout << endl << one9.x << " - " << one9.y;
     two9.pop();
-    cout << endl << two9.x << " - " << two9.y; */
+    cout << endl << two9.x << " - " << two9.y;
 
+    /*12. Рассмотрим старую Британскую платежную систему фунты-стерлинги-пенсы (см. упражнение 10 главы 4 
+    «Структуры»). Пенни в дальнейшем делятся на фартинги и полупенни. Фартинг — это 1/4 пенни. Существовали 
+    монеты фартинг, полфартинга и пенни. Любые сочетания монет выражались через восьмые части пенни:
+        1/8 пенни — это полфартинга;
+        1/4 пенни — это фартинг;
+        3/8 пенни — это фартинг с половиной;
+        1/2 пенни — это по\пенни;
+        5/8 пенни — это полфартинга плюс по\пенни;
+        3/4 пенни — это по\пенни плюс фартинг;
+        7/8 пенни — это по\пенни плюс фартинг с половиной.
+    Давайте предположим, что мы хотим добавить в класс sterling возможность пользоваться этими дробными 
+    частями пенни. Формат ввода/вывода может быть похожим на £1.1.1-1/4 или £9.19.11-7/8, где дефисы 
+    отделяют дробные части от пенни. Создайте новый класс sterfrac, производный от класса sterling. В нем 
+    должна быть возможность выполнения четырех основных арифметических операций со стерлингами, включая 
+    восьмые части пенни. Поле eighths типа int определяет количество восьмых. Вам нужно будет перегрузить
+    методы класса sterling, чтобы они могли работать с восьмыми частями. Пользователь должен иметь 
+    возможность ввести и вывести дробные части пенни. Не обязательно использовать класс fraction полностью
+    (см. упражнение 11 главы 6), по вы можете это сделать для большей точности. */
+    sterfrac one12(4, 4, 4, 4, 4);
+    sterfrac two12;
+    two12.setSterling();
+    one12.getSterling();
+    cout << endl;
+    two12.getSterling();
+    cout << endl;
+    sterfrac three12;
+    three12 = one12 + two12;
+    three12.getSterling();
+    cout << endl;
+    three12 = one12 / two12;
+    three12.getSterling();
 
     return 0;
 }
