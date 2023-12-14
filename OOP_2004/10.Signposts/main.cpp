@@ -81,6 +81,59 @@ public:
 
 ///////////////////////////////////////////////////////////
 
+class Distance {
+    int feet;
+    float inches;
+public:
+    void getdist() {
+        cout << "\nВведите футы: "; cin >> feet;
+        cout << "Введите дюймы: "; cin >> inches;
+    }
+    void showdist() const { cout << feet << "\'-" << inches << '\"'; }
+};
+
+///////////////////////////////////////////////////////////
+
+class person {
+    char name[40];  // имя человека
+public:
+    void setName() {
+        cout << "Введите имя: "; cin >> name;
+    }
+    void printName() const {
+        cout << "\n Имя: " << name;
+    }
+};
+
+///////////////////////////////////////////////////////////
+
+struct link {       // один элемент списка
+    int data;       // некоторые данные
+    link* next;     // указатель на следующую структуру
+};
+class linklist {    // список
+    link* first;
+public:
+    linklist() { first = NULL; }    // первого элемента пока нет
+    void additem(int d);    // добавление элемента
+    void display();         // показ данных
+};
+void linklist::additem(int d) {
+    link* newlink = new link;   // выделяем память
+    newlink->data = d;          // запоминаем данные
+    newlink->next = first;      // запоминаем значение first
+    first = newlink;            // first теперь указывает на новый элемент
+}
+void linklist::display() {
+    link* current = first;              // начинаем с первого элемента
+    while(current) {                    // пока есть данные
+        cout << current->data << endl;  // печатаем данные
+        current = current->next;        // двигаемся к следующему элементу
+    }
+}
+
+///////////////////////////////////////////////////////////
+
 int main(int argc, char* argv[]) 
 {
     int var1 = 11;
@@ -220,6 +273,50 @@ int main(int argc, char* argv[])
     String sNew1 = "Тише едешь - дальше будешь.";
     cout << "sNew1 = ";
     sNew1.display();
+
+    //////////////////////////////////////////////////////////////
+
+    Distance dist;
+    dist.getdist();         // получаем информацию
+    dist.showdist();        // выводим на экран
+    Distance* distptr;      // определяем переменную-указатель на Distance
+    distptr = new Distance; // создаем объект Distance
+    (*distptr).getdist();   // так можно: разыменование указателя это переменная
+    distptr->showdist();    // выводим информацию
+    cout << endl;
+    delete distptr;
+
+    Distance& distNew = *(new Distance); // создаем объект типа Distance
+    distNew.getdist();     // доступ к членам класса осуществляем через оператор "."
+    distNew.showdist();
+
+    //////////////////////////////////////////////////////////////
+
+    person* persPtr[100];   // массив указателей
+    int n = 0;      // количество элементов в массиве
+    char choice;
+    do {
+        persPtr[n] = new person;    // создаем новый объект
+        persPtr[n]->setName();      // вводим имя
+        n++;        // увеличиваем количество
+        cout << "Продолжаем ввод (д/н)?"; // спрашиваем, закончен ли ввод
+        cin >> choice;
+    } while(choice == 'д');
+    for(int j = 0; j < n; j++) {
+        cout << "\nИнформация о номере " << j + 1;
+        persPtr[j]->printName();
+    }
+    cout << endl;
+    //delete[] persPtr;
+
+    //////////////////////////////////////////////////////////////
+
+    linklist li;        // создаем переменную-список
+    li.additem(25);
+    li.additem(36);
+    li.additem(49);
+    li.additem(64);     // добавляем туда несколько чисел
+    li.display();       // показываем список
 
     //////////////////////////////////////////////////////////////
 
