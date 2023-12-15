@@ -134,6 +134,31 @@ void linklist::display() {
 
 ///////////////////////////////////////////////////////////
 
+class newPerson {
+protected:
+    string name;    // имя
+public:
+    void setName() { cout << "Введите имя: "; cin >> name; }
+    void printName() { cout << endl << name; }
+    string getName() { return name; }
+};
+void order(newPerson** pp1, newPerson** pp2) {
+    if((*pp1)->getName() > (*pp2)->getName()) // если первая строка больше второй,
+    {
+        newPerson* tempptr = *pp1; // меняем их местами
+        *pp1 = *pp2;
+        *pp2 = tempptr;
+    }
+}
+void bsort(newPerson** pp, int n) {
+    int j, k;   // переменные для циклов
+    for(j = 0; j < n - 1; j++)      // внешний цикл
+        for(k = j + 1; k < n; k++)  // внутренний цикл
+            order(pp + j, pp + k);  // сортируем два элемента
+}
+
+///////////////////////////////////////////////////////////
+
 int main(int argc, char* argv[]) 
 {
     int var1 = 11;
@@ -317,6 +342,28 @@ int main(int argc, char* argv[])
     li.additem(49);
     li.additem(64);     // добавляем туда несколько чисел
     li.display();       // показываем список
+
+    //////////////////////////////////////////////////////////////
+
+    newPerson* newPersPtr[100]; // массив указателей на newPerson
+    int countElement = 0;       // количество элементов в массиве
+    char choiceNew;             // переменная для ввода символа
+    do {
+        newPersPtr[countElement] = new newPerson;   // создаем новый объект
+        newPersPtr[countElement]->setName();        // вводим имя
+        countElement++;                             // увеличиваем количество
+        cout << "Продолжаем ввод (y/n)?";           // спрашиваем, закончен ли ввод
+        cin >> choiceNew;
+    } while(choiceNew == 'y');
+    cout << "\nНеотсортированный список:";
+    int j = 0;
+    for(j = 0; j < countElement; j++)           // покажем неотсортированный список
+        newPersPtr[j]->printName();
+    bsort(newPersPtr, countElement);            // отсортируем указатели
+    cout << "\nОтсортированный список:";
+    for(j = 0; j < countElement; j++)           // покажем отсортированный список
+        newPersPtr[j]->printName();
+    cout << endl;
 
     //////////////////////////////////////////////////////////////
 
