@@ -417,8 +417,6 @@ int main(int argc, char* argv[])
         cout << arrSort[j] << " ";
     cout << endl;
 
-/*
-
     //////////////////////////////////////////////////////////////
 
     char str1[] = "Определение через массив";
@@ -532,8 +530,6 @@ int main(int argc, char* argv[])
     for(j = 0; j < countElement; j++)           // покажем отсортированный список
         newPersPtr[j]->printName();
     cout << endl;
-
-*/
 
     //////////////////////////////////////////////////////////////
 
