@@ -4,6 +4,7 @@
 #include <cstdlib>
 #include <ctime>
 #include <ctype.h>
+//#include <string> // start 6
 
 using namespace std;
 
@@ -102,7 +103,56 @@ void addarrays(float *one, float *two, float *three, int count) {
 ///////////////////////////////////////////////////////////
 
 //Task 6
+int compstr(const char * first, const char * second) {
+    //int size = (length(first) > length(second)) ? first : second;
+    while(*first != '\0' && *second != '\0') {
+        if (*first < *second) {
+            //cout << *first << " - " << *second << endl;
+            return -1; 
+        } else if (*first > *second) {
+            //cout << *first << " - " << *second << endl;
+            return 1;
+        }
+        first++; 
+        second++;
+    }
+    return 0;
+}
 
+///////////////////////////////////////////////////////////
+
+// Task 7
+class person {
+    char name[40];  // имя человека
+    float salary;
+public:
+    void setData() {
+        cout << "Введите имя: "; cin >> name;
+        cout << "Введите зарплату: "; cin >> salary;
+    }
+    void printData() const {
+        cout << "\n Имя: " << name;
+        cout << "\n Зарплата: " << salary;
+    }
+    string getName() { return name; }
+    float getSalary() { return salary; }
+    //void salsort(person** , int );
+};
+void order(person** pp1, person** pp2) {
+    if((*pp1)->getSalary() > (*pp2)->getSalary()) // если первая строка больше второй,
+    {
+        person* tempptr = *pp1; // меняем их местами
+        *pp1 = *pp2;
+        *pp2 = tempptr;
+    }
+}
+//void person::salsort(person** pp, int n) {
+void salsort(person** pp, int n) {
+    int j, k;   // переменные для циклов
+    for(j = 0; j < n - 1; j++)      // внешний цикл
+        for(k = j + 1; k < n; k++)  // внутренний цикл
+            order(pp + j, pp + k);  // сортируем два элемента
+}
 
 ///////////////////////////////////////////////////////////
 
@@ -195,8 +245,41 @@ int main(int argc, char* argv[])
     по алфавиту, 0, если в s1 и s2 одинаковые значения, и 1, если s2 идет первой по алфавиту. Назовите вашу функцию compstr(). Она 
     должна принимать в качестве аргументов два указателя на строки char*, сравнивать эти строки посимвольно и возвращать число int. 
     Напишите функцию main() для проверки работы вашей функции с разными строками. Используйте указатели во всех возможных ситуациях. */
+    /*const char * firstLine = "First line";
+    //const char * firstLine = "Second line";
+    const char * secondLine = "Second line";
+    cout << "Line " << compstr(firstLine, secondLine) << " is over alphabet !" << endl; */
 
-
+    /*7. Модифицируйте класс person из программы PERSORT этой главы так, чтобы он включал в себя не только имя человека, но и сведения 
+    о его зарплате в виде поля salary типа float. Вам будет необходимо изменить методы setName() и printName() на setData() и printData(),
+    включив в них возможность ввода и вывода значения salary, как это можно сделать с именем. Вам также понадобится метод getSalary(). 
+    Используя указатели, напишите функцию salsort(), которая сортирует указатели массива persPtr по значениям зарплаты. Попробуйте 
+    вместить всю сортировку в функцию salsort(), не вызывая других функций, как это сделано в программе PERSORT. При этом не забывайте, 
+    что операция -> имеет больший приоритет, чем операция *, и вам нужно будет написать
+        if((*(pp + j))->getSalary() > (*(pp + k))->getSalary())
+        { / меняем указатели местами / } */
+    person* persPtr[100];   // массив указателей
+    int countElement = 0;      // количество элементов в массиве
+    char choice;
+    do {
+        persPtr[countElement] = new person;    // создаем новый объект
+        persPtr[countElement]->setData();      // вводим имя
+        countElement++;        // увеличиваем количество
+        cout << "Продолжаем ввод (y/n)?"; // спрашиваем, закончен ли ввод
+        cin >> choice;
+    } while(choice == 'y');
+    for(int j = 0; j < countElement; j++) {
+        cout << "\nИнформация о номере " << j + 1;
+        persPtr[j]->printData();
+    }
+    cout << endl;
+    salsort(persPtr, countElement); 
+    for(int j = 0; j < countElement; j++) {
+        cout << "\nИнформация о номере " << j + 1;
+        persPtr[j]->printData();
+    }
+    cout << endl;
+    
 
 
     return 0;
