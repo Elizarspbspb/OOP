@@ -156,6 +156,59 @@ void salsort(person** pp, int n) {
 
 ///////////////////////////////////////////////////////////
 
+// Task 8
+struct link8 {       // один элемент списка
+    int data;       // некоторые данные
+    link8* next;     // указатель на следующую структуру
+};
+class linklistNew {    // список
+    link8* first;
+    link8* last;
+public:
+    linklistNew() { first = NULL; }    // первого элемента пока нет
+    void additemFirst(int d);       // добавление элемента
+    void additemSecond(int d);      // добавление элемента
+    void displayFirst();            // показ данных
+    void displaySecond();           // показ данных
+};
+void linklistNew::additemFirst(int d) {
+    link8* newlink = new link8;   // выделяем память
+    newlink->data = d;          // запоминаем данные
+    newlink->next = first;      // запоминаем значение first
+    first = newlink;            // first теперь указывает на новый элемент
+}
+void linklistNew::additemSecond(int d) {
+    link8* newlink = new link8;   // выделяем память
+    newlink->data = d;          // запоминаем данные
+    newlink->next = first;      // запоминаем значение first
+    if (first == NULL) {
+        first = newlink;            // first теперь указывает на новый элемент
+    } else {
+        link8 *count = first;
+        while(count->next != NULL){
+            count = count->next;
+        }
+        count->next = newlink;
+    }
+}
+void linklistNew::displayFirst() {
+    link8* current = first;              // начинаем с первого элемента
+    while(current) {                    // пока есть данные
+        cout << current->data << endl;  // печатаем данные
+        current = current->next;        // двигаемся к следующему элементу
+    }
+}
+void linklistNew::displaySecond() {
+    link8* current = first;
+    while (current != NULL) {
+        std::cout << current->data << " ";
+        current = current->next;
+    }
+    std::cout << std::endl;
+}
+
+///////////////////////////////////////////////////////////
+
 int main(int argc, char* argv[]) 
 {
     /*1. Напишите программу, которая принимает группу чисел от пользователя и помещает их в массив типа float. После того как числа 
@@ -258,7 +311,7 @@ int main(int argc, char* argv[])
     что операция -> имеет больший приоритет, чем операция *, и вам нужно будет написать
         if((*(pp + j))->getSalary() > (*(pp + k))->getSalary())
         { / меняем указатели местами / } */
-    person* persPtr[100];   // массив указателей
+    /*person* persPtr[100];   // массив указателей
     int countElement = 0;      // количество элементов в массиве
     char choice;
     do {
@@ -278,8 +331,22 @@ int main(int argc, char* argv[])
         cout << "\nИнформация о номере " << j + 1;
         persPtr[j]->printData();
     }
-    cout << endl;
-    
+    cout << endl; */
+
+    /*8. Исправьте функцию additem() из программы LINKLIST так, чтобы она добавляла новый элемент в конец списка, а не в начало. Это 
+    будет означать, что первый вставленный элемент будет выведен первым и результат работы программы будет следующим:
+        25
+        36
+        49
+        64
+        Для того чтобы добавить элемент, вам необходимо будет пройти по цепи до конца списка, а затем изменить указатель последнего 
+    элемента так, чтобы он указывал на новый элемент. */
+    linklistNew li;        // создаем переменную-список
+    li.additemSecond(25);
+    li.additemSecond(36);
+    li.additemSecond(49);
+    li.additemSecond(64);     // добавляем туда несколько чисел
+    li.displaySecond();       // показываем список
 
 
     return 0;
