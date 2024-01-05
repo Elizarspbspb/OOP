@@ -209,12 +209,42 @@ void linklistNew::displaySecond() {
 }
 
 ///////////////////////////////////////////////////////////
-
+// Task 10
+const int MAXSIZE = 10;
+const int NUMARRAYS = 5;
 class pwdArray {
 private:
-    const int MAXSIZE = 10;
+    int* ap[MAXSIZE];      // Массив указателей на массивы 
+    int coff;
 public:
-    int* ap[MAXSIZE];      // Массив указателей на массивы
+    pwdArray(int coffenc) : coff(coffenc) {};
+    void setData() {
+        for(int j = 0; j < NUMARRAYS; j++) {        // создаем NUMARRAYS массивов
+            *(ap + j) = new int[MAXSIZE];           // no MAXSIZE целых чисел в каждом
+            for(int k = 0; k < MAXSIZE; k++) {
+                *(*(ap + j)+k) = (j+k)*coff;        // ap[i][k]
+            }
+        }
+    }
+    void getData() {
+        for (int i = 0; i < NUMARRAYS; ++i) {
+            for (int j = 0; j < MAXSIZE; ++j) {
+                cout << setw(6) << ap[i][j] << " ";
+            }
+            cout << endl;
+        } 
+    }
+    int& operator[](int number) {
+        if(number < 0 || number >= MAXSIZE*NUMARRAYS) {cout << "\nОшибочный индекс!"; exit(1);}
+        cout << "ENDL" << endl;
+        for (int i = 0; i < NUMARRAYS; ++i) {
+            for (int j = 0; j < MAXSIZE; ++j) {
+                if ((MAXSIZE*i + j) == number) {
+                    return ap[i][j];
+                }
+            }
+        }
+    }
 };
 
 ///////////////////////////////////////////////////////////
@@ -415,8 +445,13 @@ int main(int argc, char* argv[])
     методы класса могут получить доступ к полям класса, используя двухшаговый подход. Перегрузим операцию [] (см. главу 9 
     «Наследование»), чтобы получить нужный нам результат. Заполним массив данными и выведем их. Хотя для интерфейса класса использованы 
     операции индексации массива, вам следует использовать указатели внутри методов класса. */
-    const int NUMARRAYS = 5;
-    pwdArray *mas[NUMARRAYS];
+    //pwdArray *mas[NUMARRAYS];
+    pwdArray mas(10);
+    mas.setData();
+    cout << "DATA 1" << endl;
+    cout << "14 = " << mas[14] << endl;
+    cout << "DATA 2" << endl;
+    mas.getData();
 
     return 0;
 }
