@@ -376,7 +376,7 @@ int main(int argc, char* argv[])
     int* ptrintMas;                         // указатель на int
     ptrintMas = intarray;                   // пусть он указывает на наш массив
     for(int j = 0; j < 5; j++)              // для каждого элемента массива
-        // *(intarray++)                    // ERROR аналогично вычислению 7++. intarray - адрес в памяти
+        // *(intarray++)                    // ERROR аналогично вычислению 0x7ffc4baf6390++. intarray - адрес в памяти
         cout << *(ptrintMas++) << endl;     // напечатаем его значение
 
     //////////////////////////////////////////////////////////////
@@ -416,8 +416,6 @@ int main(int argc, char* argv[])
     for(int j = 0; j < N; j++)
         cout << arrSort[j] << " ";
     cout << endl;
-
-/*
 
     //////////////////////////////////////////////////////////////
 
@@ -532,8 +530,6 @@ int main(int argc, char* argv[])
     for(j = 0; j < countElement; j++)           // покажем отсортированный список
         newPersPtr[j]->printName();
     cout << endl;
-
-*/
 
     //////////////////////////////////////////////////////////////
 
