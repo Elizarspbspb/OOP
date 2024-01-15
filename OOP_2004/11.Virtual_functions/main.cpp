@@ -112,6 +112,101 @@ public:
 
 ///////////////////////////////////////////////////////////
 
+// normbase.cpp
+class Parent {
+protected:
+    int basedata;
+};
+//class Child1 : public Parent { };       // ОШИБКА: неоднозначность
+//class Child2 : public Parent { };       // ОШИБКА: неоднозначность
+class Child1 : virtual public Parent { };      
+class Child2 : virtual public Parent { };      
+class Grandchild : public Child1, public Child2 {
+public:
+    int getdata() { return basedata; }  // ОШИБКА: неоднозначность
+};
+
+///////////////////////////////////////////////////////////
+
+class beta;     // нужно для объявления frifunc
+class alpha {
+private:
+    int data;
+public:
+    alpha() : data(3) {}
+    friend int frifunc(alpha, beta); // дружественная функция
+};
+class beta {
+private:
+    int data;
+public:
+    beta() : data(7) { }
+    friend int frifunc(alpha, beta); // дружественная функция
+};
+int frifunc(alpha a, beta b) {
+    return (a.data + b.data);
+}
+
+///////////////////////////////////////////////////////////
+// ограничение перегрузки оператора «+»
+class Distance {
+private:
+    int feet;
+    float inches;
+public:
+    Distance() : feet(0), inches(0.0) { }
+    Distance(float fltfeet) {                   // переводит float в Distance
+        feet = static_cast<int>(fltfeet);
+        inches = 12*(fltfeet - feet);           // слева — дюймы
+    }
+    Distance(int ft, float in) { feet = ft; inches = in; }
+    void showdist() { cout << feet << "\'-" << inches << '\"'; }
+    //Distance operator+(Distance);
+    friend Distance operator+(Distance, Distance);      // дружественный
+    //float square();                                     // обычный метод
+    friend float square(Distance);                      // дружественная ф-ция
+};
+/*Distance Distance::operator+(Distance d2) {     // прибавить расстояние к d2
+    int f = feet + d2.feet;                     // добавить футы
+    float i = inches + d2.inches;               // добавить дюймы
+    if(i >= 12.0) { i -= 12.0; f++; }
+    return Distance(f, i);
+}*/
+Distance operator+(Distance d1, Distance d2) {  // d1 + d2
+    int f = d1.feet + d2.feet;                  // + футы
+    float i = d1.inches + d2.inches;            // + дюймы
+    if(i >= 12.0) { i -= 12.0; f++; }
+    return Distance(f, i);
+}
+/*float Distance::square() {
+    float fltfeet = feet + inches / 12;     // перевод во float
+    float feetsqrd = fltfeet * fltfeet;     // возведение в квадрат
+    return feetsqrd;
+}*/
+float square(Distance d) {
+    float fltfeet = d.feet + d.inches / 12;     // конвертировать в float
+    float feetsqrd = fltfeet * fltfeet;         // вычислить квадрат
+    return feetsqrd;                            // вернуть квадратные футы
+}
+
+///////////////////////////////////////////////////////////
+// Дружественные классы
+class alpha2 {
+private:
+    int data1;
+public:
+    alpha2() : data1(99) { }     // конструктор
+    friend class beta2;          // beta - дружественный класс
+}; 
+class beta2 {    // все методы имеют доступ к скрытым данным alpha
+public:
+    void func1(alpha2 a) { cout << "\ndata1 =" << a.data1; }
+    void func2(alpha2 a) { cout << "\ndata1 =" << a.data1; }
+    //friend alpha2;          
+};
+
+///////////////////////////////////////////////////////////
+
 int main(int argc, char* argv[]) 
 {
     Derv1 dv1;          // Объект производного класса 1
@@ -173,7 +268,45 @@ int main(int argc, char* argv[])
     Base* pBase = new Derv1;
     delete pBase;
 
+///////////////////////////////////////////////////////////
+
+    alpha aa;
+    beta bb;
+    cout << frifunc(aa, bb) << endl; // вызов функции
 
 ///////////////////////////////////////////////////////////
+// ограничение перегрузки оператора «+»
+    Distance d1 = 2.5;      // конструктор переводит feet типа float в Distance
+    Distance d2 = 1.25;
+    Distance d3;
+    cout << "\nd1 = "; d1.showdist();
+    cout << "\nd2 = "; d2.showdist();
+    d3 = d1 + 10.0;                     // distance + float: OK
+    cout << "\nd3 = "; d3.showdist();   // d3 = 10.0 + d1;
+    // float + Distance: ОШИБКА без virtual
+    // cout << "\nd3 = "; d3.showdist();
+    d3 = 10.0 + d1;                     // float + Distance: OK если virtual
+    cout << "\nd3 = "; d3.showdist();
+    cout << endl;
+
+///////////////////////////////////////////////////////////
+
+    Distance dist(3, 6.0);
+    float sqft;
+    //sqft = dist.square();                               // вычислить квадрат расстояния
+    sqft = square(dist);
+    cout << "\nРасстояние = "; dist.showdist();         // показать расст. и квадрат расст.
+    cout << "\nКвадрат расст. = " << sqft << " кв. футов\n";
+
+///////////////////////////////////////////////////////////
+
+    alpha2 a;
+    beta2 b;
+    b.func1(a);
+    b.func2(a);
+    cout << endl;
+
+///////////////////////////////////////////////////////////
+
     return 0;
 }
