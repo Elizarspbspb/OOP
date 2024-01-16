@@ -1,5 +1,6 @@
 // Глава 11. Виртуальные функции
 #include <iostream>
+#include <cstring>      // для strcpy() и т. д.
 
 using namespace std;
 
@@ -207,6 +208,122 @@ public:
 
 ///////////////////////////////////////////////////////////
 
+class gamma {
+private:
+    static int total;   // всего объектов класса (только объявление)
+    int id;             // ID текущего объекта
+public:
+    gamma() {
+        total++;            // добавить объект
+        id = total;         // id равен текущему значению total
+    }
+    ~gamma() {
+        total--;
+        cout << "Удаление ID " << id << endl;
+    }
+    static void showtotal() {       // статическая функция
+        cout << "Всего: " << total << endl;
+    }
+    void showid() {                 // Нестатическая функция
+        cout << "ID: " << id << endl;
+    }
+};
+int gamma::total = 0;
+
+///////////////////////////////////////////////////////////
+
+class newAlpha {
+private:
+    int data;
+public:
+    newAlpha() { }
+    newAlpha(int d) { data = d; }
+    void display() { cout << data; }
+    newAlpha operator=(newAlpha& a) {   // перегружаемый =
+        data = a.data;                  // не выполняется автоматически
+        cout << "\nЗапущен оператор присваивания";
+        return newAlpha(data);          // возвращает копию newAlpha
+    }
+};
+
+///////////////////////////////////////////////////////////
+
+class copyAlpha {
+private:
+    int data;
+public:
+    copyAlpha() { }
+    copyAlpha(int d) { data = d; }
+    copyAlpha(copyAlpha& a) {           // конструктор копирования
+        data = a.data;
+        cout << "\nЗапущен конструктор копирования";
+    }
+    void display() { cout << data; }
+    void operator=(copyAlpha& a) {      // переопределение присваивания
+        data = a.data;
+        cout << "\nЗапущен оператор присваивания";
+    }
+};
+
+///////////////////////////////////////////////////////////
+
+class hiddenAlpha {
+private:
+    hiddenAlpha& operator=(hiddenAlpha&);   // Скрытое присваивание
+    hiddenAlpha(hiddenAlpha&);              // Скрытое копирование
+public:
+    hiddenAlpha() { }
+};
+
+///////////////////////////////////////////////////////////
+
+/* strCount класс содержит указатель на реальную строку и считает, 
+сколько объектов класса String на нее указывают. */
+class strCount {    // Класс-счетчик уникальных строк
+private:                            // методы скрыты
+    int count;                      // собственно счетчик
+    char* str;                      // указатель на строку
+    friend class String;            // сделаем себя доступными
+    strCount(char* s) {
+        int length = strlen(s);     // длина строкового аргумента
+        str = new char[length + 1]; // занять память под строку
+        strcpy(str, s);             // копировать в нее аргументы
+        count = 1;                  // считать с единицы
+    }
+    ~strCount() { delete[] str; }   // удалить строку
+};
+class String {          // класс String
+private:
+    strCount* psc;      // указатель на strCount
+public:
+    String() { psc = new strCount("NULL"); }
+    String(char* s) { psc = new strCount(s); }
+    String(String& S) {             // конструктор копирования
+        psc = S.psc;
+        (psc->count)++;
+    }
+    ~String() {
+        if(psc->count == 1)         // если последний пользователь,
+            delete psc;             // удалить strCount
+        else                        // иначе
+            (psc->count)--;         // уменьшить счетчик
+    }
+    void display() {
+        cout << psc->str;                   // вывести строку
+        cout << " (addr =" << psc << ")";   // вывести адрес
+    }
+    void operator=(String& S) {             // присвоение String
+        if(psc->count == 1)                 // если последний пользователь,
+            delete psc;                     // удалить strCount
+        else                                // иначе
+            (psc->count)--;                 // уменьшить счетчик
+        psc = S.psc;                        // использовать strCount аргумента
+        (psc->count)++;                     // увеличить счетчик
+    }
+};
+
+///////////////////////////////////////////////////////////
+
 int main(int argc, char* argv[]) 
 {
     Derv1 dv1;          // Объект производного класса 1
@@ -304,6 +421,56 @@ int main(int argc, char* argv[])
     beta2 b;
     b.func1(a);
     b.func2(a);
+    cout << endl;
+
+///////////////////////////////////////////////////////////
+
+    gamma g1;
+    gamma::showtotal();
+    gamma g2, g3;
+    gamma::showtotal();
+    g1.showid();
+    g2.showid();
+    g3.showid();
+    cout << "----------конец программы----------\n";
+
+///////////////////////////////////////////////////////////
+
+    newAlpha a1(37);
+    newAlpha a2;
+    a2 = a1;                            // запуск перегружаемого =
+    cout << "\na2 ="; a2.display();     
+    newAlpha a3 = a2;                   // инициализация копирования, а не присваивание!
+    cout << "\na3 ="; a3.display();     
+    //newAlpha a3(a2);                  // альтернативный вариант инициализации копирования
+    cout << endl;
+
+///////////////////////////////////////////////////////////
+
+    copyAlpha a11(37);
+    copyAlpha a22;
+    a22 = a11;                                // запуск перегружаемого =
+    cout << "\na22 ="; a22.display();
+    copyAlpha a33(a11);                       // запуск конструктора копирования
+    // copyAlpha a33 = a11;                   // эквивалентное определение a3
+    cout << "\na33 ="; a33.display();
+    cout << endl;
+
+///////////////////////////////////////////////////////////
+
+    hiddenAlpha a1H, a2H;   
+    //a1H = a2H;                // присваивание
+    //hiddenAlpha a3H(a1H);     // копирование
+
+///////////////////////////////////////////////////////////
+
+    String s3 = "Муха по полю пошла, муха денежку нашла";
+    cout << "\ns3 ="; s3.display();         // вывести s3
+    String s1;                              // определить объект String
+    s1 = s3;                                // присвоить его другому объекту (ПЕРЕГРУЗКА ПРИСВАИВАНИЯ)
+    cout << "\ns1 ="; s1.display();         // вывести его
+    String s2(s3);                          // инициализация (ПЕРЕГРУЗКА ОПЕРАЦИИ КОПИРОВАНИЯ)
+    cout << "\ns2 ="; s2.display();         // вывести инициализированное
     cout << endl;
 
 ///////////////////////////////////////////////////////////
