@@ -1,6 +1,7 @@
 // Глава 11. Виртуальные функции
 #include <iostream>
 #include <cstring>      // для strcpy() и т. д.
+#include <typeinfo>     // для dynamic_cast и для typeid()
 
 using namespace std;
 
@@ -284,6 +285,7 @@ private:                            // методы скрыты
     int count;                      // собственно счетчик
     char* str;                      // указатель на строку
     friend class String;            // сделаем себя доступными
+    friend class StringThis;        // сделаем себя доступными
     strCount(char* s) {
         int length = strlen(s);     // длина строкового аргумента
         str = new char[length + 1]; // занять память под строку
@@ -321,6 +323,113 @@ public:
         (psc->count)++;                     // увеличить счетчик
     }
 };
+class StringThis {
+private:
+    strCount* psc;  // указатель на strCount
+public:
+    StringThis() { psc = new strCount("NULL"); }
+    StringThis(char* s) { psc = new strCount(s); }
+    StringThis(StringThis& S) { // конструктор копирования THIS
+        cout << "\nКОНСТРУКТОР КОПИРОВАНИЯ THIS";
+        psc = S.psc;
+        (psc->count)++;
+    }
+    ~StringThis() {
+        if(psc->count == 1)     // если последний пользователь,
+            delete psc;         // удалить strCount
+        else                    // иначе
+            (psc->count)--;     // уменьшить счетчик
+    }
+    void display() {
+        cout << psc->str;                   // вывести строку
+        cout << " (addr =" << psc << ")";   // вывести адрес
+    }
+    StringThis& operator=(StringThis& S) {      // присвоение StringThis.   Было void operator=(String& S)
+        cout << "\nПРИСВАИВАНИЕ" << endl;
+        if(this == &S){                   // проверка на присвоение самому себе
+            cout << "\nАдреса равны" << endl;
+            return *this;
+        }
+        if(psc->count == 1)             // если последний пользователь,
+            delete psc;                 // удалить strCount
+        else                            // иначе
+            (psc->count)--;             // уменьшить счетчик
+        psc = S.psc;                    // использовать strCount аргумента
+        (psc->count)++;                 // увеличить счетчик
+        return *this;                   // вернуть этот объект              Не было возврата
+    }
+};
+///////////////////////////////////////////////////////////
+
+class where {
+private:
+    char charray[1];               // массив из 10 байтов
+public:
+    void reveal() { cout << "\nМой адрес - не дом и не улица, мой адрес - " << this; } // вывести адрес объекта
+};
+
+///////////////////////////////////////////////////////////
+
+class what {
+private:
+    int alpha;
+public:
+    void tester() {
+        this->alpha = 11;       // то же, что alpha = 11;
+        cout << this->alpha;    // то же, что cout << alpha;
+    }
+};
+
+///////////////////////////////////////////////////////////
+
+class alphaThis {
+private:
+    int data;
+public:
+    alphaThis() { }
+    alphaThis(int d) { data = d; }
+    void display() { cout << data; }
+    /*  alphaThis& operator=(alphaThis& а) -    использующий возврат по ссылке, вместо
+        alphaThis operator=(alphaThis& а) -     возврат результата по значению  */
+    alphaThis& operator=(alphaThis& a) {        // перегружаемая операция =
+        data = a.data;                          // не делается автоматически
+        cout << "\nЗапущен оператор присваивания";
+        return *this;                           // вернуть копию this alphaThis. *this — это сам объект
+    }
+};
+
+///////////////////////////////////////////////////////////
+
+class BaseDC {
+    //virtual void vertFunc() { }         // для dynamic cast
+protected:
+    int ba;
+public:
+    BaseDC() : ba(0) { }
+    BaseDC(int b) : ba(b) { }
+    virtual void vertFunc() { }         // для нужд dynamic_cast
+    void show() { cout << "BaseDC: ba =" << ba << endl; }
+};
+class Derv1DC : public BaseDC { };
+class Derv2DC : public BaseDC { };
+bool isDerv1DC(BaseDC* pUnknown) {        // неизвестный подкласс базового
+    Derv1DC* pDerv1DC;
+    if(pDerv1DC = dynamic_cast<Derv1DC*>(pUnknown)) // приводит указатель неизвестного типа pUnknown к типу Derv1DC
+        return true;                                // Если результат ненулевой, значит, pUnknown указывал на Derv1
+    else
+        return false;
+}
+class DervDC : public BaseDC {
+private:
+    int da;
+public:
+    DervDC(int b, int d) : da(d) { ba = b; }
+    void show() { cout << "DervDC: ba =" << ba << ", da =" << da << endl; }
+};
+void displayName(BaseDC* pB) {
+    cout << "указатель на объект класса ";      // вывести имя класса
+    cout << typeid(*pB).name() << endl;         // на который указывает pB
+}
 
 ///////////////////////////////////////////////////////////
 
@@ -474,6 +583,74 @@ int main(int argc, char* argv[])
     cout << endl;
 
 ///////////////////////////////////////////////////////////
+
+    where w1, w2, w3;       // создать три объекта
+    w1.reveal();            // посмотреть, где они находятся
+    w2.reveal();
+    w3.reveal();
+    cout << endl;
+
+///////////////////////////////////////////////////////////
+
+    what w;
+    w.tester();
+    cout << endl;
+    
+///////////////////////////////////////////////////////////
+
+    alphaThis a1Th(37);
+    alphaThis a2Th, a3Th;
+    a3Th = a2Th = a1Th;                     // перегружаемый =, дважды
+    cout << "\na2Th ="; a2Th.display();     // вывести a2Th
+    cout << "\na3Th ="; a3Th.display();     // вывести a3Th
+    cout << endl;
+    
+///////////////////////////////////////////////////////////
+
+    StringThis sThis3 = "Муха по полю пошла, муха денежку нашла";
+    cout << "\sThis3 = "; sThis3.display();      // вывести sThis3
+    StringThis sThis1, sThis2;                  // определить объекты StringThis
+    sThis1 = sThis2 = sThis3;                   // присваивания
+    cout << "\ns1 = "; s1.display();             // вывести их
+    cout << "\ns2 = "; s2.display();
+    cout << endl;                               // ожидать нажатия клавиши
+    /* в соответствии с выражением присваивания все три объекта 
+    класса StringThis указывают на один и тот же объект класса strCount. */
+    sThis2 = sThis2;  
+    
+///////////////////////////////////////////////////////////
+
+    Derv1DC* dc1 = new Derv1DC;
+    Derv2DC* dc2 = new Derv2DC;
+    if(isDerv1DC(dc1))
+        cout << "dc1 - компонент класса Derv1DC\n";
+    else
+        cout << "dc1 - не компонент класса Derv1DC\n";
+    if(isDerv1DC(dc2))
+        cout << "dc2 - компонент класса Derv1DC\n";
+    else
+        cout << "dc2 - не компонент класса Derv1DC\n";
+    
+///////////////////////////////////////////////////////////
+
+    BaseDC* pBaseDC = new BaseDC(10);         // указатель на BaseDC
+    DervDC* pDervDC = new DervDC(21, 22);     // указатель на DervDC
+    // приведение к базовому типу: восхождение по дереву -
+    // указатель поставлен на подобъект BaseDC класса DervDC
+    pBaseDC = dynamic_cast<BaseDC*>(pDervDC);
+    pBaseDC->show();              // "BaseDC: ba = 21"
+    pBaseDC = new DervDC(31, 32);
+    // обычное нисходящее
+    // приведение типов -- pBase должен указывать на DervDC
+    pDervDC = dynamic_cast<DervDC*>(pBaseDC);
+    pDervDC->show();              // "DervDC: ba = 31, da = 32"
+    
+///////////////////////////////////////////////////////////
+
+    BaseDC* pBase2 = new Derv1DC;
+    displayName(pBase2); // "указатель на объект класса Derv1DC"
+    pBase2 = new Derv2DC;
+    displayName(pBase2); // " указатель на объект класса Derv2DC"
 
     return 0;
 }
