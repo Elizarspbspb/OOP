@@ -151,7 +151,7 @@ long double bMoney::mstold(string strTo) {
             strTo[sizeTwo++] = strFrom[size];
         }
     }
-    mon = stold(strTo);
+    mon = mstold(strTo);
 }
 void bMoney::getmoney() {
     cout << ldtoms(money) << streams << endl;
@@ -224,7 +224,7 @@ private:
     char st[MAXCALC];       // массив данных
     int top;                // количество сохраненных данных
 public:
-    Token multi;
+    Token* multi;           // Указатель на базовый класс
     Stack() { top = 0; }
     void push(char var) { st[++top] = var; }    // поместить в стек
     char pop() { return st[top--]; }            // взять из стека 
