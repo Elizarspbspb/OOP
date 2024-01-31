@@ -193,7 +193,88 @@ bMoney bMoney::operator/(long double two) {
 }*/
 
 ///////////////////////////////////////////////////////////
+// Task 11
 
+struct link {       // один элемент списка
+    int data;       // некоторые данные
+    link* next;     // указатель на следующую структуру
+};
+class linklist {    // список
+    link* first;
+public:
+    linklist() { first = NULL; }    // первого элемента пока нет
+    void additem(int d);    // добавление элемента
+    void display();         // показ данных
+    ~linklist();
+    // Task 11
+    linklist(const linklist& other) {           // Конструктор копирования
+        first = nullptr;                        // Инициализируем первый элемент нового списка
+        link* otherCurrent = other.first;       // Указатель на первый элемент другого списка
+        link* lastCopied = nullptr;             // Указатель на последний скопированный элемент
+        while (otherCurrent) {
+            link* newlink = new link;   // Создаем новый элемент
+            newlink->data = otherCurrent->data;
+            newlink->next = nullptr;  // Новый элемент будет последним в новом списке
+            if (!first) {        // Добавляем элемент в новый список
+                first = newlink;
+            } else {
+                lastCopied->next = newlink;
+            }
+            lastCopied = newlink;               // Переходим к следующему элементу
+            otherCurrent = otherCurrent->next;
+        }
+    }
+    linklist& operator=(const linklist& other) {    // Оператор присваивания
+        if (this != &other) {       // Проверка на самоприсваивание
+            link* current = first;
+            while (current) {           // Очищаем текущий список
+                link* temp = current;
+                current = current->next;
+                delete temp;
+            }
+            first = nullptr;     // Копируем элементы из другого списка
+            link* otherCurrent = other.first;
+            link* lastCopied = nullptr;
+            while (otherCurrent) {
+                link* newlink = new link;
+                newlink->data = otherCurrent->data;
+                newlink->next = nullptr;
+                if (!first) {
+                    first = newlink;
+                } else {
+                    lastCopied->next = newlink;
+                }
+                lastCopied = newlink;
+                otherCurrent = otherCurrent->next;
+            }
+            return *this; 
+        }
+    }
+};
+void linklist::additem(int d) {
+    link* newlink = new link;   // выделяем память
+    newlink->data = d;          // запоминаем данные
+    newlink->next = first;      // запоминаем значение first
+    first = newlink;            // first теперь указывает на новый элемент
+}
+void linklist::display() {
+    link* current = first;              // начинаем с первого элемента
+    while(current) {                    // пока есть данные
+        cout << current->data << endl;  // печатаем данные
+        current = current->next;        // двигаемся к следующему элементу
+    }
+}
+linklist::~linklist() {
+    cout << "Деструктор linklist" << endl;
+    link* current = first;              // установить указатель на первый элемент
+    while(current != NULL) {            // выход по достижении последнего элемента
+        link* temp = current;           // сохранить указатель на данный элемент
+        cout << current->data << endl;  // 64 49 36 25
+        current = current->next;        // получить ссылку на следующую ссылку
+        delete temp;                    // удалить эту ссылку
+        cout << current->data << endl;  // 49 36 25
+    }
+}
 
 ///////////////////////////////////////////////////////////
 
@@ -209,7 +290,7 @@ int main(int argc, char* argv[])
     нового объекта book или tape. Сопоставляйте указатель в массиве с объектом. Когда пользователь закончит ввод исходных данных, 
     выведите результат для всех введенных книг и кассет, используя цикл for и единственное выражение pubarr[j]->putdata(); для вывода 
     данных о каждом объекте из массива */
-    /*publication* pubarr[100];       // массив указателей на публикации
+    publication* pubarr[100];       // массив указателей на публикации
     publication* books;
     int n = 0;                      // число публикаций в массиве
     char choice;                    
@@ -233,19 +314,19 @@ int main(int argc, char* argv[])
         pubarr[j]->putdata();
         books->putdata();
     }
-    cout << endl; */
+    cout << endl;
 
     /*3. В классе Distance, как показано в примерах FRENGL и FRISQ из этой главы, создайте перегружаемую операцию умножения *, чтобы 
     можно было умножать два расстояния. Сделайте эту функцию дружественной, тогда можно будет использовать выражение типа Wdist = 7.5*dist2. 
     Вам понадобится конструктор с одним аргументом для перевода величин из формата чисел с плавающей запятой в формат Distance. Напишите 
     какой-либо main() на свое усмотрение для того, чтобы несколькими способами проверить работу этой перегружаемой операции.*/
-    /*Distance dist1(10, 2);
+    Distance dist1(10, 2);
     Distance dist2(10, 5);
     Distance dist3;
     dist3 = dist1 * dist2;
     dist3 = 7.5*dist3;
     dist3.showdist();
-    dist3 = 10.0 *dist3; */
+    dist3 = 10.0 *dist3;
 
     /*4. Как уже говорилось, классы можно заставлять вести себя как массивы. Пример показывает один из способов создания такого класса. */
     class Array {                       // моделирует обычный массив C++
@@ -298,7 +379,7 @@ int main(int argc, char* argv[])
     Конструктор копирования должен создать новый объект Array со своим собственным местом в памяти, выделенным для хранения элементов 
     массива. И конструктор копирования, и оператор присваивания должны копировать содержимое старого объекта класса Array в новый. 
     Что будет, если вы присвоите объект Array одного размера объекту Array другого размера? */
-    /*const int ASIZE = 10;                   // размер массива
+    const int ASIZE = 10;                   // размер массива
     Array arr(ASIZE);                       // создать массив
     for(int j = 0; j < ASIZE; j++)          // заполнить его j^2
         arr[j] = j*j;
@@ -315,32 +396,32 @@ int main(int argc, char* argv[])
     Array arrOne(arrTwo);                   // копирование
     for(int j = 0; j < ASIZE; j++)          // вывести его содержимое
         cout << arrOne[j] << ' ';
-    cout << endl; */
+    cout << endl;
 
     /*5. Взяв за основу программу из упражнения 1 этой главы, добавьте метод типа bool, называющийся isOveersize(), к классам book и tape. 
     Допустим, книга, в которой больше 800 страниц, или кассета со временем проигрывания более 90 минут, будут считаться объектами с превышением 
     размера. К этой функции можно обращаться из main(), а результат ее работы выводить в виде строки «Превышение размера!» для соответствующих 
     книг и кассет. Допустим, объекты классов book и tape должны быть доступны через указатели на них, хранящиеся в массиве типа publication. 
     Что в этом случае вам нужно добавить в базовый класс publication? Вы можете привести примеры компонентов этого базового класса? */
-    /*publication* pubarr[100];       // массив указателей на публикации
-    int n = 0;                      // число публикаций в массиве
-    char choice;                    
+    publication* pubarr5[100];       // массив указателей на публикации
+    int n5 = 0;                      // число публикаций в массиве
+    char choice5;                    
     do {
         cout << "\nВводить данные для книги (b) или для пленки (t)?";
-        cin >> choice;
-        if(choice == 'b')
-            pubarr[n] = new book;
+        cin >> choice5;
+        if(choice5 == 'b')
+            pubarr5[n5] = new book;
         else
-            pubarr[n] = new tape;
-        pubarr[n++]->getdata();
+            pubarr5[n5] = new tape;
+        pubarr5[n5++]->getdata();
         cout << "Продолжать (y/n)?";
-        cin >> choice;
-    } while(choice == 'y');
-    for(int j = 0; j < n; j++) {
-        pubarr[j]->putdata();
-        if (pubarr[j]->isOveersize() == 1)
+        cin >> choice5;
+    } while(choice5 == 'y');
+    for(int j = 0; j < n5; j++) {
+        pubarr5[j]->putdata();
+        if (pubarr5[j]->isOveersize() == 1)
             cout << "«Превышение размера!»" << endl;
-    } */
+    }
 
     /*6. Возьмите за основу программу из упражнения 8 главы 8, где было перегружено пять арифметических операций для работы с денежным 
     форматом. Добавьте два оператора, которые не были перегружены в том упражнении:
@@ -350,7 +431,7 @@ int main(int argc, char* argv[])
     что main() позволяет пользователю ввести две денежные строки и число с плавающей запятой, а затем корректно выполняет все семь 
     арифметических действий с соответствующими парами значений. */
     //bMoney mon1; 
-    /*const long double number = 12;
+    const long double number = 12;
     bMoney mon2(10);
     bMoney mon3;
     //mon3 = number * mon2;
@@ -358,7 +439,7 @@ int main(int argc, char* argv[])
     cout << number << " * ";
     mon2.getmoney(); 
     cout << " = "; 
-    mon3.getmoney(); */
+    mon3.getmoney();
 
     /*7. Как и в предыдущем упражнении, возьмите за основу программу из упражнения 8 главы 8. На этот раз от вас требуется добавить 
     функцию, округляющую значение bMoney до ближайшего доллара: mo2 = round(mo1); Как известно, значения, не превышающие $0.49, 
@@ -366,12 +447,12 @@ int main(int argc, char* argv[])
     переменную типа long double на целую и дробную части. Если дробная часть меньше 0.50, функция просто возвращает целую часть числа. 
     В противном случае возвращается увеличенная на 1 целая часть. В main() проверьте работоспособность функции путем передачи в нее 
     последовательно значений, одни из которых меньше $0.49, другие - больше $0.50. */
-    /*bMoney mo1(2.39);
+    bMoney mo1(2.39);
     bMoney mo2(4.89);
     bMoney mo3 = round(mo1);    // 2
     bMoney mo4 = round(mo2);    // 5
     mo3.getmoney();
-    mo4.getmoney(); */
+    mo4.getmoney();
 
     /*8. Помните программу PARSE из главы 10? Попробуйте доработать ее, чтобы она могла вычислять значения математических выражений с 
     рациональными числами, например типа float, а не только с одноразрядными числами:
@@ -440,6 +521,16 @@ int main(int argc, char* argv[])
     всех данных не является самым эффективным решением проблемы с точки зрения экономии памяти. Сравните этот подход с представленным в 
     примере STRIMEM (глава 10), где использовался только один набор данных для всех объектов, и хранилась информация о том, сколько 
     объектов указывали на эти данные. */
+    linklist li;        // создаем переменную-список
+    li.additem(25);
+    li.additem(36);
+    li.additem(49);
+    li.additem(64);     // добавляем туда несколько чисел
+    li.display();       // показываем список
+    linklist liTwo;        // создаем переменную-список
+    cout << "---------" << endl;
+    liTwo = li;
+    liTwo.display();       // показываем список
 
     /*11. В 8 задаче */
 
