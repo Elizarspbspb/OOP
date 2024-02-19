@@ -71,9 +71,10 @@ int isFeet(string str) {                // true если введена стро
 int main(int argc, char* argv[]) {
 
     // ввод не цифр, а каких-либо символов (например, «девять» вместо «9») 
+    int input = 0;
     while(true) {           // Цикл до тех пор. пока ввод не будет корректным
         cout << "\nВведите целое число: ";
-        cin >> i;
+        cin >> input;
         if(cin.good()) {                    // если нет ошибок (goodbit flag)
             cin.ignore(10, '\n');           // удалить разделитель строк
             break;                          // выйти из цикла
@@ -82,15 +83,15 @@ int main(int argc, char* argv[]) {
         cout << "Неправильный ввод данных";
         cin.ignore(10, '\n');               // Удалить разделитель строк
     }
-    cout << "целое число: " << i;           // целое без ошибок
+    cout << "целое число: " << input;           // целое без ошибок
 
 ///////////////////////////////////////////////////////////
 
-    cout << "\nВведите целое число: ";
+    /*cout << "\nВведите целое число: ";
     cin.unsetf(ios::skipws);    // не игнорировать разделители
-    cin >> i;
+    cin >> input;
     if(cin.good()) {}           // ошибок нет          
-    // ОШИБКА!
+    // ОШИБКА! */
 
 ///////////////////////////////////////////////////////////
 
@@ -107,20 +108,56 @@ int main(int argc, char* argv[]) {
 
 ///////////////////////////////////////////////////////////
 
-    char ch = 'x';
-    int j = 77;
-    double d = 6.02;
-    string str1 = "Kafka";              // строки без
-    string str2 = "Proust";             // пробелов
-    ofstream outfile("fdata.txt");      // создать объект ofstream, инициализация файлом
-    outfile << ch                       // вставить (записать) данные
-            << j
-            << ' '                      // пробелы между числами
-            << d
-            << str1
-            << ' '                      // пробелы между строками
-            << str2;
+    char chOne = 'x';
+    int jOne = 77;
+    double dOne = 6.02;
+    string str1One = "Kafka";               // строки без
+    string str2One = "Proust";              // пробелов
+    ofstream outfile("fdata.txt");          // создать объект ofstream, инициализация файлом
+    outfile << chOne                        // вставить (записать) данные
+            << jOne << ' '                  // пробелы между числами
+            << dOne
+            << str1One << ' '               // пробелы между строками
+            << str2One;
     cout << "Файл записан\n";
+
+///////////////////////////////////////////////////////////
+
+    char chTwo;
+    int jTwo;
+    double dTwo;
+    string str1Two;
+    string str2Two;
+    ifstream infile("fdata.txt");                                   // создать объект ifstream
+    infile >> chTwo >> jTwo >> dTwo >> str1Two >> str2Two;          // извлечь (прочесть) из него данные
+    cout << chTwo << "-endl-" << jTwo << endl << dTwo << endl << str1Two << endl << str2Two << endl;
+
+///////////////////////////////////////////////////////////
+
+    ofstream outfileString("TEST.TXT");     // создать выходной файл
+    outfileString << "Приходит март. Я сызнова служу.\n";     // отправить текст в файл
+    outfileString << "В несчастливом кружении событий \n";
+    outfileString << "изменчивую прелесть нахожу \n";
+    outfileString << "в смешеньи незначительных наитий.\n";
+    for(int j = 0; j < str1One.size(); j++)     // каждый символ
+        outfileString.put(str1One[j]);          // записывать в файл
+    cout << "Файл записан\n";
+
+    const int MAX = 80;                 // размер буфера
+    char buffer[MAX];                   // буфер символов
+    char ch12;
+    ifstream infileString("TEST.TXT");        // создать входной файл
+    while(!infileString.eof()) {              // цикл до EOF
+    //while(infile.good())                    // Пока нет ошибок
+    //while(infile)                           // Пока нет ошибок
+        infileString.getline(buffer, MAX);    // читает строку текста
+        cout << buffer << " - ";         // и выводит ее
+    }
+    while(infileString) {         // читать до EOF или ошибки
+        infileString.get(ch12);     // считать символ
+        cout << ch12;         // и вывести его
+    }
+    cout << endl;
 
 ///////////////////////////////////////////////////////////
 
