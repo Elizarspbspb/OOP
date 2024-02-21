@@ -3,7 +3,7 @@
 #include <string>
 #include <cstdlib>      // для atoi(), atof()
 
-#include <fstream>      // для файлового ввода/вывода
+#include <fstream>      // для файлового ввода/вывода одновременно
 
 using namespace std;
 
@@ -68,10 +68,28 @@ int isFeet(string str) {                // true если введена стро
 
 ///////////////////////////////////////////////////////////
 
+class person {
+protected:
+    char name[80];      // имя человека
+    short age;          // возраст
+    protected:
+public:
+    void getdata() {    // получить данные о человеке
+        cout << "Введите имя: "; cin >> name;
+        cout << "Введите возраст: "; cin >> age;
+    }
+    void showData() const {   // вывести данные
+        cout << "Имя: " << name << endl;
+        cout << "Возраст: " << age << endl;
+    }
+};
+
+///////////////////////////////////////////////////////////
+
 int main(int argc, char* argv[]) {
 
     // ввод не цифр, а каких-либо символов (например, «девять» вместо «9») 
-    int input = 0;
+    /*int input = 0;
     while(true) {           // Цикл до тех пор. пока ввод не будет корректным
         cout << "\nВведите целое число: ";
         cin >> input;
@@ -87,11 +105,11 @@ int main(int argc, char* argv[]) {
 
 ///////////////////////////////////////////////////////////
 
-    /*cout << "\nВведите целое число: ";
-    cin.unsetf(ios::skipws);    // не игнорировать разделители
-    cin >> input;
-    if(cin.good()) {}           // ошибок нет          
-    // ОШИБКА! */
+    //cout << "\nВведите целое число: ";
+    //cin.unsetf(ios::skipws);    // не игнорировать разделители
+    //cin >> input;
+    //if(cin.good()) {}           // ошибок нет          
+    // // ОШИБКА!
 
 ///////////////////////////////////////////////////////////
 
@@ -119,6 +137,7 @@ int main(int argc, char* argv[]) {
             << dOne
             << str1One << ' '               // пробелы между строками
             << str2One;
+    outfile.close();
     cout << "Файл записан\n";
 
 ///////////////////////////////////////////////////////////
@@ -131,6 +150,7 @@ int main(int argc, char* argv[]) {
     ifstream infile("fdata.txt");                                   // создать объект ifstream
     infile >> chTwo >> jTwo >> dTwo >> str1Two >> str2Two;          // извлечь (прочесть) из него данные
     cout << chTwo << "-endl-" << jTwo << endl << dTwo << endl << str1Two << endl << str2Two << endl;
+    infile.close();
 
 ///////////////////////////////////////////////////////////
 
@@ -141,21 +161,93 @@ int main(int argc, char* argv[]) {
     outfileString << "в смешеньи незначительных наитий.\n";
     for(int j = 0; j < str1One.size(); j++)     // каждый символ
         outfileString.put(str1One[j]);          // записывать в файл
+    outfileString.close();
     cout << "Файл записан\n";
-
-    const int MAX = 80;                 // размер буфера
-    char buffer[MAX];                   // буфер символов
+    // outfileString.seekg(0);      // поставить указатель на начало файла
+    const int MAX = 800;                        // размер буфера
+    char buffer[MAX];                           // буфер символов
     char ch12;
-    ifstream infileString("TEST.TXT");        // создать входной файл
-    while(!infileString.eof()) {              // цикл до EOF
-    //while(infile.good())                    // Пока нет ошибок
-    //while(infile)                           // Пока нет ошибок
-        infileString.getline(buffer, MAX);    // читает строку текста
-        cout << buffer << " - ";         // и выводит ее
+    ifstream infileString("TEST.TXT");          // создать входной файл
+    if(!infileString){
+        cerr << "Не удалось открыть файл !" << endl;
+        return 1;
     }
-    while(infileString) {         // читать до EOF или ошибки
+    while(!infileString.eof()) {                    // цикл до EOF
+    //while(infileString.good())                    // Пока нет ошибок
+    //while(infileString)                           // Пока нет ошибок
+    //while(!infileString.getline(buffer, MAX)) {        
+        infileString.getline(buffer, MAX);          // читает строку текста
+        cout << buffer << endl;                     // и выводит ее
+        if(infileString.peek() == '\n')
+            infileString.ignore();
+    }
+    while(infileString) {           // читать до EOF или ошибки
         infileString.get(ch12);     // считать символ
-        cout << ch12;         // и вывести его
+        cout << ch12;               // и вывести его
+    }
+    cout << endl;
+    cout << infileString.rdbuf();         // передать его буфер в cout
+    cout << endl;
+    infileString.close();
+
+///////////////////////////////////////////////////////////
+
+    const int MAXBIN = 100;                         // размер буфера
+    int buff[MAXBIN];                               // буфер для целых чисел
+    ofstream os("edata.dat", ios::binary);          // записать в него
+    os.write(reinterpret_cast<char*>(buff), MAXBIN*sizeof(int));
+    os.close();                                     // должен закрыть его
+    for(int j = 0; j < MAXBIN; j++)                 // стереть буфер
+        buff[j] = 0;            
+    ifstream is("edata.dat", ios::binary);          // создать входной поток
+    is.read(reinterpret_cast<char*>(buff), MAXBIN*sizeof(int));    // читать из него 
+    //reinterpret_cast буфер данных типа int выглядел для функций read() и write() как буфер типа char.
+    for(int j = 0; j < MAXBIN; j++)                 // проверка данных
+        if(buff[j] != j) {
+            cerr << "Некорректные данные!\n";
+            break; }
+        else 
+            cout << "Данные корректны\n";
+    is.close();
+
+///////////////////////////////////////////////////////////
+
+    person pers;        // создать объект
+    pers.getdata();     // получить данные
+    ofstream outfilePerson("PERSON.DAT", ios::binary);                      // создать объект ofstream
+    outfilePerson.write(reinterpret_cast<char*>(&pers), sizeof(pers));      // записать в него
+    // при записи для данных важен единый формат, а функции любые в классе !
+    // Класс, использующийся для чтения объекта в файл, должен быть идентичен классу, использовавшемуся при его записи.
+    outfilePerson.close();
+    person persTo;      // переменная типа person
+    ifstream infilePerson("PERSON.DAT", ios::binary);   // создать поток
+    infilePerson.read(reinterpret_cast<char*>(&persTo), sizeof(persTo));    // чтение потока
+    persTo.showData();
+    infilePerson.close();
+*/
+///////////////////////////////////////////////////////////
+
+    char chContinue;
+    person persMany;
+    fstream file;                                                               // создать входной/выходной файл
+    file.open("GROUP.DAT",  ios::app | ios::out | ios::in | ios::binary);       // открыть для дозаписи
+    // app - Запись, начиная с конца файла (AAPend)
+    // out - Открытие для записи (по умолчанию для ofstream)
+    // in - Открытие для чтения (по умолчанию для ifstream)
+    // binary - Открыть в бинарном (не текстовом) режиме
+    do {    // данные от пользователя - в файл
+        cout << "\nВведите данные о человеке:" << endl;
+        persMany.getdata();     // получить данные
+        file.write(reinterpret_cast<char*>(&persMany), sizeof(persMany));       // записать их в файл
+        cout << "Продолжить ввод (y/n)? ";
+        cin >> chContinue;
+    } while(chContinue == 'y');
+    file.seekg(0);      // поставить указатель на начало файла
+    file.read(reinterpret_cast<char*>(&persMany), sizeof(persMany));        // считать данные о первом человеке
+    while(!file.eof()) {            // Выход по EOF
+        cout << "\nПерсона:";   
+        persMany.showData();    // вывести данные   
+        file.read(reinterpret_cast<char*>(&persMany), sizeof(persMany));    // считать данные о следующем
     }
     cout << endl;
 
