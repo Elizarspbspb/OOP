@@ -5,6 +5,8 @@
 
 #include <fstream>      // для файлового ввода/вывода одновременно
 
+#include <process.h>    // для exit()
+
 using namespace std;
 
 ///////////////////////////////////////////////////////////
@@ -81,6 +83,25 @@ public:
     void showData() const {   // вывести данные
         cout << "Имя: " << name << endl;
         cout << "Возраст: " << age << endl;
+    }
+};
+
+///////////////////////////////////////////////////////////
+
+// seekg.cpp
+// Поиск конкретного объекта в файле
+class personSeekg {         // класс personSeekg
+protected:
+    char name[80];          // имя человека
+    int age;                // его возраст
+public:
+    void getdata() {        // получить данные о человеке
+        cout << "\n Введите имя: "; cin >> name;
+        cout << " Введите возраст: "; cin >> age;
+    }
+    void showData(void) {   // вывод данных о человеке
+        cout << "\n Имя: " << name;
+        cout << "\n Возраст: " << age;
     }
 };
 
@@ -250,6 +271,66 @@ int main(int argc, char* argv[]) {
         file.read(reinterpret_cast<char*>(&persMany), sizeof(persMany));    // считать данные о следующем
     }
     cout << endl;
+
+///////////////////////////////////////////////////////////
+
+    personSeekg pers;           // создать объект personSeekg
+    ifstream infile;            // создать входной файл
+    infile.open("GROUP.DAT", ios::in | ios::binary);    // открыть файл
+    infile.seekg(0, ios::end);                  // установить указатель на 0 байт от конца файла
+    int endposition = infile.tellg();           // найти позицию
+    int n = endposition / sizeof(personSeekg);       // число человек
+    cout << "\nВ файле " << n << " человек(а)";
+    cout << "\nВведите номер персоны: ";
+    cin >> n;
+    int position = (n - 1) * sizeof(personSeekg);       // умножить размер данных под персону на число персон
+    infile.seekg(position);                             // число байт от начала
+    infile.read(reinterpret_cast<char*>(&pers), sizeof(pers));      // прочитать одну персону
+    pers.showData();                                    // вывести одну персону
+    cout << endl;
+
+///////////////////////////////////////////////////////////
+
+    // rewerr.cpp
+    // Обработка ошибок ввода/вывода
+    const int MAXR = 1000;
+    int buffR[MAXR];
+    for(int j = 0; j < MAXR; j++)               // заполнить буфер данными
+        buffR[j] = j;
+    ofstream os;                                // создать выходной поток
+    os.open("a:edata.dat", ios::trunc | ios::binary);   // открыть его
+    if(!os) { cerr << "Невозможно открыть выходной файл\n"; exit(1); }
+    cout << "Идет запись...\n";                 // записать в него содержимое буфера
+    os.write(reinterpret_cast<char*>(buffR), MAXR*sizeof(int));
+    if(!os) { cerr << "Запись в файл невозможна\n"; exit(1); }
+    os.close();                                 // надо закрыть поток
+    for(j = 0; j < MAXR; j++)
+        buffR[j] = 0;                           // очистить буфер
+    ifstream is;                                // создать входной поток
+    is.open("a:edata.dat", ios::binary);
+    if(!is) { cerr << "Невозможно открыть входной файл\n";exit(1); }
+    cout << "Идет чтение...\n";                 // чтение файла
+    is.read(reinterpret_cast<char*>(buffR), MAXR*sizeof(int));
+    if(!is) { cerr << "Невозможно чтение файла\n"; exit(1); }
+    for(j = 0; j < MAXR; j++)                   // проверять данные
+        if(buffR[j] != j) { cerr << "\nДанные некорректны\n"; exit(1); }
+    cout << "Данные в порядке\n";
+
+///////////////////////////////////////////////////////////
+
+    ifstream file;
+    file.open("a:test.dat");
+    if(!file)
+        cout << "\nНевозможно открыть GROUP.DAT";
+    else
+        cout << "\nФайл открыт без ошибок.";
+    cout << "\nfile = " << file;
+    cout << "\nКод ошибки = " << file.rdstate();
+    cout << "\ngood() = " << file.good();
+    cout << "\neof() = " << file.eof();
+    cout << "\nfail() = " << file.fail();
+    cout << "\nbad() = " << file.bad() << endl;
+    file.close();
 
 ///////////////////////////////////////////////////////////
 
